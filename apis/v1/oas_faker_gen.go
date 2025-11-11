@@ -13,7 +13,7 @@ import (
 func (s *AuthConditions) SetFake() {
 	{
 		{
-			s.IPRestriction = []byte("null")
+			s.IPRestriction.SetFake()
 		}
 	}
 	{
@@ -40,6 +40,32 @@ func (s *AuthConditionsDatetimeRestriction) SetFake() {
 			s.Before.SetFake()
 		}
 	}
+}
+
+// SetFake set fake values.
+func (s *AuthConditionsIPRestriction) SetFake() {
+	{
+		{
+			s.Mode.SetFake()
+		}
+	}
+	{
+		{
+			s.SourceNetwork = nil
+			for i := 0; i < 0; i++ {
+				var elem string
+				{
+					elem = "string"
+				}
+				s.SourceNetwork = append(s.SourceNetwork, elem)
+			}
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *AuthConditionsIPRestrictionMode) SetFake() {
+	*s = AuthConditionsIPRestrictionModeAllowAll
 }
 
 // SetFake set fake values.

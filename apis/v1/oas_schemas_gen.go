@@ -7,20 +7,19 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
-	"github.com/go-faster/jx"
 	"github.com/google/uuid"
 )
 
 // Ref: #/components/schemas/AuthConditions
 type AuthConditions struct {
 	// 認証を許可するIPサブネットワーク (デフォルトはすべて許可).
-	IPRestriction        jx.Raw                             `json:"ip_restriction"`
+	IPRestriction        AuthConditionsIPRestriction        `json:"ip_restriction"`
 	RequireTwoFactorAuth AuthConditionsRequireTwoFactorAuth `json:"require_two_factor_auth"`
 	DatetimeRestriction  AuthConditionsDatetimeRestriction  `json:"datetime_restriction"`
 }
 
 // GetIPRestriction returns the value of IPRestriction.
-func (s *AuthConditions) GetIPRestriction() jx.Raw {
+func (s *AuthConditions) GetIPRestriction() AuthConditionsIPRestriction {
 	return s.IPRestriction
 }
 
@@ -35,7 +34,7 @@ func (s *AuthConditions) GetDatetimeRestriction() AuthConditionsDatetimeRestrict
 }
 
 // SetIPRestriction sets the value of IPRestriction.
-func (s *AuthConditions) SetIPRestriction(val jx.Raw) {
+func (s *AuthConditions) SetIPRestriction(val AuthConditionsIPRestriction) {
 	s.IPRestriction = val
 }
 
@@ -79,6 +78,78 @@ func (s *AuthConditionsDatetimeRestriction) SetAfter(val NilDateTime) {
 // SetBefore sets the value of Before.
 func (s *AuthConditionsDatetimeRestriction) SetBefore(val NilDateTime) {
 	s.Before = val
+}
+
+// 認証を許可するIPサブネットワーク (デフォルトはすべて許可).
+type AuthConditionsIPRestriction struct {
+	// Allow_all = すべて許可
+	// allow_list = source_networkで許可リスト指定.
+	Mode AuthConditionsIPRestrictionMode `json:"mode"`
+	// Modeがlistの場合のみ必須.
+	SourceNetwork []string `json:"source_network"`
+}
+
+// GetMode returns the value of Mode.
+func (s *AuthConditionsIPRestriction) GetMode() AuthConditionsIPRestrictionMode {
+	return s.Mode
+}
+
+// GetSourceNetwork returns the value of SourceNetwork.
+func (s *AuthConditionsIPRestriction) GetSourceNetwork() []string {
+	return s.SourceNetwork
+}
+
+// SetMode sets the value of Mode.
+func (s *AuthConditionsIPRestriction) SetMode(val AuthConditionsIPRestrictionMode) {
+	s.Mode = val
+}
+
+// SetSourceNetwork sets the value of SourceNetwork.
+func (s *AuthConditionsIPRestriction) SetSourceNetwork(val []string) {
+	s.SourceNetwork = val
+}
+
+// Allow_all = すべて許可
+// allow_list = source_networkで許可リスト指定.
+type AuthConditionsIPRestrictionMode string
+
+const (
+	AuthConditionsIPRestrictionModeAllowAll  AuthConditionsIPRestrictionMode = "allow_all"
+	AuthConditionsIPRestrictionModeAllowList AuthConditionsIPRestrictionMode = "allow_list"
+)
+
+// AllValues returns all AuthConditionsIPRestrictionMode values.
+func (AuthConditionsIPRestrictionMode) AllValues() []AuthConditionsIPRestrictionMode {
+	return []AuthConditionsIPRestrictionMode{
+		AuthConditionsIPRestrictionModeAllowAll,
+		AuthConditionsIPRestrictionModeAllowList,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s AuthConditionsIPRestrictionMode) MarshalText() ([]byte, error) {
+	switch s {
+	case AuthConditionsIPRestrictionModeAllowAll:
+		return []byte(s), nil
+	case AuthConditionsIPRestrictionModeAllowList:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *AuthConditionsIPRestrictionMode) UnmarshalText(data []byte) error {
+	switch AuthConditionsIPRestrictionMode(data) {
+	case AuthConditionsIPRestrictionModeAllowAll:
+		*s = AuthConditionsIPRestrictionModeAllowAll
+		return nil
+	case AuthConditionsIPRestrictionModeAllowList:
+		*s = AuthConditionsIPRestrictionModeAllowList
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
 }
 
 type AuthConditionsRequireTwoFactorAuth struct {

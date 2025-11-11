@@ -4948,6 +4948,15 @@ func (c *Client) OrganizationAuthConditionsPut(ctx context.Context, request *Aut
 }
 
 func (c *Client) sendOrganizationAuthConditionsPut(ctx context.Context, request *AuthConditions) (res OrganizationAuthConditionsPutRes, err error) {
+	// Validate request before sending.
+	if err := func() error {
+		if err := request.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		return res, errors.Wrap(err, "validate")
+	}
 
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string

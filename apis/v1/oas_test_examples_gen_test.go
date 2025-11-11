@@ -69,6 +69,30 @@ func TestAuthConditionsDatetimeRestriction_EncodeDecode(t *testing.T) {
 	var typ2 AuthConditionsDatetimeRestriction
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
+func TestAuthConditionsIPRestriction_EncodeDecode(t *testing.T) {
+	var typ AuthConditionsIPRestriction
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 AuthConditionsIPRestriction
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestAuthConditionsIPRestrictionMode_EncodeDecode(t *testing.T) {
+	var typ AuthConditionsIPRestrictionMode
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 AuthConditionsIPRestrictionMode
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
 func TestAuthConditionsRequireTwoFactorAuth_EncodeDecode(t *testing.T) {
 	var typ AuthConditionsRequireTwoFactorAuth
 	typ.SetFake()
