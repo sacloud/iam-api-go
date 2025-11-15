@@ -28,3 +28,18 @@ func IntoOpt[T, U any, P interface {
 	}
 	return opt
 }
+
+// generic-ish type cast helper function
+func IntoNullable[T, U any, P interface {
+	*T
+	SetToNull()
+	SetTo(u U)
+}](v *U) T {
+	var nullable T
+	if v == nil {
+		P(&nullable).SetToNull()
+	} else {
+		P(&nullable).SetTo(*v)
+	}
+	return nullable
+}
