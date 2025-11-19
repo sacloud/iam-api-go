@@ -20,7 +20,7 @@ import (
 	"runtime"
 
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
-	saht "github.com/sacloud/saclient-go"
+	"github.com/sacloud/saclient-go"
 )
 
 // DefaultAPIRootURL デフォルトのAPIルートURL
@@ -35,13 +35,13 @@ var UserAgent = fmt.Sprintf(
 )
 
 // voidSecuritySource is a placeholder to satisfy the SecuritySource interface.
-// sahtにて処理するためここにはロジック不要だが何か渡さないといけないので空の構造体を用意する
+// saclientにて処理するためここにはロジック不要だが何か渡さないといけないので空の構造体を用意する
 type voidSecuritySource struct{}
 
 func (voidSecuritySource) CompatAccessTokenAuth(context.Context, v1.OperationName) (v1.CompatAccessTokenAuth, error) {
 	return v1.CompatAccessTokenAuth{}, nil
 }
 
-func NewClient(client saht.ClientAPI) (*v1.Client, error) {
+func NewClient(client saclient.ClientAPI) (*v1.Client, error) {
 	return v1.NewClient(DefaultAPIRootURL, voidSecuritySource{}, v1.WithClient(client))
 }

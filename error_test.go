@@ -18,7 +18,7 @@ import (
 	"errors"
 	"testing"
 
-	saht "github.com/sacloud/saclient-go"
+	"github.com/sacloud/saclient-go"
 	"github.com/stretchr/testify/require"
 )
 
@@ -73,9 +73,9 @@ func TestNewAPIError(t *testing.T) {
 
 	err := NewAPIError("msg", 404, baseErr)
 	assert.Equal("msg", err.msg)
-	assert.True(saht.IsNotFoundError(err))
+	assert.True(saclient.IsNotFoundError(err))
 
 	err2 := NewAPIError("msg", 503, nil)
 	assert.Equal("msg", err2.msg)
-	assert.False(saht.IsNotFoundError(err2))
+	assert.False(saclient.IsNotFoundError(err2))
 }

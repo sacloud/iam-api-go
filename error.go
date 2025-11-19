@@ -17,7 +17,7 @@ package iam
 import (
 	"strings"
 
-	saht "github.com/sacloud/saclient-go"
+	"github.com/sacloud/saclient-go"
 )
 
 type Error struct {
@@ -46,5 +46,5 @@ func (e *Error) Error() string {
 
 func NewError(msg string, err error) *Error { return &Error{msg: msg, err: err} }
 func NewAPIError(method string, code int, err error) *Error {
-	return NewError(method, saht.NewError(code, "", err))
+	return NewError(method, saclient.NewError(code, "", err))
 }
