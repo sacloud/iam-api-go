@@ -21,7 +21,7 @@ import (
 	"github.com/go-faster/errors"
 	ogen "github.com/ogen-go/ogen/validate"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
-	saht "github.com/sacloud/saclient-go"
+	"github.com/sacloud/saclient-go"
 )
 
 type Error struct {
@@ -50,7 +50,7 @@ func (e *Error) Error() string {
 
 func NewError(msg string, err error) *Error { return &Error{msg: msg, err: err} }
 func NewAPIError(method string, code int, err error) *Error {
-	return NewError(method, saht.NewError(code, "", err))
+	return NewError(method, saclient.NewError(code, "", err))
 }
 
 type apiErrorResponse struct {
@@ -83,7 +83,7 @@ func newAPIErrorFromResponse[
 	t = (*T)(nil)
 	e = NewError(
 		method,
-		saht.NewError(
+		saclient.NewError(
 			error.GetStatus(),
 			error.GetDetail(),
 			&apiErrorResponse{

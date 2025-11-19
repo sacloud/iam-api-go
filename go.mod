@@ -9,7 +9,7 @@ require (
 	github.com/go-faster/jx v1.1.0
 	github.com/google/uuid v1.6.0
 	github.com/ogen-go/ogen v1.16.0
-	github.com/sacloud/saclient-go v0.0.0
+	github.com/sacloud/saclient-go v0.2.0
 	github.com/stretchr/testify v1.11.1
 )
 
@@ -43,5 +43,3 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace github.com/sacloud/saclient-go => ./../saclient-go

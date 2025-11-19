@@ -18,14 +18,14 @@ import (
 	"testing"
 
 	. "github.com/sacloud/iam-api-go"
-	saht "github.com/sacloud/saclient-go"
+	"github.com/sacloud/saclient-go"
 	"github.com/stretchr/testify/require"
 )
 
 func TestNewClient(t *testing.T) {
 	assert := require.New(t)
 
-	var theClient saht.Client
+	var theClient saclient.Client
 	actual, err := NewClient(&theClient)
 	assert.NoError(err)
 	assert.NotNil(actual)
