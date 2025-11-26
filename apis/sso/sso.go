@@ -15,7 +15,6 @@ package sso
 import (
 	"context"
 
-	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
 	"github.com/sacloud/iam-api-go/common"
 )
@@ -40,8 +39,8 @@ func NewSSOOp(client *v1.Client) SSOAPI { return &ssoOp{client: client} }
 func (s *ssoOp) List(ctx context.Context, page, perPage *int) (*v1.SSOProfilesGetOK, error) {
 	return common.ErrorFromDecodedResponse[v1.SSOProfilesGetOK]("SSO.List", func() (any, error) {
 		return s.client.SSOProfilesGet(ctx, v1.SSOProfilesGetParams{
-			Page:    iam.IntoOpt[v1.OptInt](page),
-			PerPage: iam.IntoOpt[v1.OptInt](perPage),
+			Page:    common.IntoOpt[v1.OptInt](page),
+			PerPage: common.IntoOpt[v1.OptInt](perPage),
 		})
 	})
 }

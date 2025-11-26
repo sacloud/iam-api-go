@@ -17,7 +17,6 @@ package projectapikey
 import (
 	"context"
 
-	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
 	"github.com/sacloud/iam-api-go/common"
 )
@@ -47,9 +46,9 @@ type ListParams struct {
 func (p *projectApiKeyOp) List(ctx context.Context, params ListParams) (*v1.CompatAPIKeysGetOK, error) {
 	return common.ErrorFromDecodedResponse[v1.CompatAPIKeysGetOK]("ProjectAPIKey.List", func() (any, error) {
 		return p.client.CompatAPIKeysGet(ctx, v1.CompatAPIKeysGetParams{
-			Page:     iam.IntoOpt[v1.OptInt](params.Page),
-			PerPage:  iam.IntoOpt[v1.OptInt](params.PerPage),
-			Ordering: iam.IntoOpt[v1.OptCompatAPIKeysGetOrdering](params.Ordering),
+			Page:     common.IntoOpt[v1.OptInt](params.Page),
+			PerPage:  common.IntoOpt[v1.OptInt](params.PerPage),
+			Ordering: common.IntoOpt[v1.OptCompatAPIKeysGetOrdering](params.Ordering),
 		})
 	})
 }
@@ -69,9 +68,9 @@ func (p *projectApiKeyOp) Create(ctx context.Context, params CreateParams) (*v1.
 			ProjectID:        params.ProjectID,
 			Name:             params.Name,
 			Description:      params.Description,
-			ServerResourceID: iam.IntoOpt[v1.OptString](params.ServerResourceID),
+			ServerResourceID: common.IntoOpt[v1.OptString](params.ServerResourceID),
 			IamRoles:         params.IamRoles,
-			ZoneID:           iam.IntoOpt[v1.OptString](params.Zone),
+			ZoneID:           common.IntoOpt[v1.OptString](params.Zone),
 		})
 	})
 }
@@ -95,9 +94,9 @@ func (p *projectApiKeyOp) Update(ctx context.Context, id int, params UpdateParam
 		req := v1.CompatAPIKeysApikeyIDPutReq{
 			Name:             params.Name,
 			Description:      params.Description,
-			ServerResourceID: iam.IntoOpt[v1.OptString](params.ServerResourceID),
+			ServerResourceID: common.IntoOpt[v1.OptString](params.ServerResourceID),
 			IamRoles:         params.IamRoles,
-			ZoneID:           iam.IntoOpt[v1.OptString](params.Zone),
+			ZoneID:           common.IntoOpt[v1.OptString](params.Zone),
 		}
 		param := v1.CompatAPIKeysApikeyIDPutParams{
 			ApikeyID: id,

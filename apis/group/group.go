@@ -18,7 +18,6 @@ package group
 import (
 	"context"
 
-	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
 	"github.com/sacloud/iam-api-go/common"
 )
@@ -57,10 +56,10 @@ func (g *groupOp) List(ctx context.Context, params ListParams) (*v1.GroupsGetOK,
 		}
 
 		return g.client.GroupsGet(ctx, v1.GroupsGetParams{
-			Page:         iam.IntoOpt[v1.OptInt](params.Page),
-			PerPage:      iam.IntoOpt[v1.OptInt](params.PerPage),
-			Ordering:     iam.IntoOpt[v1.OptGroupsGetOrdering](params.Ordering),
-			CompatUserID: iam.IntoOpt[v1.OptInt](userID),
+			Page:         common.IntoOpt[v1.OptInt](params.Page),
+			PerPage:      common.IntoOpt[v1.OptInt](params.PerPage),
+			Ordering:     common.IntoOpt[v1.OptGroupsGetOrdering](params.Ordering),
+			CompatUserID: common.IntoOpt[v1.OptInt](userID),
 		})
 	})
 }

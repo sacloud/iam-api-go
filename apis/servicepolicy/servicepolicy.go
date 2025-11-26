@@ -17,7 +17,6 @@ package servicepolicy
 import (
 	"context"
 
-	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
 	"github.com/sacloud/iam-api-go/common"
 )
@@ -72,11 +71,11 @@ type ListRuleTemplatesParams struct {
 func (s *servicePolicyOp) ListRuleTemplates(ctx context.Context, params ListRuleTemplatesParams) (*v1.ServicePolicyRuleTemplatesGetOK, error) {
 	return common.ErrorFromDecodedResponse[v1.ServicePolicyRuleTemplatesGetOK]("ServicePolicy.ListRuleTemplates", func() (any, error) {
 		return s.client.ServicePolicyRuleTemplatesGet(ctx, v1.ServicePolicyRuleTemplatesGetParams{
-			Page:    iam.IntoOpt[v1.OptInt](params.Page),
-			PerPage: iam.IntoOpt[v1.OptInt](params.PerPage),
-			Name:    iam.IntoOpt[v1.OptString](params.Name),
-			Code:    iam.IntoOpt[v1.OptString](params.Code),
-			Type:    iam.IntoOpt[v1.OptServicePolicyRuleTemplatesGetType](params.Type),
+			Page:    common.IntoOpt[v1.OptInt](params.Page),
+			PerPage: common.IntoOpt[v1.OptInt](params.PerPage),
+			Name:    common.IntoOpt[v1.OptString](params.Name),
+			Code:    common.IntoOpt[v1.OptString](params.Code),
+			Type:    common.IntoOpt[v1.OptServicePolicyRuleTemplatesGetType](params.Type),
 		})
 	})
 }

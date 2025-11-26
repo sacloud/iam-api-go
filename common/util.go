@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package iam
+package common
 
 // generic-ish type cast helper function
 func IntoOpt[T, U any, P interface {

@@ -3,7 +3,6 @@ package project
 import (
 	"context"
 
-	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
 	"github.com/sacloud/iam-api-go/common"
 )
@@ -38,11 +37,11 @@ type ListParams struct {
 func (p *projectOp) List(ctx context.Context, params ListParams) (*v1.ProjectsGetOK, error) {
 	return common.ErrorFromDecodedResponse[v1.ProjectsGetOK]("Project.List", func() (any, error) {
 		return p.client.ProjectsGet(ctx, v1.ProjectsGetParams{
-			Page:           iam.IntoOpt[v1.OptInt](params.Page),
-			PerPage:        iam.IntoOpt[v1.OptInt](params.PerPage),
-			Ordering:       iam.IntoOpt[v1.OptProjectsGetOrdering](params.Ordering),
-			IamRole:        iam.IntoOpt[v1.OptString](params.IamRole),
-			ParentFolderID: iam.IntoOpt[v1.OptInt](params.ParentFolderID),
+			Page:           common.IntoOpt[v1.OptInt](params.Page),
+			PerPage:        common.IntoOpt[v1.OptInt](params.PerPage),
+			Ordering:       common.IntoOpt[v1.OptProjectsGetOrdering](params.Ordering),
+			IamRole:        common.IntoOpt[v1.OptString](params.IamRole),
+			ParentFolderID: common.IntoOpt[v1.OptInt](params.ParentFolderID),
 		})
 	})
 }
@@ -60,7 +59,7 @@ func (p *projectOp) Create(ctx context.Context, params CreateParams) (*v1.Projec
 			Code:           params.Code,
 			Name:           params.Name,
 			Description:    params.Description,
-			ParentFolderID: iam.IntoOpt[v1.OptInt](params.ParentFolderID),
+			ParentFolderID: common.IntoOpt[v1.OptInt](params.ParentFolderID),
 		})
 	})
 }
@@ -101,7 +100,7 @@ func (p *projectOp) Move(ctx context.Context, ids []int, parentFolderID *int) er
 	_, err := common.ErrorFromDecodedResponse[v1.MoveProjectsPostNoContent]("Project.Move", func() (any, error) {
 		return p.client.MoveProjectsPost(ctx, &v1.MoveProjects{
 			ProjectIds:     ids,
-			ParentFolderID: iam.IntoNullable[v1.NilInt](parentFolderID),
+			ParentFolderID: common.IntoNullable[v1.NilInt](parentFolderID),
 		})
 	})
 

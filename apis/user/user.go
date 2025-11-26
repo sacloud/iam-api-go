@@ -18,7 +18,6 @@ package user
 import (
 	"context"
 
-	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
 	"github.com/sacloud/iam-api-go/common"
 )
@@ -52,9 +51,9 @@ type ListParams struct {
 func (u *userOp) List(ctx context.Context, params ListParams) (*v1.CompatUsersGetOK, error) {
 	return common.ErrorFromDecodedResponse[v1.CompatUsersGetOK]("User.List", func() (any, error) {
 		return u.client.CompatUsersGet(ctx, v1.CompatUsersGetParams{
-			Page:     iam.IntoOpt[v1.OptInt](params.Page),
-			PerPage:  iam.IntoOpt[v1.OptInt](params.PerPage),
-			Ordering: iam.IntoOpt[v1.OptCompatUsersGetOrdering](params.Ordering),
+			Page:     common.IntoOpt[v1.OptInt](params.Page),
+			PerPage:  common.IntoOpt[v1.OptInt](params.PerPage),
+			Ordering: common.IntoOpt[v1.OptCompatUsersGetOrdering](params.Ordering),
 		})
 	})
 }
@@ -74,7 +73,7 @@ func (u *userOp) Create(ctx context.Context, params CreateParams) (*v1.User, err
 			Password:    params.Password,
 			Code:        params.Code,
 			Description: params.Description,
-			Email:       iam.IntoOpt[v1.OptString](params.Email),
+			Email:       common.IntoOpt[v1.OptString](params.Email),
 		})
 	})
 }
@@ -95,7 +94,7 @@ func (u *userOp) Update(ctx context.Context, id int, params UpdateParams) (*v1.U
 	return common.ErrorFromDecodedResponse[v1.User]("User.Update", func() (any, error) {
 		req := v1.CompatUsersUserIDPutReq{
 			Name:        params.Name,
-			Password:    iam.IntoOpt[v1.OptString](params.Password),
+			Password:    common.IntoOpt[v1.OptString](params.Password),
 			Description: params.Description,
 		}
 		p := v1.CompatUsersUserIDPutParams{
