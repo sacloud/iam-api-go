@@ -19,6 +19,7 @@ import (
 
 	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
+	"github.com/sacloud/iam-api-go/common"
 )
 
 type ProjectAPIKeyAPI interface {
@@ -44,7 +45,7 @@ type ListParams struct {
 }
 
 func (p *projectApiKeyOp) List(ctx context.Context, params ListParams) (*v1.CompatAPIKeysGetOK, error) {
-	return iam.ErrorFromDecodedResponse[v1.CompatAPIKeysGetOK]("ProjectAPIKey.List", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.CompatAPIKeysGetOK]("ProjectAPIKey.List", func() (any, error) {
 		return p.client.CompatAPIKeysGet(ctx, v1.CompatAPIKeysGetParams{
 			Page:     iam.IntoOpt[v1.OptInt](params.Page),
 			PerPage:  iam.IntoOpt[v1.OptInt](params.PerPage),
@@ -63,7 +64,7 @@ type CreateParams struct {
 }
 
 func (p *projectApiKeyOp) Create(ctx context.Context, params CreateParams) (*v1.ProjectApiKeyWithSecret, error) {
-	return iam.ErrorFromDecodedResponse[v1.ProjectApiKeyWithSecret]("ProjectAPIKey.Create", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.ProjectApiKeyWithSecret]("ProjectAPIKey.Create", func() (any, error) {
 		return p.client.CompatAPIKeysPost(ctx, &v1.CompatAPIKeysPostReq{
 			ProjectID:        params.ProjectID,
 			Name:             params.Name,
@@ -76,7 +77,7 @@ func (p *projectApiKeyOp) Create(ctx context.Context, params CreateParams) (*v1.
 }
 
 func (p *projectApiKeyOp) Read(ctx context.Context, id int) (*v1.ProjectApiKey, error) {
-	return iam.ErrorFromDecodedResponse[v1.ProjectApiKey]("ProjectAPIKey.Read", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.ProjectApiKey]("ProjectAPIKey.Read", func() (any, error) {
 		return p.client.CompatAPIKeysApikeyIDGet(ctx, v1.CompatAPIKeysApikeyIDGetParams{ApikeyID: id})
 	})
 }
@@ -90,7 +91,7 @@ type UpdateParams struct {
 }
 
 func (p *projectApiKeyOp) Update(ctx context.Context, id int, params UpdateParams) (*v1.ProjectApiKey, error) {
-	return iam.ErrorFromDecodedResponse[v1.ProjectApiKey]("ProjectAPIKey.Update", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.ProjectApiKey]("ProjectAPIKey.Update", func() (any, error) {
 		req := v1.CompatAPIKeysApikeyIDPutReq{
 			Name:             params.Name,
 			Description:      params.Description,
@@ -106,7 +107,7 @@ func (p *projectApiKeyOp) Update(ctx context.Context, id int, params UpdateParam
 }
 
 func (p *projectApiKeyOp) Delete(ctx context.Context, id int) error {
-	_, err := iam.ErrorFromDecodedResponse[v1.CompatAPIKeysApikeyIDDeleteNoContent]("ProjectAPIKey.Delete", func() (any, error) {
+	_, err := common.ErrorFromDecodedResponse[v1.CompatAPIKeysApikeyIDDeleteNoContent]("ProjectAPIKey.Delete", func() (any, error) {
 		return p.client.CompatAPIKeysApikeyIDDelete(ctx, v1.CompatAPIKeysApikeyIDDeleteParams{ApikeyID: id})
 	})
 

@@ -5,6 +5,7 @@ import (
 
 	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
+	"github.com/sacloud/iam-api-go/common"
 )
 
 type ProjectAPI interface {
@@ -35,7 +36,7 @@ type ListParams struct {
 }
 
 func (p *projectOp) List(ctx context.Context, params ListParams) (*v1.ProjectsGetOK, error) {
-	return iam.ErrorFromDecodedResponse[v1.ProjectsGetOK]("Project.List", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.ProjectsGetOK]("Project.List", func() (any, error) {
 		return p.client.ProjectsGet(ctx, v1.ProjectsGetParams{
 			Page:           iam.IntoOpt[v1.OptInt](params.Page),
 			PerPage:        iam.IntoOpt[v1.OptInt](params.PerPage),
@@ -54,7 +55,7 @@ type CreateParams struct {
 }
 
 func (p *projectOp) Create(ctx context.Context, params CreateParams) (*v1.Project, error) {
-	return iam.ErrorFromDecodedResponse[v1.Project]("Project.Create", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.Project]("Project.Create", func() (any, error) {
 		return p.client.ProjectsPost(ctx, &v1.ProjectsPostReq{
 			Code:           params.Code,
 			Name:           params.Name,
@@ -65,13 +66,13 @@ func (p *projectOp) Create(ctx context.Context, params CreateParams) (*v1.Projec
 }
 
 func (p *projectOp) Read(ctx context.Context, id int) (*v1.Project, error) {
-	return iam.ErrorFromDecodedResponse[v1.Project]("Project.Read", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.Project]("Project.Read", func() (any, error) {
 		return p.client.ProjectsProjectIDGet(ctx, v1.ProjectsProjectIDGetParams{ProjectID: id})
 	})
 }
 
 func (p *projectOp) Update(ctx context.Context, id int, name string, description string) (*v1.Project, error) {
-	return iam.ErrorFromDecodedResponse[v1.Project]("Project.Update", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.Project]("Project.Update", func() (any, error) {
 		params := v1.ProjectsProjectIDPutParams{
 			ProjectID: id,
 		}
@@ -84,7 +85,7 @@ func (p *projectOp) Update(ctx context.Context, id int, name string, description
 }
 
 func (p *projectOp) Delete(ctx context.Context, projectID int) error {
-	_, err := iam.ErrorFromDecodedResponse[v1.ProjectsProjectIDDeleteNoContent]("Project.Delete", func() (any, error) {
+	_, err := common.ErrorFromDecodedResponse[v1.ProjectsProjectIDDeleteNoContent]("Project.Delete", func() (any, error) {
 		return p.client.ProjectsProjectIDDelete(ctx, v1.ProjectsProjectIDDeleteParams{ProjectID: projectID})
 	})
 
@@ -97,7 +98,7 @@ type MoveProjectsParams struct {
 }
 
 func (p *projectOp) Move(ctx context.Context, ids []int, parentFolderID *int) error {
-	_, err := iam.ErrorFromDecodedResponse[v1.MoveProjectsPostNoContent]("Project.Move", func() (any, error) {
+	_, err := common.ErrorFromDecodedResponse[v1.MoveProjectsPostNoContent]("Project.Move", func() (any, error) {
 		return p.client.MoveProjectsPost(ctx, &v1.MoveProjects{
 			ProjectIds:     ids,
 			ParentFolderID: iam.IntoNullable[v1.NilInt](parentFolderID),

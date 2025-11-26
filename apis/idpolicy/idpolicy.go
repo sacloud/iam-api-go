@@ -18,8 +18,8 @@ package idpolicy
 import (
 	"context"
 
-	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
+	"github.com/sacloud/iam-api-go/common"
 )
 
 type IDPolicyAPI interface {
@@ -34,7 +34,7 @@ type idPolicyOp struct {
 func NewIDPolicyOp(client *v1.Client) IDPolicyAPI { return &idPolicyOp{client: client} }
 
 func (o *idPolicyOp) ReadOrganizationIdPolicy(ctx context.Context) ([]v1.IdPolicy, error) {
-	if ret, err := iam.ErrorFromDecodedResponse[v1.OrganizationIDPolicyGetOK]("IdPolicy.ReadOrganizationIdPolicy", func() (any, error) {
+	if ret, err := common.ErrorFromDecodedResponse[v1.OrganizationIDPolicyGetOK]("IdPolicy.ReadOrganizationIdPolicy", func() (any, error) {
 		return o.client.OrganizationIDPolicyGet(ctx)
 	}); err != nil {
 		return nil, err
@@ -44,7 +44,7 @@ func (o *idPolicyOp) ReadOrganizationIdPolicy(ctx context.Context) ([]v1.IdPolic
 }
 
 func (o *idPolicyOp) UpdateOrganizationIdPolicy(ctx context.Context, bindings []v1.IdPolicy) ([]v1.IdPolicy, error) {
-	if ret, err := iam.ErrorFromDecodedResponse[v1.OrganizationIDPolicyPutOK]("IdPolicy.UpdateOrganizationIdPolicy", func() (any, error) {
+	if ret, err := common.ErrorFromDecodedResponse[v1.OrganizationIDPolicyPutOK]("IdPolicy.UpdateOrganizationIdPolicy", func() (any, error) {
 		return o.client.OrganizationIDPolicyPut(ctx, &v1.OrganizationIDPolicyPutReq{Bindings: bindings})
 	}); err != nil {
 		return nil, err

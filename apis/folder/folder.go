@@ -5,6 +5,7 @@ import (
 
 	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
+	"github.com/sacloud/iam-api-go/common"
 )
 
 type FolderAPI interface {
@@ -34,7 +35,7 @@ type ListParams struct {
 }
 
 func (f *folderOp) List(ctx context.Context, params ListParams) (*v1.FoldersGetOK, error) {
-	return iam.ErrorFromDecodedResponse[v1.FoldersGetOK]("Folder.List", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.FoldersGetOK]("Folder.List", func() (any, error) {
 		return f.client.FoldersGet(ctx, v1.FoldersGetParams{
 			Page:       iam.IntoOpt[v1.OptInt](params.Page),
 			PerPage:    iam.IntoOpt[v1.OptInt](params.PerPage),
@@ -51,7 +52,7 @@ type CreateParams struct {
 }
 
 func (f *folderOp) Create(ctx context.Context, params CreateParams) (*v1.Folder, error) {
-	return iam.ErrorFromDecodedResponse[v1.Folder]("Folder.Create", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.Folder]("Folder.Create", func() (any, error) {
 		return f.client.FoldersPost(ctx, &v1.FoldersPostReq{
 			Name:        params.Name,
 			Description: iam.IntoOpt[v1.OptString](params.Description),
@@ -61,13 +62,13 @@ func (f *folderOp) Create(ctx context.Context, params CreateParams) (*v1.Folder,
 }
 
 func (f *folderOp) Read(ctx context.Context, id int) (*v1.Folder, error) {
-	return iam.ErrorFromDecodedResponse[v1.Folder]("Folder.Read", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.Folder]("Folder.Read", func() (any, error) {
 		return f.client.FoldersFolderIDGet(ctx, v1.FoldersFolderIDGetParams{FolderID: id})
 	})
 }
 
 func (f *folderOp) Update(ctx context.Context, id int, name string, description *string) (*v1.Folder, error) {
-	return iam.ErrorFromDecodedResponse[v1.Folder]("Folder.Update", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.Folder]("Folder.Update", func() (any, error) {
 		params := v1.FoldersFolderIDPutParams{
 			FolderID: id,
 		}
@@ -80,7 +81,7 @@ func (f *folderOp) Update(ctx context.Context, id int, name string, description 
 }
 
 func (f *folderOp) Delete(ctx context.Context, folderID int) error {
-	_, err := iam.ErrorFromDecodedResponse[v1.FoldersFolderIDDeleteNoContent]("Folder.Delete", func() (any, error) {
+	_, err := common.ErrorFromDecodedResponse[v1.FoldersFolderIDDeleteNoContent]("Folder.Delete", func() (any, error) {
 		return f.client.FoldersFolderIDDelete(ctx, v1.FoldersFolderIDDeleteParams{FolderID: folderID})
 	})
 
@@ -88,7 +89,7 @@ func (f *folderOp) Delete(ctx context.Context, folderID int) error {
 }
 
 func (f *folderOp) Move(ctx context.Context, ids []int, parent *int) error {
-	_, err := iam.ErrorFromDecodedResponse[v1.MoveFoldersPostNoContent]("Folder.Move", func() (any, error) {
+	_, err := common.ErrorFromDecodedResponse[v1.MoveFoldersPostNoContent]("Folder.Move", func() (any, error) {
 		return f.client.MoveFoldersPost(ctx, &v1.MoveFolders{
 			FolderIds: ids,
 			ParentID:  iam.IntoNullable[v1.NilInt](parent),

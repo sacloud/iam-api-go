@@ -20,6 +20,7 @@ import (
 
 	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
+	"github.com/sacloud/iam-api-go/common"
 )
 
 // UserAPI is the interface for user operations.
@@ -49,7 +50,7 @@ type ListParams struct {
 }
 
 func (u *userOp) List(ctx context.Context, params ListParams) (*v1.CompatUsersGetOK, error) {
-	return iam.ErrorFromDecodedResponse[v1.CompatUsersGetOK]("User.List", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.CompatUsersGetOK]("User.List", func() (any, error) {
 		return u.client.CompatUsersGet(ctx, v1.CompatUsersGetParams{
 			Page:     iam.IntoOpt[v1.OptInt](params.Page),
 			PerPage:  iam.IntoOpt[v1.OptInt](params.PerPage),
@@ -67,7 +68,7 @@ type CreateParams struct {
 }
 
 func (u *userOp) Create(ctx context.Context, params CreateParams) (*v1.User, error) {
-	return iam.ErrorFromDecodedResponse[v1.User]("User.Create", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.User]("User.Create", func() (any, error) {
 		return u.client.CompatUsersPost(ctx, &v1.CompatUsersPostReq{
 			Name:        params.Name,
 			Password:    params.Password,
@@ -79,7 +80,7 @@ func (u *userOp) Create(ctx context.Context, params CreateParams) (*v1.User, err
 }
 
 func (u *userOp) Read(ctx context.Context, id int) (*v1.User, error) {
-	return iam.ErrorFromDecodedResponse[v1.User]("User.Read", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.User]("User.Read", func() (any, error) {
 		return u.client.CompatUsersUserIDGet(ctx, v1.CompatUsersUserIDGetParams{UserID: id})
 	})
 }
@@ -91,7 +92,7 @@ type UpdateParams struct {
 }
 
 func (u *userOp) Update(ctx context.Context, id int, params UpdateParams) (*v1.User, error) {
-	return iam.ErrorFromDecodedResponse[v1.User]("User.Update", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.User]("User.Update", func() (any, error) {
 		req := v1.CompatUsersUserIDPutReq{
 			Name:        params.Name,
 			Password:    iam.IntoOpt[v1.OptString](params.Password),
@@ -105,7 +106,7 @@ func (u *userOp) Update(ctx context.Context, id int, params UpdateParams) (*v1.U
 }
 
 func (u *userOp) Delete(ctx context.Context, id int) error {
-	_, err := iam.ErrorFromDecodedResponse[v1.CompatUsersUserIDDeleteNoContent]("User.Delete", func() (any, error) {
+	_, err := common.ErrorFromDecodedResponse[v1.CompatUsersUserIDDeleteNoContent]("User.Delete", func() (any, error) {
 		return u.client.CompatUsersUserIDDelete(ctx, v1.CompatUsersUserIDDeleteParams{UserID: id})
 	})
 
@@ -113,7 +114,7 @@ func (u *userOp) Delete(ctx context.Context, id int) error {
 }
 
 func (u *userOp) RegisterEmail(ctx context.Context, userID int, email string) error {
-	_, err := iam.ErrorFromDecodedResponse[v1.CompatUsersUserIDRegisterEmailPostNoContent]("User.RegisterEmail", func() (any, error) {
+	_, err := common.ErrorFromDecodedResponse[v1.CompatUsersUserIDRegisterEmailPostNoContent]("User.RegisterEmail", func() (any, error) {
 		req := v1.CompatUsersUserIDRegisterEmailPostReq{Email: email}
 		p := v1.CompatUsersUserIDRegisterEmailPostParams{UserID: userID}
 		return u.client.CompatUsersUserIDRegisterEmailPost(ctx, &req, p)
@@ -122,7 +123,7 @@ func (u *userOp) RegisterEmail(ctx context.Context, userID int, email string) er
 }
 
 func (u *userOp) UnregisterEmail(ctx context.Context, userID int) error {
-	_, err := iam.ErrorFromDecodedResponse[v1.CompatUsersUserIDUnregisterEmailPostNoContent]("User.UnregisterEmail", func() (any, error) {
+	_, err := common.ErrorFromDecodedResponse[v1.CompatUsersUserIDUnregisterEmailPostNoContent]("User.UnregisterEmail", func() (any, error) {
 		return u.client.CompatUsersUserIDUnregisterEmailPost(ctx, v1.CompatUsersUserIDUnregisterEmailPostParams{
 			UserID: userID,
 		})
