@@ -15,8 +15,12 @@
 package iam
 
 import (
+	"encoding/json"
 	"strings"
 
+	"github.com/go-faster/errors"
+	ogen "github.com/ogen-go/ogen/validate"
+	v1 "github.com/sacloud/iam-api-go/apis/v1"
 	"github.com/sacloud/saclient-go"
 )
 
@@ -47,4 +51,76 @@ func (e *Error) Error() string {
 func NewError(msg string, err error) *Error { return &Error{msg: msg, err: err} }
 func NewAPIError(method string, code int, err error) *Error {
 	return NewError(method, saclient.NewError(code, "", err))
+}
+
+type apiErrorResponse struct {
+	j json.Marshaler
+}
+
+func (e *apiErrorResponse) Error() string {
+	if buf, err := e.j.MarshalJSON(); err != nil {
+		o := errors.Errorf("%#+v", e.j)
+		return errors.Join(o, err).Error()
+	} else {
+		return string(buf)
+	}
+}
+
+func newAPIErrorFromResponse[
+	T any,
+	E interface {
+		json.Marshaler
+		GetStatus() int
+		GetDetail() string
+	},
+](
+	method string,
+	error E,
+) (
+	t *T,
+	e *Error,
+) {
+	t = (*T)(nil)
+	e = NewError(
+		method,
+		saclient.NewError(
+			error.GetStatus(),
+			error.GetDetail(),
+			&apiErrorResponse{
+				j: error,
+			},
+		),
+	)
+	return
+}
+
+func ErrorFromDecodedResponse[T any](method string, yield func() (any, error)) (*T, error) {
+	resp, err := yield()
+
+	switch r := resp.(type) {
+	case *T:
+		return r, nil
+	case *v1.Http400BadRequest:
+		return newAPIErrorFromResponse[T](method, r)
+	case *v1.Http401Unauthorized:
+		return newAPIErrorFromResponse[T](method, r)
+	case *v1.Http403Forbidden:
+		return newAPIErrorFromResponse[T](method, r)
+	case *v1.Http404NotFound:
+		return newAPIErrorFromResponse[T](method, r)
+	case *v1.Http409Conflict:
+		return newAPIErrorFromResponse[T](method, r)
+	case *v1.Http429TooManyRequests:
+		return newAPIErrorFromResponse[T](method, r)
+	case *v1.Http503ServiceUnavailable:
+		return newAPIErrorFromResponse[T](method, r)
+	default:
+		if e, ok := errors.Into[*ogen.UnexpectedStatusCodeError](err); ok {
+			return nil, NewAPIError(method, e.StatusCode, err)
+		} else if err != nil {
+			return nil, NewError(method, err)
+		} else {
+			return nil, NewError(method, errors.Errorf("unexpected type %#+v", resp))
+		}
+	}
 }

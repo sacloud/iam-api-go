@@ -3,6 +3,14 @@
 package v1
 
 // setDefaults set default value of fields.
+func (s *AuthConditionsIPRestriction) setDefaults() {
+	{
+		val := AuthConditionsIPRestrictionMode("allow_all")
+		s.Mode = val
+	}
+}
+
+// setDefaults set default value of fields.
 func (s *Folder) setDefaults() {
 	{
 		s.ParentID.Null = true

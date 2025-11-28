@@ -9412,39 +9412,7 @@
                 },
                 "description": "modeがlistの場合のみ必須"
               }
-            },
-            "allOf": [
-              {
-                "if": {
-                  "properties": {
-                    "mode": {
-                      "const": "allow_list"
-                    }
-                  }
-                },
-                "then": {
-                  "required": [
-                    "source_network"
-                  ]
-                }
-              },
-              {
-                "if": {
-                  "properties": {
-                    "mode": {
-                      "const": "allow_all"
-                    }
-                  }
-                },
-                "then": {
-                  "not": {
-                    "required": [
-                      "source_network"
-                    ]
-                  }
-                }
-              }
-            ]
+            }
           },
           "require_two_factor_auth": {
             "type": "object",

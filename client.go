@@ -45,3 +45,7 @@ func (voidSecuritySource) CompatAccessTokenAuth(context.Context, v1.OperationNam
 func NewClient(client saclient.ClientAPI) (*v1.Client, error) {
 	return v1.NewClient(DefaultAPIRootURL, voidSecuritySource{}, v1.WithClient(client))
 }
+
+func NewClientWithAPIRootURL(client saclient.ClientAPI, apiRootURL string) (*v1.Client, error) {
+	return v1.NewClient(apiRootURL, voidSecuritySource{}, v1.WithClient(client))
+}
