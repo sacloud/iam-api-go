@@ -43,9 +43,18 @@ func (voidSecuritySource) CompatAccessTokenAuth(context.Context, v1.OperationNam
 }
 
 func NewClient(client saclient.ClientAPI) (*v1.Client, error) {
-	return v1.NewClient(DefaultAPIRootURL, voidSecuritySource{}, v1.WithClient(client))
+	return NewClientWithAPIRootURL(client, DefaultAPIRootURL)
 }
 
 func NewClientWithAPIRootURL(client saclient.ClientAPI, apiRootURL string) (*v1.Client, error) {
-	return v1.NewClient(apiRootURL, voidSecuritySource{}, v1.WithClient(client))
+	if dupable, ok := client.(saclient.ClientOptionAPI); !ok {
+		return nil, NewError("client does not implement saclient.ClientOptionAPI", nil)
+	} else if augmented, err := dupable.DupWith(
+		saclient.WithUserAgent(UserAgent),
+		saclient.WithForceAutomaticAuthentication(),
+	); err != nil {
+		return nil, err
+	} else {
+		return v1.NewClient(apiRootURL, voidSecuritySource{}, v1.WithClient(augmented))
+	}
 }

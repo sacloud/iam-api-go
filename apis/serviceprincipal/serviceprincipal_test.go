@@ -15,11 +15,18 @@
 package serviceprincipal_test
 
 import (
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
+	"fmt"
 	"net/http"
 	"testing"
 	"time"
 
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/sacloud/iam-api-go/apis/serviceprincipal"
 	. "github.com/sacloud/iam-api-go/apis/serviceprincipal"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
 	iam_test "github.com/sacloud/iam-api-go/testutil"
@@ -319,4 +326,116 @@ func TestIssueToken_Fail(t *testing.T) {
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
+}
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	api := NewServicePrincipalOp(client)
+	myself := iam_test.Myself()
+	name := testutil.RandomName("sp-", 32, testutil.CharSetAlphaNum)
+
+	// Read
+	sp, err := api.Read(t.Context(), myself.PrincipalID)
+	assert.NoError(err)
+	assert.NotNil(sp)
+
+	// Create
+	created, err := api.Create(t.Context(), serviceprincipal.CreateParams{
+		ProjectID: sp.GetProjectID(),
+		Name:      name,
+	})
+	assert.NoError(err)
+
+	spid := created.GetID()
+
+	// Delete
+	defer func() {
+		err = api.Delete(t.Context(), spid)
+		assert.NoError(err)
+	}()
+
+	// Read Created
+	read, err := api.Read(t.Context(), spid)
+	assert.NoError(err)
+	assert.NotNil(read)
+	assert.Equal(created, read)
+
+	// Update
+	expected := testutil.Random(128, testutil.CharSetAlphaNum)
+	updated, err := api.Update(t.Context(), spid, serviceprincipal.UpdateParams{
+		Name:        name,
+		Description: v1.NewOptString(expected),
+	})
+	assert.NoError(err)
+	assert.NotNil(updated)
+	assert.Equal(expected, updated.GetDescription())
+
+	k, err := rsa.GenerateKey(rand.Reader, bits)
+	assert.NoError(err)
+
+	// Upload Key
+	uploaded, err := api.UploadKey(t.Context(), spid, pubkey(assert, k))
+	assert.NoError(err)
+	assert.NotNil(uploaded)
+
+	keyid := uploaded.GetID()
+
+	// Delete Key
+	defer func() {
+		err = api.DeleteKey(t.Context(), spid, keyid)
+		assert.NoError(err)
+	}()
+
+	// List Keys
+	keys, err := api.ListKeys(t.Context(), spid, ListKeysParams{})
+	assert.NoError(err)
+	assert.NotNil(keys)
+	assert.NotEmpty(keys.GetItems())
+
+	// Disable Key
+	disabled, err := api.DisableKey(t.Context(), spid, keyid)
+	assert.NoError(err)
+	assert.NotNil(disabled)
+	assert.Equal(v1.ServicePrincipalKeyStatusDisabled, disabled.GetStatus())
+
+	// Enable Key
+	enabled, err := api.EnableKey(t.Context(), spid, keyid)
+	assert.NoError(err)
+	assert.NotNil(enabled)
+	assert.Equal(v1.ServicePrincipalKeyStatusEnabled, enabled.GetStatus())
+
+	// Issue Token
+	// (This HAS to be working though, given we ARE issuing queries already)
+	sub := fmt.Sprintf("%d", spid)
+	kid := uploaded.GetKid()
+	token, err := api.IssueToken(t.Context(), assertion(assert, k, sub, kid))
+	assert.NoError(err)
+	assert.NotNil(token)
+}
+
+const bits = 2048
+
+func pubkey(assert *require.Assertions, k *rsa.PrivateKey) v1.ServiceprincipalKeyPublicKey {
+	der, err := x509.MarshalPKIXPublicKey(&k.PublicKey)
+	assert.NoError(err)
+
+	return v1.ServiceprincipalKeyPublicKey(pem.EncodeToMemory(&pem.Block{
+		Type:  "PUBLIC KEY",
+		Bytes: der,
+	}))
+}
+
+func assertion(assert *require.Assertions, k *rsa.PrivateKey, sub, kid string) string {
+	claims := jwt.MapClaims{
+		"iss": sub,
+		"sub": sub,
+		"aud": "https://secure.sakura.ad.jp/cloud/api/iam/1.0/service-principals/oauth2/token", // :FIXME: magic string
+		"iat": time.Now().Unix(),
+		"exp": time.Now().Unix() + 3500, // 0 ... 3600
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+	token.Header["kid"] = kid
+	assertion, err := token.SignedString(k)
+	assert.NoError(err)
+	return assertion
 }

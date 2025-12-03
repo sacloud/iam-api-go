@@ -244,3 +244,6 @@ func TestClearTrustedDevices_Fail(t *testing.T) {
 	assert.Error(err)
 	assert.Contains(err.Error(), expected)
 }
+
+// There is no TestIntegrated
+// You can delete MFA but canot create one.

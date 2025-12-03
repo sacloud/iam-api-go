@@ -18,6 +18,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/sacloud/iam-api-go"
 	. "github.com/sacloud/iam-api-go/apis/organization"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
 	iam_test "github.com/sacloud/iam-api-go/testutil"
@@ -146,4 +147,88 @@ func TestPutServicePolicy_Fail(t *testing.T) {
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
+}
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	api := NewOrganizationOp(client)
+
+	actual, err := api.Read(t.Context())
+	assert.NoError(err)
+	assert.NotNil(actual)
+
+	name := actual.Name
+	defer func() {
+		_, err = api.Update(t.Context(), name)
+		assert.NoError(err)
+	}()
+
+	actual, err = api.Update(t.Context(), testutil.RandomName("test::", 128, testutil.CharSetAlphaNum))
+	assert.NoError(err)
+	assert.NotNil(actual)
+
+	policyop := iam.NewServicePolicyOp(client)
+	before, err := policyop.IsEnabled(t.Context())
+	assert.NoError(err)
+	if before {
+		defer func() {
+			err = policyop.Enable(t.Context())
+			assert.NoError(err)
+		}()
+	} else {
+		defer func() {
+			err = policyop.Disable(t.Context())
+			assert.NoError(err)
+		}()
+	}
+
+	err = policyop.Enable(t.Context())
+	assert.NoError(err)
+
+	actualPolicies, err := api.ReadServicePolicy(t.Context(), GetServicePolicyParams{})
+	assert.NoError(err)
+	assert.NotNil(actualPolicies)
+
+	rules := make([]v1.Rule, 0, len(actualPolicies))
+	for _, r := range actualPolicies {
+		rules = append(rules, into(&r))
+	}
+	actualPolicies, err = api.UpdateServicePolicy(t.Context(), rules)
+	assert.NoError(err)
+	assert.NotNil(actualPolicies)
+}
+
+func into(from *v1.RuleResponse) (ret v1.Rule) {
+	if val, ok := from.GetCode().Get(); ok {
+		ret.SetCode(v1.NewOptString(val))
+	}
+	if val, ok := from.GetSpec().Get(); ok {
+		if len(val.GetContents()) > 0 {
+			ret.SetSpec(v1.NewOptRuleSpec(val))
+		}
+	}
+	if val, ok := from.GetDryRunSpec().Get(); ok {
+		if len(val.GetContents()) > 0 {
+			ret.SetDryRunSpec(v1.NewOptRuleSpec(val))
+		}
+	}
+
+	if (!ret.GetSpec().IsSet()) && (!ret.GetDryRunSpec().IsSet()) {
+		// fall back to empty spec
+		var spec v1.RuleSpec
+		spec.SetFake()
+		spec.SetContents(make([]v1.RuleContent, 1))
+		spec.Contents[0].SetFake()
+		spec.Contents[0].SetAllowAll(v1.NewOptBool(true))
+		spec.Contents[0].SetDenyAll(v1.NewOptBool(false))
+		ret.SetSpec(v1.NewOptRuleSpec(spec))
+	}
+
+	if val, ok := from.GetIsActive().Get(); ok {
+		ret.SetIsActive(v1.NewOptBool(val))
+	}
+	if val, ok := from.GetIsDryRun().Get(); ok {
+		ret.SetIsDryRun(v1.NewOptBool(val))
+	}
+	return ret
 }

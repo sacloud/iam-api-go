@@ -142,3 +142,22 @@ func TestPutAuthConditions_Fail(t *testing.T) {
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
 }
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	op := NewAuthOp(client)
+
+	pp, err := op.ReadPasswordPolicy(t.Context())
+	assert.NoError(err)
+	assert.NotNil(pp)
+
+	_, err = op.UpdatePasswordPolicy(t.Context(), *pp)
+	assert.NoError(err)
+
+	ac, err := op.ReadAuthConditions(t.Context())
+	assert.NoError(err)
+	assert.NotNil(ac)
+
+	_, err = op.UpdateAuthConditions(t.Context(), ac)
+	assert.NoError(err)
+}

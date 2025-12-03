@@ -166,3 +166,50 @@ func TestMove_Fail(t *testing.T) {
 	assert.Error(err)
 	assert.Contains(err.Error(), expected)
 }
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	op := NewFolderOp(client)
+
+	name1 := testutil.RandomName("folder", 64, testutil.CharSetAlphaNum)
+	folder1, err := op.Create(t.Context(), CreateParams{Name: name1})
+	assert.NoError(err)
+	assert.NotNil(folder1)
+	assert.Equal(name1, folder1.GetName())
+	defer func() {
+		err := op.Delete(t.Context(), folder1.GetID())
+		assert.NoError(err)
+	}()
+
+	name2 := testutil.RandomName("folder", 64, testutil.CharSetAlphaNum)
+	folder2, err := op.Create(t.Context(), CreateParams{Name: name2})
+	assert.NoError(err)
+	assert.NotNil(folder2)
+	assert.Equal(name2, folder2.GetName())
+	defer func() {
+		err := op.Delete(t.Context(), folder2.GetID())
+		assert.NoError(err)
+	}()
+
+	list, err := op.List(t.Context(), ListParams{})
+	assert.NoError(err)
+	assert.NotEmpty(list.Items)
+
+	readFolder, err := op.Read(t.Context(), folder1.GetID())
+	assert.NoError(err)
+	assert.NotNil(readFolder)
+	assert.Equal(folder1, readFolder)
+
+	updatedName := testutil.RandomName("folder-updated", 64, testutil.CharSetAlphaNum)
+	updatedFolder, err := op.Update(t.Context(), folder1.GetID(), updatedName, nil)
+	assert.NoError(err)
+	assert.NotNil(updatedFolder)
+	assert.Equal(updatedName, updatedFolder.GetName())
+
+	defer func() {
+		err = op.Move(t.Context(), []int{folder1.GetID()}, nil)
+		assert.NoError(err)
+	}()
+	err = op.Move(t.Context(), []int{folder1.GetID()}, saclient.Ptr(folder2.GetID()))
+	assert.NoError(err)
+}

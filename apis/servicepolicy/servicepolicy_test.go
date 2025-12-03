@@ -132,3 +132,45 @@ func TestGetRuleTemplates_Fail(t *testing.T) {
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
 }
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	op := NewServicePolicyOp(client)
+
+	ok, err := op.IsEnabled(t.Context())
+	assert.NoError(err)
+
+	if ok {
+		defer func() {
+			ok, err := op.IsEnabled(t.Context())
+			assert.NoError(err)
+			if !ok {
+				err = op.Enable(t.Context())
+				assert.NoError(err)
+			}
+		}()
+	} else {
+		defer func() {
+			ok, err := op.IsEnabled(t.Context())
+			assert.NoError(err)
+			if ok {
+				err = op.Disable(t.Context())
+				assert.NoError(err)
+			}
+		}()
+	}
+
+	err = op.Enable(t.Context())
+	assert.NoError(err)
+
+	ok, err = op.IsEnabled(t.Context())
+	assert.NoError(err)
+	assert.True(ok)
+
+	err = op.Disable(t.Context())
+	assert.NoError(err)
+
+	ok, err = op.IsEnabled(t.Context())
+	assert.NoError(err)
+	assert.False(ok)
+}
