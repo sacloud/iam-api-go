@@ -65,7 +65,7 @@ func (p *projectOp) Create(ctx context.Context, params CreateParams) (*v1.Projec
 }
 
 func (p *projectOp) Read(ctx context.Context, id int) (*v1.Project, error) {
-	return iam.ErrorFromDecodedResponse[v1.Project]("Project.Get", func() (any, error) {
+	return iam.ErrorFromDecodedResponse[v1.Project]("Project.Read", func() (any, error) {
 		return p.client.ProjectsProjectIDGet(ctx, v1.ProjectsProjectIDGetParams{ProjectID: id})
 	})
 }
