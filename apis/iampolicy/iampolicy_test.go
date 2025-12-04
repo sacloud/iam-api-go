@@ -43,7 +43,7 @@ func TestGetOrganizationPolicy(t *testing.T) {
 	expected.Bindings[0].SetFake()
 	assert, api := setup(t, &expected)
 
-	actual, err := api.GetOrganizationPolicy(t.Context())
+	actual, err := api.ReadOrganizationPolicy(t.Context())
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(expected.GetBindings(), actual)
@@ -70,7 +70,7 @@ func TestGetProjectPolicy(t *testing.T) {
 	expected.Bindings[0].SetFake()
 	assert, api := setup(t, &expected)
 
-	actual, err := api.GetProjectPolicy(t.Context(), 123)
+	actual, err := api.ReadProjectPolicy(t.Context(), 123)
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(expected.GetBindings(), actual)
@@ -97,7 +97,7 @@ func TestGetFolderPolicy(t *testing.T) {
 	expected.Bindings[0].SetFake()
 	assert, api := setup(t, &expected)
 
-	actual, err := api.GetFolderPolicy(t.Context(), 123)
+	actual, err := api.ReadFolderPolicy(t.Context(), 123)
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(expected.GetBindings(), actual)
@@ -125,7 +125,7 @@ func TestGetOrganizationPolicy_Fail(t *testing.T) {
 	res.SetDetail(expected)
 	assert, api := setup(t, &res, res.Status)
 
-	actual, err := api.GetOrganizationPolicy(t.Context())
+	actual, err := api.ReadOrganizationPolicy(t.Context())
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
@@ -155,7 +155,7 @@ func TestGetProjectPolicy_Fail(t *testing.T) {
 	assert, api := setup(t, &res, res.Status)
 
 	projectID := 1
-	actual, err := api.GetProjectPolicy(t.Context(), projectID)
+	actual, err := api.ReadProjectPolicy(t.Context(), projectID)
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
@@ -186,7 +186,7 @@ func TestGetFolderPolicy_Fail(t *testing.T) {
 	assert, api := setup(t, &res, res.Status)
 
 	folderID := 1
-	actual, err := api.GetFolderPolicy(t.Context(), folderID)
+	actual, err := api.ReadFolderPolicy(t.Context(), folderID)
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)

@@ -22,13 +22,13 @@ import (
 )
 
 type IAMPolicyAPI interface {
-	GetOrganizationPolicy(ctx context.Context) ([]v1.IamPolicy, error)
+	ReadOrganizationPolicy(ctx context.Context) ([]v1.IamPolicy, error)
 	UpdateOrganizationPolicy(ctx context.Context, bindings []v1.IamPolicy) ([]v1.IamPolicy, error)
 
-	GetProjectPolicy(ctx context.Context, projectID int) ([]v1.IamPolicy, error)
+	ReadProjectPolicy(ctx context.Context, projectID int) ([]v1.IamPolicy, error)
 	UpdateProjectPolicy(ctx context.Context, projectID int, bindings []v1.IamPolicy) ([]v1.IamPolicy, error)
 
-	GetFolderPolicy(ctx context.Context, folderID int) ([]v1.IamPolicy, error)
+	ReadFolderPolicy(ctx context.Context, folderID int) ([]v1.IamPolicy, error)
 	UpdateFolderPolicy(ctx context.Context, folderID int, bindings []v1.IamPolicy) ([]v1.IamPolicy, error)
 }
 
@@ -38,8 +38,8 @@ type iamPolicyOp struct {
 
 func NewIAMPolicyOp(client *v1.Client) IAMPolicyAPI { return &iamPolicyOp{client: client} }
 
-func (op *iamPolicyOp) GetOrganizationPolicy(ctx context.Context) ([]v1.IamPolicy, error) {
-	if res, err := iam.ErrorFromDecodedResponse[v1.OrganizationIamPolicyGetOK]("IamPolicy.GetOrganizationPolicy", func() (any, error) {
+func (op *iamPolicyOp) ReadOrganizationPolicy(ctx context.Context) ([]v1.IamPolicy, error) {
+	if res, err := iam.ErrorFromDecodedResponse[v1.OrganizationIamPolicyGetOK]("IamPolicy.ReadOrganizationPolicy", func() (any, error) {
 		return op.client.OrganizationIamPolicyGet(ctx)
 	}); err != nil {
 		return nil, err
@@ -58,8 +58,8 @@ func (op *iamPolicyOp) UpdateOrganizationPolicy(ctx context.Context, bindings []
 	}
 }
 
-func (op *iamPolicyOp) GetProjectPolicy(ctx context.Context, id int) ([]v1.IamPolicy, error) {
-	if res, err := iam.ErrorFromDecodedResponse[v1.ProjectsProjectIDIamPolicyGetOK]("IamPolicy.GetProjectPolicy", func() (any, error) {
+func (op *iamPolicyOp) ReadProjectPolicy(ctx context.Context, id int) ([]v1.IamPolicy, error) {
+	if res, err := iam.ErrorFromDecodedResponse[v1.ProjectsProjectIDIamPolicyGetOK]("IamPolicy.ReadProjectPolicy", func() (any, error) {
 		return op.client.ProjectsProjectIDIamPolicyGet(ctx, v1.ProjectsProjectIDIamPolicyGetParams{ProjectID: id})
 	}); err != nil {
 		return nil, err
@@ -80,8 +80,8 @@ func (op *iamPolicyOp) UpdateProjectPolicy(ctx context.Context, id int, bindings
 	}
 }
 
-func (op *iamPolicyOp) GetFolderPolicy(ctx context.Context, id int) ([]v1.IamPolicy, error) {
-	if res, err := iam.ErrorFromDecodedResponse[v1.FoldersFolderIDIamPolicyGetOK]("IamPolicy.GetFolderPolicy", func() (any, error) {
+func (op *iamPolicyOp) ReadFolderPolicy(ctx context.Context, id int) ([]v1.IamPolicy, error) {
+	if res, err := iam.ErrorFromDecodedResponse[v1.FoldersFolderIDIamPolicyGetOK]("IamPolicy.ReadFolderPolicy", func() (any, error) {
 		return op.client.FoldersFolderIDIamPolicyGet(ctx, v1.FoldersFolderIDIamPolicyGetParams{FolderID: id})
 	}); err != nil {
 		return nil, err
