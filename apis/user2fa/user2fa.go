@@ -124,7 +124,7 @@ func (u *user2faOp) ListSecurityKeys(ctx context.Context) (*v1.CompatUsersUserID
 }
 
 func (u *user2faOp) ReadSecurityKey(ctx context.Context, securityKeyID int) (*v1.UserSecurityKey, error) {
-	return iam.ErrorFromDecodedResponse[v1.UserSecurityKey]("User2FA.GetSecurityKey", func() (any, error) {
+	return iam.ErrorFromDecodedResponse[v1.UserSecurityKey]("User2FA.ReadSecurityKey", func() (any, error) {
 		return u.client.CompatUsersUserIDSecurityKeysSecurityKeyIDGet(ctx, v1.CompatUsersUserIDSecurityKeysSecurityKeyIDGetParams{
 			UserID:        u.getUserID(),
 			SecurityKeyID: securityKeyID,
