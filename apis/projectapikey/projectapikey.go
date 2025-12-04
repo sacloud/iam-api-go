@@ -59,7 +59,7 @@ type CreateParams struct {
 	Description      string
 	ServerResourceID *string
 	IamRoles         []string
-	ZoneID           *string
+	Zone             *string
 }
 
 func (p *projectApiKeyOp) Create(ctx context.Context, params CreateParams) (*v1.ProjectApiKeyWithSecret, error) {
@@ -70,7 +70,7 @@ func (p *projectApiKeyOp) Create(ctx context.Context, params CreateParams) (*v1.
 			Description:      params.Description,
 			ServerResourceID: iam.IntoOpt[v1.OptString](params.ServerResourceID),
 			IamRoles:         params.IamRoles,
-			ZoneID:           iam.IntoOpt[v1.OptString](params.ZoneID),
+			ZoneID:           iam.IntoOpt[v1.OptString](params.Zone),
 		})
 	})
 }
@@ -86,7 +86,7 @@ type UpdateParams struct {
 	Description      string
 	ServerResourceID *string
 	IamRoles         []string
-	ZoneID           *string
+	Zone             *string
 }
 
 func (p *projectApiKeyOp) Update(ctx context.Context, id int, params UpdateParams) (*v1.ProjectApiKey, error) {
@@ -96,7 +96,7 @@ func (p *projectApiKeyOp) Update(ctx context.Context, id int, params UpdateParam
 			Description:      params.Description,
 			ServerResourceID: iam.IntoOpt[v1.OptString](params.ServerResourceID),
 			IamRoles:         params.IamRoles,
-			ZoneID:           iam.IntoOpt[v1.OptString](params.ZoneID),
+			ZoneID:           iam.IntoOpt[v1.OptString](params.Zone),
 		}
 		param := v1.CompatAPIKeysApikeyIDPutParams{
 			ApikeyID: id,
