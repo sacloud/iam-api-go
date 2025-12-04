@@ -11,7 +11,7 @@ type FolderAPI interface {
 	List(ctx context.Context, params ListParams) (*v1.FoldersGetOK, error)
 
 	Create(ctx context.Context, params CreateParams) (*v1.Folder, error)
-	Get(ctx context.Context, id int) (*v1.Folder, error)
+	Read(ctx context.Context, id int) (*v1.Folder, error)
 	Update(ctx context.Context, id int, name string, description *string) (*v1.Folder, error)
 	Delete(ctx context.Context, id int) error
 
@@ -60,8 +60,8 @@ func (f *folderOp) Create(ctx context.Context, params CreateParams) (*v1.Folder,
 	})
 }
 
-func (f *folderOp) Get(ctx context.Context, id int) (*v1.Folder, error) {
-	return iam.ErrorFromDecodedResponse[v1.Folder]("Folder.Get", func() (any, error) {
+func (f *folderOp) Read(ctx context.Context, id int) (*v1.Folder, error) {
+	return iam.ErrorFromDecodedResponse[v1.Folder]("Folder.Read", func() (any, error) {
 		return f.client.FoldersFolderIDGet(ctx, v1.FoldersFolderIDGetParams{FolderID: id})
 	})
 }
