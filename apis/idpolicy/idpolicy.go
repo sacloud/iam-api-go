@@ -23,7 +23,7 @@ import (
 )
 
 type IDPolicyAPI interface {
-	GetOrganizationIdPolicy(ctx context.Context) ([]v1.IdPolicy, error)
+	ReadOrganizationIdPolicy(ctx context.Context) ([]v1.IdPolicy, error)
 	UpdateOrganizationIdPolicy(ctx context.Context, bindings []v1.IdPolicy) ([]v1.IdPolicy, error)
 }
 
@@ -33,8 +33,8 @@ type idPolicyOp struct {
 
 func NewIDPolicyOp(client *v1.Client) IDPolicyAPI { return &idPolicyOp{client: client} }
 
-func (o *idPolicyOp) GetOrganizationIdPolicy(ctx context.Context) ([]v1.IdPolicy, error) {
-	if ret, err := iam.ErrorFromDecodedResponse[v1.OrganizationIDPolicyGetOK]("IdPolicy.GetOrganizationIdPolicy", func() (any, error) {
+func (o *idPolicyOp) ReadOrganizationIdPolicy(ctx context.Context) ([]v1.IdPolicy, error) {
+	if ret, err := iam.ErrorFromDecodedResponse[v1.OrganizationIDPolicyGetOK]("IdPolicy.ReadOrganizationIdPolicy", func() (any, error) {
 		return o.client.OrganizationIDPolicyGet(ctx)
 	}); err != nil {
 		return nil, err

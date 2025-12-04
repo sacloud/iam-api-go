@@ -33,7 +33,7 @@ type User2FAAPI interface {
 	ValidateSecurityKeyRegistration(ctx context.Context, credential string) error
 
 	ListSecurityKeys(ctx context.Context) (*v1.CompatUsersUserIDSecurityKeysGetOK, error)
-	GetSecurityKey(ctx context.Context, securityKeyID int) (*v1.UserSecurityKey, error)
+	ReadSecurityKey(ctx context.Context, securityKeyID int) (*v1.UserSecurityKey, error)
 	UpdateSecurityKey(ctx context.Context, securityKeyID int, name string) (*v1.UserSecurityKey, error)
 	DeleteSecurityKey(ctx context.Context, securityKeyID int) error
 }
@@ -123,8 +123,8 @@ func (u *user2faOp) ListSecurityKeys(ctx context.Context) (*v1.CompatUsersUserID
 	})
 }
 
-func (u *user2faOp) GetSecurityKey(ctx context.Context, securityKeyID int) (*v1.UserSecurityKey, error) {
-	return iam.ErrorFromDecodedResponse[v1.UserSecurityKey]("User2FA.GetSecurityKey", func() (any, error) {
+func (u *user2faOp) ReadSecurityKey(ctx context.Context, securityKeyID int) (*v1.UserSecurityKey, error) {
+	return iam.ErrorFromDecodedResponse[v1.UserSecurityKey]("User2FA.ReadSecurityKey", func() (any, error) {
 		return u.client.CompatUsersUserIDSecurityKeysSecurityKeyIDGet(ctx, v1.CompatUsersUserIDSecurityKeysSecurityKeyIDGetParams{
 			UserID:        u.getUserID(),
 			SecurityKeyID: securityKeyID,

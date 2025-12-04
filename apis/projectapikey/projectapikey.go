@@ -24,7 +24,7 @@ import (
 type ProjectAPIKeyAPI interface {
 	List(ctx context.Context, params ListParams) (*v1.CompatAPIKeysGetOK, error)
 	Create(ctx context.Context, params CreateParams) (*v1.ProjectApiKeyWithSecret, error)
-	Get(ctx context.Context, id int) (*v1.ProjectApiKey, error)
+	Read(ctx context.Context, id int) (*v1.ProjectApiKey, error)
 	Update(ctx context.Context, id int, params UpdateParams) (*v1.ProjectApiKey, error)
 	Delete(ctx context.Context, id int) error
 }
@@ -59,7 +59,7 @@ type CreateParams struct {
 	Description      string
 	ServerResourceID *string
 	IamRoles         []string
-	ZoneID           *string
+	Zone             *string
 }
 
 func (p *projectApiKeyOp) Create(ctx context.Context, params CreateParams) (*v1.ProjectApiKeyWithSecret, error) {
@@ -70,13 +70,13 @@ func (p *projectApiKeyOp) Create(ctx context.Context, params CreateParams) (*v1.
 			Description:      params.Description,
 			ServerResourceID: iam.IntoOpt[v1.OptString](params.ServerResourceID),
 			IamRoles:         params.IamRoles,
-			ZoneID:           iam.IntoOpt[v1.OptString](params.ZoneID),
+			ZoneID:           iam.IntoOpt[v1.OptString](params.Zone),
 		})
 	})
 }
 
-func (p *projectApiKeyOp) Get(ctx context.Context, id int) (*v1.ProjectApiKey, error) {
-	return iam.ErrorFromDecodedResponse[v1.ProjectApiKey]("ProjectAPIKey.Get", func() (any, error) {
+func (p *projectApiKeyOp) Read(ctx context.Context, id int) (*v1.ProjectApiKey, error) {
+	return iam.ErrorFromDecodedResponse[v1.ProjectApiKey]("ProjectAPIKey.Read", func() (any, error) {
 		return p.client.CompatAPIKeysApikeyIDGet(ctx, v1.CompatAPIKeysApikeyIDGetParams{ApikeyID: id})
 	})
 }
@@ -86,7 +86,7 @@ type UpdateParams struct {
 	Description      string
 	ServerResourceID *string
 	IamRoles         []string
-	ZoneID           *string
+	Zone             *string
 }
 
 func (p *projectApiKeyOp) Update(ctx context.Context, id int, params UpdateParams) (*v1.ProjectApiKey, error) {
@@ -96,7 +96,7 @@ func (p *projectApiKeyOp) Update(ctx context.Context, id int, params UpdateParam
 			Description:      params.Description,
 			ServerResourceID: iam.IntoOpt[v1.OptString](params.ServerResourceID),
 			IamRoles:         params.IamRoles,
-			ZoneID:           iam.IntoOpt[v1.OptString](params.ZoneID),
+			ZoneID:           iam.IntoOpt[v1.OptString](params.Zone),
 		}
 		param := v1.CompatAPIKeysApikeyIDPutParams{
 			ApikeyID: id,

@@ -22,7 +22,7 @@ import (
 type SSOAPI interface {
 	List(ctx context.Context, page, perPage *int) (*v1.SSOProfilesGetOK, error)
 	Create(ctx context.Context, params CreateParams) (*v1.SSOProfile, error)
-	Get(ctx context.Context, id int) (*v1.SSOProfile, error)
+	Read(ctx context.Context, id int) (*v1.SSOProfile, error)
 	Update(ctx context.Context, id int, params UpdateParams) (*v1.SSOProfile, error)
 	Delete(ctx context.Context, id int) error
 
@@ -53,8 +53,8 @@ func (s *ssoOp) Create(ctx context.Context, params CreateParams) (*v1.SSOProfile
 	})
 }
 
-func (s *ssoOp) Get(ctx context.Context, id int) (*v1.SSOProfile, error) {
-	return iam.ErrorFromDecodedResponse[v1.SSOProfile]("SSO.Get", func() (any, error) {
+func (s *ssoOp) Read(ctx context.Context, id int) (*v1.SSOProfile, error) {
+	return iam.ErrorFromDecodedResponse[v1.SSOProfile]("SSO.Read", func() (any, error) {
 		return s.client.SSOProfilesSSOProfileIDGet(ctx, v1.SSOProfilesSSOProfileIDGetParams{SSOProfileID: id})
 	})
 }

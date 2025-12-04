@@ -207,7 +207,7 @@ func TestGetSecurityKey(t *testing.T) {
 	expected.SetLastUsedAt(v1.NewNilDateTime(Time))
 	assert, api := setup(t, &expected)
 
-	actual, err := api.GetSecurityKey(t.Context(), 123)
+	actual, err := api.ReadSecurityKey(t.Context(), 123)
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(&expected, actual)
@@ -221,7 +221,7 @@ func TestGetSecurityKey_Fail(t *testing.T) {
 	res.SetDetail(expected)
 	assert, api := setup(t, &res, res.Status)
 
-	actual, err := api.GetSecurityKey(t.Context(), 123)
+	actual, err := api.ReadSecurityKey(t.Context(), 123)
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.True(saclient.IsNotFoundError(err))

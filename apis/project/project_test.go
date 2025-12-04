@@ -110,7 +110,7 @@ func TestGet(t *testing.T) {
 	assert, api := setup(t, &expected)
 
 	projectID := 1
-	actual, err := api.Get(t.Context(), projectID)
+	actual, err := api.Read(t.Context(), projectID)
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(&expected, actual)
@@ -125,7 +125,7 @@ func TestGet_Fail(t *testing.T) {
 	assert, api := setup(t, &res, res.Status)
 
 	projectID := 1
-	actual, err := api.Get(t.Context(), projectID)
+	actual, err := api.Read(t.Context(), projectID)
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.True(saclient.IsNotFoundError(err))

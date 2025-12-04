@@ -23,7 +23,7 @@ import (
 
 type IDRoleAPI interface {
 	List(ctx context.Context, page, perPage *int) (*v1.IDRolesGetOK, error)
-	Get(ctx context.Context, id string) (*v1.IdRole, error)
+	Read(ctx context.Context, id string) (*v1.IdRole, error)
 }
 
 type idRoleOp struct {
@@ -41,8 +41,8 @@ func (i *idRoleOp) List(ctx context.Context, page, perPage *int) (*v1.IDRolesGet
 	})
 }
 
-func (i *idRoleOp) Get(ctx context.Context, id string) (*v1.IdRole, error) {
-	return iam.ErrorFromDecodedResponse[v1.IdRole]("IdRole.Get", func() (any, error) {
+func (i *idRoleOp) Read(ctx context.Context, id string) (*v1.IdRole, error) {
+	return iam.ErrorFromDecodedResponse[v1.IdRole]("IdRole.Read", func() (any, error) {
 		return i.client.IDRolesIDRoleIDGet(ctx, v1.IDRolesIDRoleIDGetParams{IDRoleID: id})
 	})
 }

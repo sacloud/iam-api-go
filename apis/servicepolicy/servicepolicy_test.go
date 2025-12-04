@@ -86,7 +86,7 @@ func TestGetStatus(t *testing.T) {
 	expected.SetEnabled(true)
 	assert, api := setup(t, &expected)
 
-	actual, err := api.GetStatus(t.Context())
+	actual, err := api.IsEnabled(t.Context())
 	assert.NoError(err)
 	assert.True(actual)
 	assert.Equal(expected.Enabled, actual)
@@ -100,7 +100,7 @@ func TestGetStatus_Fail(t *testing.T) {
 	res.SetDetail(expected)
 	assert, api := setup(t, &res, res.Status)
 
-	actual, err := api.GetStatus(t.Context())
+	actual, err := api.IsEnabled(t.Context())
 	assert.Error(err)
 	assert.False(actual)
 	assert.Contains(err.Error(), expected)
@@ -113,7 +113,7 @@ func TestGetRuleTemplates(t *testing.T) {
 	expected.Items[0].SetFake()
 	assert, api := setup(t, &expected)
 
-	actual, err := api.GetRuleTemplates(t.Context(), GetRuleTemplatesParams{})
+	actual, err := api.ListRuleTemplates(t.Context(), ListRuleTemplatesParams{})
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(&expected, actual)
@@ -127,7 +127,7 @@ func TestGetRuleTemplates_Fail(t *testing.T) {
 	res.SetDetail(expected)
 	assert, api := setup(t, &res, res.Status)
 
-	actual, err := api.GetRuleTemplates(t.Context(), GetRuleTemplatesParams{})
+	actual, err := api.ListRuleTemplates(t.Context(), ListRuleTemplatesParams{})
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)

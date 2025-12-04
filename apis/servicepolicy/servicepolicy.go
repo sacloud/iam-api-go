@@ -24,8 +24,8 @@ import (
 type ServicePolicyAPI interface {
 	Enable(ctx context.Context) error
 	Disable(ctx context.Context) error
-	GetStatus(ctx context.Context) (bool, error)
-	GetRuleTemplates(ctx context.Context, params GetRuleTemplatesParams) (*v1.ServicePolicyRuleTemplatesGetOK, error)
+	IsEnabled(ctx context.Context) (bool, error)
+	ListRuleTemplates(ctx context.Context, params ListRuleTemplatesParams) (*v1.ServicePolicyRuleTemplatesGetOK, error)
 }
 
 type servicePolicyOp struct {
@@ -50,8 +50,8 @@ func (s *servicePolicyOp) Disable(ctx context.Context) error {
 	return err
 }
 
-func (s *servicePolicyOp) GetStatus(ctx context.Context) (bool, error) {
-	if ret, err := iam.ErrorFromDecodedResponse[v1.ServicePolicyStatusGetOK]("ServicePolicy.GetStatus", func() (any, error) {
+func (s *servicePolicyOp) IsEnabled(ctx context.Context) (bool, error) {
+	if ret, err := iam.ErrorFromDecodedResponse[v1.ServicePolicyStatusGetOK]("ServicePolicy.IsEnabled", func() (any, error) {
 		return s.client.ServicePolicyStatusGet(ctx)
 	}); err != nil {
 		return false, err
@@ -60,7 +60,7 @@ func (s *servicePolicyOp) GetStatus(ctx context.Context) (bool, error) {
 	}
 }
 
-type GetRuleTemplatesParams struct {
+type ListRuleTemplatesParams struct {
 	Page    *int
 	PerPage *int
 	Name    *string
@@ -68,8 +68,8 @@ type GetRuleTemplatesParams struct {
 	Type    *v1.ServicePolicyRuleTemplatesGetType
 }
 
-func (s *servicePolicyOp) GetRuleTemplates(ctx context.Context, params GetRuleTemplatesParams) (*v1.ServicePolicyRuleTemplatesGetOK, error) {
-	return iam.ErrorFromDecodedResponse[v1.ServicePolicyRuleTemplatesGetOK]("ServicePolicy.GetRuleTemplates", func() (any, error) {
+func (s *servicePolicyOp) ListRuleTemplates(ctx context.Context, params ListRuleTemplatesParams) (*v1.ServicePolicyRuleTemplatesGetOK, error) {
+	return iam.ErrorFromDecodedResponse[v1.ServicePolicyRuleTemplatesGetOK]("ServicePolicy.ListRuleTemplates", func() (any, error) {
 		return s.client.ServicePolicyRuleTemplatesGet(ctx, v1.ServicePolicyRuleTemplatesGetParams{
 			Page:    iam.IntoOpt[v1.OptInt](params.Page),
 			PerPage: iam.IntoOpt[v1.OptInt](params.PerPage),

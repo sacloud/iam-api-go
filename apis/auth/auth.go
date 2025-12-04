@@ -22,11 +22,11 @@ import (
 )
 
 type AuthAPI interface {
-	GetPasswordPolicy(ctx context.Context) (*v1.PasswordPolicy, error)
-	PutPasswordPolicy(ctx context.Context) (*v1.PasswordPolicy, error)
+	ReadPasswordPolicy(ctx context.Context) (*v1.PasswordPolicy, error)
+	UpdatePasswordPolicy(ctx context.Context) (*v1.PasswordPolicy, error)
 
-	GetAuthConditions(ctx context.Context) (*v1.AuthConditions, error)
-	PutAuthConditions(ctx context.Context, req *v1.AuthConditions) (*v1.AuthConditions, error)
+	ReadAuthConditions(ctx context.Context) (*v1.AuthConditions, error)
+	UpdateAuthConditions(ctx context.Context, req *v1.AuthConditions) (*v1.AuthConditions, error)
 }
 
 type authOp struct {
@@ -37,26 +37,26 @@ var _ AuthAPI = (*authOp)(nil)
 
 func NewAuthOp(client *v1.Client) AuthAPI { return &authOp{client} }
 
-func (a *authOp) GetPasswordPolicy(ctx context.Context) (*v1.PasswordPolicy, error) {
-	return iam.ErrorFromDecodedResponse[v1.PasswordPolicy]("Auth.GetPasswordPolicy", func() (any, error) {
+func (a *authOp) ReadPasswordPolicy(ctx context.Context) (*v1.PasswordPolicy, error) {
+	return iam.ErrorFromDecodedResponse[v1.PasswordPolicy]("Auth.ReadPasswordPolicy", func() (any, error) {
 		return a.client.OrganizationPasswordPolicyGet(ctx)
 	})
 }
 
-func (a *authOp) PutPasswordPolicy(ctx context.Context) (*v1.PasswordPolicy, error) {
-	return iam.ErrorFromDecodedResponse[v1.PasswordPolicy]("Auth.PutPasswordPolicy", func() (any, error) {
+func (a *authOp) UpdatePasswordPolicy(ctx context.Context) (*v1.PasswordPolicy, error) {
+	return iam.ErrorFromDecodedResponse[v1.PasswordPolicy]("Auth.UpdatePasswordPolicy", func() (any, error) {
 		return a.client.OrganizationPasswordPolicyPut(ctx)
 	})
 }
 
-func (a *authOp) GetAuthConditions(ctx context.Context) (*v1.AuthConditions, error) {
-	return iam.ErrorFromDecodedResponse[v1.AuthConditions]("Auth.GetAuthConditions", func() (any, error) {
+func (a *authOp) ReadAuthConditions(ctx context.Context) (*v1.AuthConditions, error) {
+	return iam.ErrorFromDecodedResponse[v1.AuthConditions]("Auth.ReadAuthConditions", func() (any, error) {
 		return a.client.OrganizationAuthConditionsGet(ctx)
 	})
 }
 
-func (a *authOp) PutAuthConditions(ctx context.Context, req *v1.AuthConditions) (*v1.AuthConditions, error) {
-	return iam.ErrorFromDecodedResponse[v1.AuthConditions]("Auth.PutAuthConditions", func() (any, error) {
+func (a *authOp) UpdateAuthConditions(ctx context.Context, req *v1.AuthConditions) (*v1.AuthConditions, error) {
+	return iam.ErrorFromDecodedResponse[v1.AuthConditions]("Auth.UpdateAuthConditions", func() (any, error) {
 		return a.client.OrganizationAuthConditionsPut(ctx, req)
 	})
 }

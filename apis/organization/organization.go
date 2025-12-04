@@ -22,11 +22,11 @@ import (
 )
 
 type OrganizationAPI interface {
-	Get(ctx context.Context) (*v1.Organization, error)
-	Put(ctx context.Context, name string) (*v1.Organization, error)
+	Read(ctx context.Context) (*v1.Organization, error)
+	Update(ctx context.Context, name string) (*v1.Organization, error)
 
-	GetServicePolicy(ctx context.Context, params GetServicePolicyParams) ([]v1.RuleResponse, error)
-	PutServicePolicy(ctx context.Context, rules []v1.Rule) ([]v1.RuleResponse, error)
+	ReadServicePolicy(ctx context.Context, params GetServicePolicyParams) ([]v1.RuleResponse, error)
+	UpdateServicePolicy(ctx context.Context, rules []v1.Rule) ([]v1.RuleResponse, error)
 }
 
 type organizationOp struct {
@@ -37,13 +37,13 @@ var _ OrganizationAPI = (*organizationOp)(nil)
 
 func NewOrganizationOp(client *v1.Client) OrganizationAPI { return &organizationOp{client} }
 
-func (o *organizationOp) Get(ctx context.Context) (*v1.Organization, error) {
+func (o *organizationOp) Read(ctx context.Context) (*v1.Organization, error) {
 	return iam.ErrorFromDecodedResponse[v1.Organization]("Organization.Get", func() (any, error) {
 		return o.client.OrganizationGet(ctx)
 	})
 }
 
-func (o *organizationOp) Put(ctx context.Context, name string) (*v1.Organization, error) {
+func (o *organizationOp) Update(ctx context.Context, name string) (*v1.Organization, error) {
 	return iam.ErrorFromDecodedResponse[v1.Organization]("Organization.Put", func() (any, error) {
 		return o.client.OrganizationPut(ctx, &v1.OrganizationPutReq{Name: name})
 	})
@@ -57,7 +57,7 @@ type GetServicePolicyParams struct {
 	Type     *v1.OrganizationServicePolicyGetType
 }
 
-func (o *organizationOp) GetServicePolicy(ctx context.Context, params GetServicePolicyParams) ([]v1.RuleResponse, error) {
+func (o *organizationOp) ReadServicePolicy(ctx context.Context, params GetServicePolicyParams) ([]v1.RuleResponse, error) {
 	if ret, err := iam.ErrorFromDecodedResponse[v1.OrganizationServicePolicyGetOK]("Organization.GetServicePolicy", func() (any, error) {
 		return o.client.OrganizationServicePolicyGet(ctx, v1.OrganizationServicePolicyGetParams{
 			IsActive: iam.IntoOpt[v1.OptBool](params.IsActive),
@@ -73,7 +73,7 @@ func (o *organizationOp) GetServicePolicy(ctx context.Context, params GetService
 	}
 }
 
-func (o *organizationOp) PutServicePolicy(ctx context.Context, rules []v1.Rule) ([]v1.RuleResponse, error) {
+func (o *organizationOp) UpdateServicePolicy(ctx context.Context, rules []v1.Rule) ([]v1.RuleResponse, error) {
 	if ret, err := iam.ErrorFromDecodedResponse[v1.OrganizationServicePolicyPutOK]("Organization.PutServicePolicy", func() (any, error) {
 		return o.client.OrganizationServicePolicyPut(ctx, &v1.OrganizationServicePolicyPutReq{Rules: rules})
 	}); err != nil {

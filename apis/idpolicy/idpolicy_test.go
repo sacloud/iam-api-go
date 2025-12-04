@@ -44,7 +44,7 @@ func TestGetOrganizationIdPolicy(t *testing.T) {
 	expected.Bindings[0].SetFake()
 	assert, api := setup(t, &expected)
 
-	actual, err := api.GetOrganizationIdPolicy(t.Context())
+	actual, err := api.ReadOrganizationIdPolicy(t.Context())
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(expected.GetBindings(), actual)
@@ -58,7 +58,7 @@ func TestGetOrganizationIdPolicy_Fail(t *testing.T) {
 	res.SetDetail(detail)
 	assert, api := setup(t, &res, res.Status)
 
-	actual, err := api.GetOrganizationIdPolicy(t.Context())
+	actual, err := api.ReadOrganizationIdPolicy(t.Context())
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), detail)

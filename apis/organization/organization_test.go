@@ -43,7 +43,7 @@ func TestGet(t *testing.T) {
 	expected.SetFake()
 	assert, api := setup(t, &expected)
 
-	actual, err := api.Get(t.Context())
+	actual, err := api.Read(t.Context())
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(&expected, actual)
@@ -57,7 +57,7 @@ func TestGet_Fail(t *testing.T) {
 	res.SetDetail(expected)
 	assert, api := setup(t, &res, res.Status)
 
-	actual, err := api.Get(t.Context())
+	actual, err := api.Read(t.Context())
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.True(saclient.IsNotFoundError(err))
@@ -71,7 +71,7 @@ func TestPut(t *testing.T) {
 	expected.SetName(name)
 	assert, api := setup(t, &expected)
 
-	actual, err := api.Put(t.Context(), name)
+	actual, err := api.Update(t.Context(), name)
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(&expected, actual)
@@ -85,7 +85,7 @@ func TestPut_Fail(t *testing.T) {
 	res.SetDetail(expected)
 	assert, api := setup(t, &res, res.Status)
 
-	actual, err := api.Put(t.Context(), "updated")
+	actual, err := api.Update(t.Context(), "updated")
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.False(saclient.IsNotFoundError(err))
@@ -100,7 +100,7 @@ func TestGetServicePolicy(t *testing.T) {
 	assert, api := setup(t, &expected)
 
 	params := GetServicePolicyParams{IsActive: new(bool)}
-	actual, err := api.GetServicePolicy(t.Context(), params)
+	actual, err := api.ReadServicePolicy(t.Context(), params)
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(expected.Rules, actual)
@@ -115,7 +115,7 @@ func TestGetServicePolicy_Fail(t *testing.T) {
 	assert, api := setup(t, &res, res.Status)
 
 	params := GetServicePolicyParams{IsActive: new(bool)}
-	actual, err := api.GetServicePolicy(t.Context(), params)
+	actual, err := api.ReadServicePolicy(t.Context(), params)
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
@@ -128,7 +128,7 @@ func TestPutServicePolicy(t *testing.T) {
 	expected.Rules[0].SetFake()
 	assert, api := setup(t, &expected)
 
-	actual, err := api.PutServicePolicy(t.Context(), []v1.Rule{})
+	actual, err := api.UpdateServicePolicy(t.Context(), []v1.Rule{})
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(expected.Rules, actual)
@@ -142,7 +142,7 @@ func TestPutServicePolicy_Fail(t *testing.T) {
 	res.SetDetail(expected)
 	assert, api := setup(t, &res, res.Status)
 
-	actual, err := api.PutServicePolicy(t.Context(), []v1.Rule{})
+	actual, err := api.UpdateServicePolicy(t.Context(), []v1.Rule{})
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)

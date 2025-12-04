@@ -24,7 +24,7 @@ import (
 type ServicePrincipalAPI interface {
 	List(ctx context.Context, params ListParams) (*v1.ServicePrincipalsGetOK, error)
 	Create(ctx context.Context, params CreateParams) (*v1.ServicePrincipal, error)
-	Get(ctx context.Context, id int) (*v1.ServicePrincipal, error)
+	Read(ctx context.Context, id int) (*v1.ServicePrincipal, error)
 	Update(ctx context.Context, id int, params UpdateParams) (*v1.ServicePrincipal, error)
 	Delete(ctx context.Context, id int) error
 
@@ -71,8 +71,8 @@ func (s *servicePrincipalOp) Create(ctx context.Context, params CreateParams) (*
 	})
 }
 
-func (s *servicePrincipalOp) Get(ctx context.Context, id int) (*v1.ServicePrincipal, error) {
-	return iam.ErrorFromDecodedResponse[v1.ServicePrincipal]("ServicePrincipal.Get", func() (any, error) {
+func (s *servicePrincipalOp) Read(ctx context.Context, id int) (*v1.ServicePrincipal, error) {
+	return iam.ErrorFromDecodedResponse[v1.ServicePrincipal]("ServicePrincipal.Read", func() (any, error) {
 		return s.client.ServicePrincipalsServicePrincipalIDGet(ctx, v1.ServicePrincipalsServicePrincipalIDGetParams{ServicePrincipalID: id})
 	})
 }

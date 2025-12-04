@@ -42,7 +42,7 @@ func TestGetPasswordPolicy(t *testing.T) {
 	expected.SetFake()
 	assert, api := setup(t, &expected)
 
-	actual, err := api.GetPasswordPolicy(t.Context())
+	actual, err := api.ReadPasswordPolicy(t.Context())
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(&expected, actual)
@@ -56,7 +56,7 @@ func TestGetPasswordPolicy_Fail(t *testing.T) {
 	res.SetDetail(expected)
 	assert, api := setup(t, &res, res.Status)
 
-	actual, err := api.GetPasswordPolicy(t.Context())
+	actual, err := api.ReadPasswordPolicy(t.Context())
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
@@ -67,7 +67,7 @@ func TestPutPasswordPolicy(t *testing.T) {
 	expected.SetFake()
 	assert, api := setup(t, &expected)
 
-	actual, err := api.PutPasswordPolicy(t.Context())
+	actual, err := api.UpdatePasswordPolicy(t.Context())
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(&expected, actual)
@@ -81,7 +81,7 @@ func TestPutPasswordPolicy_Fail(t *testing.T) {
 	res.SetDetail(expected)
 	assert, api := setup(t, &res, res.Status)
 
-	actual, err := api.PutPasswordPolicy(t.Context())
+	actual, err := api.UpdatePasswordPolicy(t.Context())
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
@@ -92,7 +92,7 @@ func TestGetAuthConditions(t *testing.T) {
 	expected.SetFake()
 	assert, api := setup(t, &expected)
 
-	actual, err := api.GetAuthConditions(t.Context())
+	actual, err := api.ReadAuthConditions(t.Context())
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(&expected, actual)
@@ -106,7 +106,7 @@ func TestGetAuthConditions_Fail(t *testing.T) {
 	res.SetDetail(expected)
 	assert, api := setup(t, &res, res.Status)
 
-	actual, err := api.GetAuthConditions(t.Context())
+	actual, err := api.ReadAuthConditions(t.Context())
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
@@ -117,7 +117,7 @@ func TestPutAuthConditions(t *testing.T) {
 	expected.SetFake()
 	assert, api := setup(t, &expected)
 
-	actual, err := api.PutAuthConditions(t.Context(), &expected)
+	actual, err := api.UpdateAuthConditions(t.Context(), &expected)
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(&expected, actual)
@@ -133,7 +133,7 @@ func TestPutAuthConditions_Fail(t *testing.T) {
 
 	var req v1.AuthConditions
 	req.SetFake()
-	actual, err := api.PutAuthConditions(t.Context(), &req)
+	actual, err := api.UpdateAuthConditions(t.Context(), &req)
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)

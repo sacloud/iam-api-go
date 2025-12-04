@@ -26,7 +26,7 @@ import (
 type UserAPI interface {
 	List(ctx context.Context, params ListParams) (*v1.CompatUsersGetOK, error)
 	Create(ctx context.Context, params CreateParams) (*v1.User, error)
-	Get(ctx context.Context, id int) (*v1.User, error)
+	Read(ctx context.Context, id int) (*v1.User, error)
 	Update(ctx context.Context, id int, params UpdateParams) (*v1.User, error)
 	Delete(ctx context.Context, id int) error
 
@@ -78,8 +78,8 @@ func (u *userOp) Create(ctx context.Context, params CreateParams) (*v1.User, err
 	})
 }
 
-func (u *userOp) Get(ctx context.Context, id int) (*v1.User, error) {
-	return iam.ErrorFromDecodedResponse[v1.User]("User.Get", func() (any, error) {
+func (u *userOp) Read(ctx context.Context, id int) (*v1.User, error) {
+	return iam.ErrorFromDecodedResponse[v1.User]("User.Read", func() (any, error) {
 		return u.client.CompatUsersUserIDGet(ctx, v1.CompatUsersUserIDGetParams{UserID: id})
 	})
 }

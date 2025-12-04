@@ -11,7 +11,7 @@ type ProjectAPI interface {
 	List(ctx context.Context, params ListParams) (*v1.ProjectsGetOK, error)
 
 	Create(ctx context.Context, params CreateParams) (*v1.Project, error)
-	Get(ctx context.Context, id int) (*v1.Project, error)
+	Read(ctx context.Context, id int) (*v1.Project, error)
 	Update(ctx context.Context, id int, name string, description *string) (*v1.Project, error)
 	Delete(ctx context.Context, id int) error
 
@@ -64,8 +64,8 @@ func (p *projectOp) Create(ctx context.Context, params CreateParams) (*v1.Projec
 	})
 }
 
-func (p *projectOp) Get(ctx context.Context, id int) (*v1.Project, error) {
-	return iam.ErrorFromDecodedResponse[v1.Project]("Project.Get", func() (any, error) {
+func (p *projectOp) Read(ctx context.Context, id int) (*v1.Project, error) {
+	return iam.ErrorFromDecodedResponse[v1.Project]("Project.Read", func() (any, error) {
 		return p.client.ProjectsProjectIDGet(ctx, v1.ProjectsProjectIDGetParams{ProjectID: id})
 	})
 }
