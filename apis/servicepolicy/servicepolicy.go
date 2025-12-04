@@ -51,7 +51,7 @@ func (s *servicePolicyOp) Disable(ctx context.Context) error {
 }
 
 func (s *servicePolicyOp) IsEnabled(ctx context.Context) (bool, error) {
-	if ret, err := iam.ErrorFromDecodedResponse[v1.ServicePolicyStatusGetOK]("ServicePolicy.GetStatus", func() (any, error) {
+	if ret, err := iam.ErrorFromDecodedResponse[v1.ServicePolicyStatusGetOK]("ServicePolicy.IsEnabled", func() (any, error) {
 		return s.client.ServicePolicyStatusGet(ctx)
 	}); err != nil {
 		return false, err
@@ -69,7 +69,7 @@ type ListRuleTemplatesParams struct {
 }
 
 func (s *servicePolicyOp) ListRuleTemplates(ctx context.Context, params ListRuleTemplatesParams) (*v1.ServicePolicyRuleTemplatesGetOK, error) {
-	return iam.ErrorFromDecodedResponse[v1.ServicePolicyRuleTemplatesGetOK]("ServicePolicy.GetRuleTemplates", func() (any, error) {
+	return iam.ErrorFromDecodedResponse[v1.ServicePolicyRuleTemplatesGetOK]("ServicePolicy.ListRuleTemplates", func() (any, error) {
 		return s.client.ServicePolicyRuleTemplatesGet(ctx, v1.ServicePolicyRuleTemplatesGetParams{
 			Page:    iam.IntoOpt[v1.OptInt](params.Page),
 			PerPage: iam.IntoOpt[v1.OptInt](params.PerPage),
