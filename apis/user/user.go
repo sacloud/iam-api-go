@@ -79,7 +79,7 @@ func (u *userOp) Create(ctx context.Context, params CreateParams) (*v1.User, err
 }
 
 func (u *userOp) Read(ctx context.Context, id int) (*v1.User, error) {
-	return iam.ErrorFromDecodedResponse[v1.User]("User.Get", func() (any, error) {
+	return iam.ErrorFromDecodedResponse[v1.User]("User.Read", func() (any, error) {
 		return u.client.CompatUsersUserIDGet(ctx, v1.CompatUsersUserIDGetParams{UserID: id})
 	})
 }
