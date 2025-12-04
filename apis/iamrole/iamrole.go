@@ -23,7 +23,7 @@ import (
 
 type IAMRoleAPI interface {
 	List(ctx context.Context, page, perPage *int) (*v1.IamRolesGetOK, error)
-	Get(ctx context.Context, id string) (*v1.IamRole, error)
+	Read(ctx context.Context, id string) (*v1.IamRole, error)
 }
 
 type iamRoleOp struct {
@@ -41,8 +41,8 @@ func (i *iamRoleOp) List(ctx context.Context, page, perPage *int) (*v1.IamRolesG
 	})
 }
 
-func (i *iamRoleOp) Get(ctx context.Context, id string) (*v1.IamRole, error) {
-	return iam.ErrorFromDecodedResponse[v1.IamRole]("IAMRole.Get", func() (any, error) {
+func (i *iamRoleOp) Read(ctx context.Context, id string) (*v1.IamRole, error) {
+	return iam.ErrorFromDecodedResponse[v1.IamRole]("IAMRole.Read", func() (any, error) {
 		return i.client.IamRolesIamRoleIDGet(ctx, v1.IamRolesIamRoleIDGetParams{IamRoleID: id})
 	})
 }
