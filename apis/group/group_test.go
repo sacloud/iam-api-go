@@ -99,7 +99,7 @@ func TestGet(t *testing.T) {
 	expected.SetFake()
 	assert, api := setup(t, &expected)
 
-	actual, err := api.Get(t.Context(), 123)
+	actual, err := api.Read(t.Context(), 123)
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(&expected, actual)
@@ -113,7 +113,7 @@ func TestGet_Fail(t *testing.T) {
 	res.SetDetail(expected)
 	assert, api := setup(t, &res, res.Status)
 
-	actual, err := api.Get(t.Context(), 123)
+	actual, err := api.Read(t.Context(), 123)
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.True(saclient.IsNotFoundError(err))
@@ -178,7 +178,7 @@ func TestGetMemberships(t *testing.T) {
 	mock.SetCompatUsers(expected)
 	assert, api := setup(t, &mock)
 
-	actual, err := api.GetMemberships(t.Context(), 123)
+	actual, err := api.ReadMemberships(t.Context(), 123)
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(expected, actual)
@@ -192,7 +192,7 @@ func TestGetMemberships_Fail(t *testing.T) {
 	res.SetDetail(expected)
 	assert, api := setup(t, &res, res.Status)
 
-	actual, err := api.GetMemberships(t.Context(), 123)
+	actual, err := api.ReadMemberships(t.Context(), 123)
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.True(saclient.IsNotFoundError(err))

@@ -26,11 +26,11 @@ import (
 type GroupAPI interface {
 	List(ctx context.Context, params ListParams) (*v1.GroupsGetOK, error)
 	Create(ctx context.Context, name string, description string) (*v1.Group, error)
-	Get(ctx context.Context, id int) (*v1.Group, error)
+	Read(ctx context.Context, id int) (*v1.Group, error)
 	Update(ctx context.Context, id int, name string, description string) (*v1.Group, error)
 	Delete(ctx context.Context, id int) error
 
-	GetMemberships(ctx context.Context, groupID int) ([]v1.GroupMembershipsCompatUsersItem, error)
+	ReadMemberships(ctx context.Context, groupID int) ([]v1.GroupMembershipsCompatUsersItem, error)
 	UpdateMemberships(ctx context.Context, groupID int, userIDs []int) ([]v1.GroupMembershipsCompatUsersItem, error)
 }
 
@@ -73,8 +73,8 @@ func (g *groupOp) Create(ctx context.Context, name string, description string) (
 	})
 }
 
-func (g *groupOp) Get(ctx context.Context, id int) (*v1.Group, error) {
-	return iam.ErrorFromDecodedResponse[v1.Group]("Group.Get", func() (any, error) {
+func (g *groupOp) Read(ctx context.Context, id int) (*v1.Group, error) {
+	return iam.ErrorFromDecodedResponse[v1.Group]("Group.Read", func() (any, error) {
 		return g.client.GroupsGroupIDGet(ctx, v1.GroupsGroupIDGetParams{GroupID: id})
 	})
 }
@@ -100,8 +100,8 @@ func (g *groupOp) Delete(ctx context.Context, id int) error {
 	return err
 }
 
-func (g *groupOp) GetMemberships(ctx context.Context, id int) ([]v1.GroupMembershipsCompatUsersItem, error) {
-	if ret, err := iam.ErrorFromDecodedResponse[v1.GroupMemberships]("Group.GetMemberships", func() (any, error) {
+func (g *groupOp) ReadMemberships(ctx context.Context, id int) ([]v1.GroupMembershipsCompatUsersItem, error) {
+	if ret, err := iam.ErrorFromDecodedResponse[v1.GroupMemberships]("Group.ReadMemberships", func() (any, error) {
 		return g.client.GroupsGroupIDMembershipsGet(ctx, v1.GroupsGroupIDMembershipsGetParams{GroupID: id})
 	}); err != nil {
 		return nil, err
