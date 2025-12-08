@@ -142,7 +142,7 @@ func TestUpdate(t *testing.T) {
 	assert, api := setup(t, &expected)
 
 	projectID := 1
-	actual, err := api.Update(t.Context(), projectID, name, &description)
+	actual, err := api.Update(t.Context(), projectID, name, description)
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(&expected, actual)
@@ -159,7 +159,7 @@ func TestUpdate_Fail(t *testing.T) {
 	projectID := 1
 	name := testutil.RandomName("project", 32, testutil.CharSetAlphaNum)
 	description := testutil.Random(64, testutil.CharSetAlphaNum)
-	actual, err := api.Update(t.Context(), projectID, name, &description)
+	actual, err := api.Update(t.Context(), projectID, name, description)
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)

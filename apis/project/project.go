@@ -12,7 +12,7 @@ type ProjectAPI interface {
 
 	Create(ctx context.Context, params CreateParams) (*v1.Project, error)
 	Read(ctx context.Context, id int) (*v1.Project, error)
-	Update(ctx context.Context, id int, name string, description *string) (*v1.Project, error)
+	Update(ctx context.Context, id int, name string, description string) (*v1.Project, error)
 	Delete(ctx context.Context, id int) error
 
 	Move(ctx context.Context, ids []int, parentFolderID *int) error
@@ -70,14 +70,14 @@ func (p *projectOp) Read(ctx context.Context, id int) (*v1.Project, error) {
 	})
 }
 
-func (p *projectOp) Update(ctx context.Context, id int, name string, description *string) (*v1.Project, error) {
+func (p *projectOp) Update(ctx context.Context, id int, name string, description string) (*v1.Project, error) {
 	return iam.ErrorFromDecodedResponse[v1.Project]("Project.Update", func() (any, error) {
 		params := v1.ProjectsProjectIDPutParams{
 			ProjectID: id,
 		}
 		request := v1.ProjectsProjectIDPutReq{
 			Name:        name,
-			Description: *description,
+			Description: description,
 		}
 		return p.client.ProjectsProjectIDPut(ctx, &request, params)
 	})
