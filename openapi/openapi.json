@@ -2,7 +2,11 @@
   "openapi": "3.0.3",
   "info": {
     "title": "さくらのクラウドIAM API",
-    "version": "0.0.1"
+    "version": "1.0.0",
+    "contact": {
+      "name": "SAKURA internet Inc."
+    },
+    "description": "さくらのクラウドIAMのAPIドキュメントです"
   },
   "servers": [
     {
@@ -532,142 +536,6 @@
         }
       }
     },
-    "/compat/users/{user_id}/activate-otp": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/UserID"
-        }
-      ],
-      "post": {
-        "tags": [
-          "user-2fa"
-        ],
-        "summary": "ユーザのOTPを有効化する",
-        "description": "指定したユーザのワンタイムパスワード認証の有効化を開始し、シークレットキーを取得します。\n",
-        "responses": {
-          "200": {
-            "description": "成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "class",
-                    "name",
-                    "secret",
-                    "period_sec",
-                    "algorithm",
-                    "issuer",
-                    "uncommitted"
-                  ],
-                  "properties": {
-                    "class": {
-                      "type": "string",
-                      "enum": [
-                        "totp"
-                      ],
-                      "description": "OTP生成方式",
-                      "example": "totp"
-                    },
-                    "name": {
-                      "type": "string",
-                      "description": "ユーザ識別子",
-                      "example": "SakuraCloud:user1@xxx888888",
-                      "minLength": 1,
-                      "maxLength": 32
-                    },
-                    "secret": {
-                      "type": "string",
-                      "description": "OTP用のシークレット",
-                      "example": "rusp3t3ujcdzwyt5abzl6c5h44xxxxxx",
-                      "minLength": 32,
-                      "maxLength": 32
-                    },
-                    "period_sec": {
-                      "type": "integer",
-                      "description": "有効期限",
-                      "example": 30,
-                      "minimum": 1,
-                      "maximum": 32
-                    },
-                    "algorithm": {
-                      "type": "string",
-                      "enum": [
-                        "sha1"
-                      ],
-                      "description": "生成アルゴリズム",
-                      "example": "sha1"
-                    },
-                    "issuer": {
-                      "type": "string",
-                      "description": "発行元",
-                      "example": "SakuraCloud",
-                      "minLength": 1,
-                      "maxLength": 32
-                    },
-                    "uncommitted": {
-                      "type": "boolean",
-                      "description": "OTP有効化が完了したかどうか",
-                      "example": false
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "認証情報が無効",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http401Unauthorized"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "アクセス権限がない",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http403Forbidden"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "指定したユーザが存在しない",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http404NotFound"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "OTPが有効化済み",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http409Conflict"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "APIリクエストのレートリミット超過",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http429TooManyRequests"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/compat/users/{user_id}/deactivate-otp": {
       "parameters": [
         {
@@ -710,96 +578,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Http404NotFound"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "APIリクエストのレートリミット超過",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http429TooManyRequests"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/compat/users/{user_id}/recovery-code": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/UserID"
-        }
-      ],
-      "post": {
-        "tags": [
-          "user-2fa"
-        ],
-        "summary": "ユーザのOTPリカバリコードを発行する",
-        "description": "指定したユーザの2要素認証リカバリコードを発行します。再実行するとリカバリコードが上書きされます。\n",
-        "responses": {
-          "200": {
-            "description": "成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "code"
-                  ],
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "format": "integer",
-                      "description": "リカバリコード",
-                      "readOnly": true,
-                      "example": "1234567890123456789012345678901234567890",
-                      "minLength": 40,
-                      "maxLength": 40
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "認証情報が無効",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http401Unauthorized"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "アクセス権限がない",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http403Forbidden"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "指定したユーザが存在しない",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http404NotFound"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "OTP有効化が完了していない",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http409Conflict"
                 }
               }
             }
@@ -1148,190 +926,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Http404NotFound"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "APIリクエストのレートリミット超過",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http429TooManyRequests"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/compat/users/{user_id}/start-security-key-registration": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/UserID"
-        }
-      ],
-      "post": {
-        "tags": [
-          "user-2fa"
-        ],
-        "summary": "ユーザのセキュリティキー登録を開始する",
-        "description": "指定したユーザのセキュリティキー登録を開始します。現時点でのセキュリティキーの最大登録数は1つです。  \nWebAuthnのPublicKeyCredentialCreationOptions生成を行います。\n",
-        "responses": {
-          "200": {
-            "description": "成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "description": "WebAuthnのPublicKeyCredentialCreationOptions",
-                  "required": [
-                    "public_key_credential_creation_options"
-                  ],
-                  "properties": {
-                    "public_key_credential_creation_options": {
-                      "type": "string",
-                      "description": "PublicKeyCredentialCreationOptionsの辞書データを文字列に変換したもの"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "認証情報が無効",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http401Unauthorized"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "アクセス権限がない",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http403Forbidden"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "指定したユーザが存在しない",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http404NotFound"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "セキュリティキーの最大登録数を超えた",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http409Conflict"
-                }
-              }
-            }
-          },
-          "429": {
-            "description": "APIリクエストのレートリミット超過",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http429TooManyRequests"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/compat/users/{user_id}/validate-security-key-registration": {
-      "parameters": [
-        {
-          "$ref": "#/components/parameters/UserID"
-        }
-      ],
-      "post": {
-        "tags": [
-          "user-2fa"
-        ],
-        "summary": "ユーザのセキュリティキー登録を完了する",
-        "description": "指定したユーザのセキュリティキー登録を完了します。  \nブラウザの `navigator.credentials.create()` で生成された[認証情報](https://www.w3.org/TR/webauthn-2/#publickeycredential)を受け取って検証します。\n",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "credential"
-                ],
-                "properties": {
-                  "credential": {
-                    "type": "string",
-                    "description": "AuthenticatorAttestationResponseを持つ認証情報の辞書データを文字列にしたもの"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "成功"
-          },
-          "400": {
-            "description": "不正なリクエスト",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http400BadRequest"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "認証情報が無効",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http401Unauthorized"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "アクセス権限がない",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http403Forbidden"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "指定したユーザが存在しない",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http404NotFound"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "セキュリティキーの最大登録数を超えた",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Http409Conflict"
                 }
               }
             }
@@ -2709,7 +2303,8 @@
                       "type": "about:blank",
                       "status": 400,
                       "title": "parant_not_found",
-                      "detail": "親フォルダが見つかりません。"
+                      "detail": "親フォルダが見つかりません。",
+                      "errors": {}
                     }
                   }
                 }
@@ -2803,7 +2398,8 @@
                       "type": "about:blank",
                       "status": 400,
                       "title": "project_not_found",
-                      "detail": "指定されたプロジェクトが見つかりません。"
+                      "detail": "指定されたプロジェクトが見つかりません。",
+                      "errors": {}
                     }
                   },
                   "ParentIdNotFound": {
@@ -2812,7 +2408,8 @@
                       "type": "about:blank",
                       "status": 400,
                       "title": "parant_not_found",
-                      "detail": "親フォルダが見つかりません。"
+                      "detail": "親フォルダが見つかりません。",
+                      "errors": {}
                     }
                   },
                   "DuplicateProjectNames": {
@@ -2821,7 +2418,8 @@
                       "type": "about:blank",
                       "status": 400,
                       "title": "duplicate_project_names",
-                      "detail": "同じ階層に同じ名前のプロジェクトを登録できません。"
+                      "detail": "同じ階層に同じ名前のプロジェクトを登録できません。",
+                      "errors": {}
                     }
                   }
                 }
@@ -4483,6 +4081,7 @@
         "tags": [
           "service-principal"
         ],
+        "summary": "サービスプリンシパルキー一覧を取得する",
         "parameters": [
           {
             "$ref": "#/components/parameters/ServicePrincipalID"
@@ -4686,8 +4285,10 @@
                 },
                 "example": {
                   "id": "00000000-0000-0000-0000-000000000000",
+                  "kid": "key-id-123456",
                   "status": "enabled",
                   "key_origin": "user",
+                  "public_key": "BEGIN PUBLIC KEY\\n...\\nEND PUBLIC KEY",
                   "created_at": "2023-10-01T00:00:00Z",
                   "expired_at": "2024-10-01T00:00:00Z"
                 }
@@ -4761,8 +4362,10 @@
                 },
                 "example": {
                   "id": "00000000-0000-0000-0000-000000000000",
+                  "kid": "key-id-123456",
                   "status": "disabled",
                   "key_origin": "user",
+                  "public_key": "BEGIN PUBLIC KEY\\n...\\nEND PUBLIC KEY",
                   "created_at": "2023-10-01T00:00:00Z",
                   "expired_at": "2024-10-01T00:00:00Z"
                 }
@@ -4997,7 +4600,7 @@
                   "server_resource_id": {
                     "type": "string",
                     "description": "APIキーがシングルサーバコントロールパネルで利用される場合は必須",
-                    "example": 123456789123
+                    "example": "123456789123"
                   },
                   "iam_roles": {
                     "type": "array",
@@ -5058,6 +4661,26 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Http403Forbidden"
+                },
+                "examples": {
+                  "Response1": {
+                    "summary": "このアクションを実行する権限がない",
+                    "value": {
+                      "type": "about:blank",
+                      "status": 403,
+                      "title": "permission_denied",
+                      "detail": "このアクションを実行する権限がありません。"
+                    }
+                  },
+                  "Response2": {
+                    "summary": "サービスポリシーを違反した",
+                    "value": {
+                      "type": "about:blank",
+                      "status": 403,
+                      "title": "permission_denied",
+                      "detail": "要求された操作は許可されていません。サービスポリシーを違反しました。\niam-disable-api-key-creationの内容を確認してください。"
+                    }
+                  }
                 }
               }
             }
@@ -5179,7 +4802,7 @@
                   "server_resource_id": {
                     "type": "string",
                     "description": "APIキーがシングルサーバコントロールパネルで利用される場合のみ変更可能。",
-                    "example": 123456789123
+                    "example": "123456789123"
                   },
                   "iam_roles": {
                     "type": "array",
@@ -5946,9 +5569,9 @@
                   },
                   "parent_id": {
                     "type": "integer",
+                    "nullable": true,
                     "description": "親フォルダID",
                     "default": null,
-                    "nullable": true,
                     "example": 1
                   }
                 }
@@ -5981,7 +5604,8 @@
                       "type": "about:blank",
                       "status": 400,
                       "title": "parant_not_found",
-                      "detail": "親フォルダが見つかりません。"
+                      "detail": "親フォルダが見つかりません。",
+                      "errors": {}
                     }
                   },
                   "DuplicateFolderNames": {
@@ -5990,15 +5614,18 @@
                       "type": "about:blank",
                       "status": 400,
                       "title": "duplicate_folder_names",
-                      "detail": "同じ階層に同じ名前のフォルダを登録できません。"
+                      "detail": "同じ階層に同じ名前のフォルダを登録できません。",
+                      "errors": {}
                     }
                   },
                   "FolderRegistrationLimitOver": {
                     "summary": "フォルダの登録数上限◯◯を超えている",
                     "value": {
+                      "type": "about:blank",
                       "status": 400,
                       "title": "folder_registration_limit_over",
-                      "detail": "フォルダの登録数上限◯◯を超えています。"
+                      "detail": "フォルダの登録数上限◯◯を超えています。",
+                      "errors": {}
                     }
                   }
                 }
@@ -6191,7 +5818,8 @@
                       "type": "about:blank",
                       "status": 400,
                       "title": "duplicate_folder_names",
-                      "detail": "同じ階層に同じ名前のフォルダを登録できません。\nフォルダ名を変更してください。\n"
+                      "detail": "同じ階層に同じ名前のフォルダを登録できません。\nフォルダ名を変更してください。\n",
+                      "errors": {}
                     }
                   }
                 }
@@ -6263,7 +5891,8 @@
                       "type": "about:blank",
                       "status": 400,
                       "title": "exist_dependency_folders_or_projects",
-                      "detail": "下の階層にフォルダまたはプロジェクトがあります。"
+                      "detail": "下の階層にフォルダまたはプロジェクトがあります。",
+                      "errors": {}
                     }
                   }
                 }
@@ -6405,7 +6034,8 @@
                       "type": "about:blank",
                       "status": 400,
                       "title": "folder_not_found",
-                      "detail": "指定されたフォルダが見つかりません"
+                      "detail": "指定されたフォルダが見つかりません",
+                      "errors": {}
                     }
                   },
                   "ParentIdNotFound": {
@@ -6414,7 +6044,8 @@
                       "type": "about:blank",
                       "status": 400,
                       "title": "parant_not_found",
-                      "detail": "親フォルダが見つかりません。"
+                      "detail": "親フォルダが見つかりません。",
+                      "errors": {}
                     }
                   },
                   "DuplicateFolderNames": {
@@ -6423,7 +6054,8 @@
                       "type": "about:blank",
                       "status": 400,
                       "title": "duplicate_folder_names",
-                      "detail": "同じ階層に同じ名前のフォルダを登録できません。"
+                      "detail": "同じ階層に同じ名前のフォルダを登録できません。",
+                      "errors": {}
                     }
                   }
                 }
@@ -7591,6 +7223,16 @@
           "auth"
         ],
         "summary": "組織のパスワードポリシーを更新する",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordPolicy"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "成功",
@@ -8367,7 +8009,7 @@
           "code": {
             "type": "string",
             "description": "プロジェクトコード",
-            "maxLength": 12,
+            "maxLength": 64,
             "example": "my-sakura-project-code"
           },
           "name": {
@@ -8777,8 +8419,7 @@
             "example": "user"
           },
           "public_key": {
-            "$ref": "#/components/schemas/ServiceprincipalKeyPublicKey",
-            "readOnly": true
+            "$ref": "#/components/schemas/ServiceprincipalKeyPublicKey"
           },
           "created_at": {
             "type": "string",
@@ -8890,7 +8531,7 @@
           "server_resource_id": {
             "type": "string",
             "description": "APIキーがシングルサーバコントロールパネルで利用される場合は必須。",
-            "example": 123456789123
+            "example": "123456789123"
           },
           "iam_roles": {
             "type": "array",
@@ -9138,9 +8779,9 @@
           },
           "parent_id": {
             "type": "integer",
+            "nullable": true,
             "description": "親フォルダID",
             "default": null,
-            "nullable": true,
             "example": 1
           },
           "description": {
@@ -9394,25 +9035,40 @@
               "mode"
             ],
             "description": "認証を許可するIPサブネットワーク (デフォルトはすべて許可)",
-            "properties": {
-              "mode": {
-                "type": "string",
-                "enum": [
-                  "allow_all",
-                  "allow_list"
-                ],
-                "default": "allow_all",
-                "description": "allow_all = すべて許可\nallow_list = source_networkで許可リスト指定\n"
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "enum": [
+                      "allow_all"
+                    ],
+                    "description": "allow_all = すべて許可\nallow_list = source_networkで許可リスト指定\n"
+                  }
+                }
               },
-              "source_network": {
-                "type": "array",
-                "items": {
-                  "type": "string",
-                  "description": "IPv4のCIDR表記"
-                },
-                "description": "modeがlistの場合のみ必須"
+              {
+                "type": "object",
+                "properties": {
+                  "mode": {
+                    "type": "string",
+                    "enum": [
+                      "allow_list"
+                    ],
+                    "description": "allow_all = すべて許可\nallow_list = source_networkで許可リスト指定\n"
+                  },
+                  "source_network": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "description": "IPv4のCIDR表記"
+                    },
+                    "description": "modeがallow_listの場合のみ必須"
+                  }
+                }
               }
-            }
+            ]
           },
           "require_two_factor_auth": {
             "type": "object",
