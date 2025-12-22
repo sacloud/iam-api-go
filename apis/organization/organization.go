@@ -17,8 +17,8 @@ package organization
 import (
 	"context"
 
-	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
+	"github.com/sacloud/iam-api-go/common"
 )
 
 type OrganizationAPI interface {
@@ -38,13 +38,13 @@ var _ OrganizationAPI = (*organizationOp)(nil)
 func NewOrganizationOp(client *v1.Client) OrganizationAPI { return &organizationOp{client} }
 
 func (o *organizationOp) Read(ctx context.Context) (*v1.Organization, error) {
-	return iam.ErrorFromDecodedResponse[v1.Organization]("Organization.Read", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.Organization]("Organization.Read", func() (any, error) {
 		return o.client.OrganizationGet(ctx)
 	})
 }
 
 func (o *organizationOp) Update(ctx context.Context, name string) (*v1.Organization, error) {
-	return iam.ErrorFromDecodedResponse[v1.Organization]("Organization.Update", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.Organization]("Organization.Update", func() (any, error) {
 		return o.client.OrganizationPut(ctx, &v1.OrganizationPutReq{Name: name})
 	})
 }
@@ -58,13 +58,13 @@ type GetServicePolicyParams struct {
 }
 
 func (o *organizationOp) ReadServicePolicy(ctx context.Context, params GetServicePolicyParams) ([]v1.RuleResponse, error) {
-	if ret, err := iam.ErrorFromDecodedResponse[v1.OrganizationServicePolicyGetOK]("Organization.ReadServicePolicy", func() (any, error) {
+	if ret, err := common.ErrorFromDecodedResponse[v1.OrganizationServicePolicyGetOK]("Organization.ReadServicePolicy", func() (any, error) {
 		return o.client.OrganizationServicePolicyGet(ctx, v1.OrganizationServicePolicyGetParams{
-			IsActive: iam.IntoOpt[v1.OptBool](params.IsActive),
-			IsDryRun: iam.IntoOpt[v1.OptBool](params.IsDryRun),
-			Name:     iam.IntoOpt[v1.OptString](params.Name),
-			Code:     iam.IntoOpt[v1.OptString](params.Code),
-			Type:     iam.IntoOpt[v1.OptOrganizationServicePolicyGetType](params.Type),
+			IsActive: common.IntoOpt[v1.OptBool](params.IsActive),
+			IsDryRun: common.IntoOpt[v1.OptBool](params.IsDryRun),
+			Name:     common.IntoOpt[v1.OptString](params.Name),
+			Code:     common.IntoOpt[v1.OptString](params.Code),
+			Type:     common.IntoOpt[v1.OptOrganizationServicePolicyGetType](params.Type),
 		})
 	}); err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func (o *organizationOp) ReadServicePolicy(ctx context.Context, params GetServic
 }
 
 func (o *organizationOp) UpdateServicePolicy(ctx context.Context, rules []v1.Rule) ([]v1.RuleResponse, error) {
-	if ret, err := iam.ErrorFromDecodedResponse[v1.OrganizationServicePolicyPutOK]("Organization.UpdateServicePolicy", func() (any, error) {
+	if ret, err := common.ErrorFromDecodedResponse[v1.OrganizationServicePolicyPutOK]("Organization.UpdateServicePolicy", func() (any, error) {
 		return o.client.OrganizationServicePolicyPut(ctx, &v1.OrganizationServicePolicyPutReq{Rules: rules})
 	}); err != nil {
 		return nil, err

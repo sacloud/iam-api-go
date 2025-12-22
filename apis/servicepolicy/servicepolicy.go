@@ -17,8 +17,8 @@ package servicepolicy
 import (
 	"context"
 
-	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
+	"github.com/sacloud/iam-api-go/common"
 )
 
 type ServicePolicyAPI interface {
@@ -37,21 +37,21 @@ var _ ServicePolicyAPI = (*servicePolicyOp)(nil)
 func NewServicePolicyOp(client *v1.Client) ServicePolicyAPI { return &servicePolicyOp{client} }
 
 func (s *servicePolicyOp) Enable(ctx context.Context) error {
-	_, err := iam.ErrorFromDecodedResponse[v1.EnableServicePolicyPostNoContent]("ServicePolicy.Enable", func() (any, error) {
+	_, err := common.ErrorFromDecodedResponse[v1.EnableServicePolicyPostNoContent]("ServicePolicy.Enable", func() (any, error) {
 		return s.client.EnableServicePolicyPost(ctx)
 	})
 	return err
 }
 
 func (s *servicePolicyOp) Disable(ctx context.Context) error {
-	_, err := iam.ErrorFromDecodedResponse[v1.DisableServicePolicyPostNoContent]("ServicePolicy.Disable", func() (any, error) {
+	_, err := common.ErrorFromDecodedResponse[v1.DisableServicePolicyPostNoContent]("ServicePolicy.Disable", func() (any, error) {
 		return s.client.DisableServicePolicyPost(ctx)
 	})
 	return err
 }
 
 func (s *servicePolicyOp) IsEnabled(ctx context.Context) (bool, error) {
-	if ret, err := iam.ErrorFromDecodedResponse[v1.ServicePolicyStatusGetOK]("ServicePolicy.IsEnabled", func() (any, error) {
+	if ret, err := common.ErrorFromDecodedResponse[v1.ServicePolicyStatusGetOK]("ServicePolicy.IsEnabled", func() (any, error) {
 		return s.client.ServicePolicyStatusGet(ctx)
 	}); err != nil {
 		return false, err
@@ -69,13 +69,13 @@ type ListRuleTemplatesParams struct {
 }
 
 func (s *servicePolicyOp) ListRuleTemplates(ctx context.Context, params ListRuleTemplatesParams) (*v1.ServicePolicyRuleTemplatesGetOK, error) {
-	return iam.ErrorFromDecodedResponse[v1.ServicePolicyRuleTemplatesGetOK]("ServicePolicy.ListRuleTemplates", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.ServicePolicyRuleTemplatesGetOK]("ServicePolicy.ListRuleTemplates", func() (any, error) {
 		return s.client.ServicePolicyRuleTemplatesGet(ctx, v1.ServicePolicyRuleTemplatesGetParams{
-			Page:    iam.IntoOpt[v1.OptInt](params.Page),
-			PerPage: iam.IntoOpt[v1.OptInt](params.PerPage),
-			Name:    iam.IntoOpt[v1.OptString](params.Name),
-			Code:    iam.IntoOpt[v1.OptString](params.Code),
-			Type:    iam.IntoOpt[v1.OptServicePolicyRuleTemplatesGetType](params.Type),
+			Page:    common.IntoOpt[v1.OptInt](params.Page),
+			PerPage: common.IntoOpt[v1.OptInt](params.PerPage),
+			Name:    common.IntoOpt[v1.OptString](params.Name),
+			Code:    common.IntoOpt[v1.OptString](params.Code),
+			Type:    common.IntoOpt[v1.OptServicePolicyRuleTemplatesGetType](params.Type),
 		})
 	})
 }

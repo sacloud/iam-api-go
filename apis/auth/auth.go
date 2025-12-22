@@ -17,8 +17,8 @@ package auth
 import (
 	"context"
 
-	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
+	"github.com/sacloud/iam-api-go/common"
 )
 
 type AuthAPI interface {
@@ -38,25 +38,25 @@ var _ AuthAPI = (*authOp)(nil)
 func NewAuthOp(client *v1.Client) AuthAPI { return &authOp{client} }
 
 func (a *authOp) ReadPasswordPolicy(ctx context.Context) (*v1.PasswordPolicy, error) {
-	return iam.ErrorFromDecodedResponse[v1.PasswordPolicy]("Auth.ReadPasswordPolicy", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.PasswordPolicy]("Auth.ReadPasswordPolicy", func() (any, error) {
 		return a.client.OrganizationPasswordPolicyGet(ctx)
 	})
 }
 
 func (a *authOp) UpdatePasswordPolicy(ctx context.Context) (*v1.PasswordPolicy, error) {
-	return iam.ErrorFromDecodedResponse[v1.PasswordPolicy]("Auth.UpdatePasswordPolicy", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.PasswordPolicy]("Auth.UpdatePasswordPolicy", func() (any, error) {
 		return a.client.OrganizationPasswordPolicyPut(ctx)
 	})
 }
 
 func (a *authOp) ReadAuthConditions(ctx context.Context) (*v1.AuthConditions, error) {
-	return iam.ErrorFromDecodedResponse[v1.AuthConditions]("Auth.ReadAuthConditions", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.AuthConditions]("Auth.ReadAuthConditions", func() (any, error) {
 		return a.client.OrganizationAuthConditionsGet(ctx)
 	})
 }
 
 func (a *authOp) UpdateAuthConditions(ctx context.Context, req *v1.AuthConditions) (*v1.AuthConditions, error) {
-	return iam.ErrorFromDecodedResponse[v1.AuthConditions]("Auth.UpdateAuthConditions", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.AuthConditions]("Auth.UpdateAuthConditions", func() (any, error) {
 		return a.client.OrganizationAuthConditionsPut(ctx, req)
 	})
 }

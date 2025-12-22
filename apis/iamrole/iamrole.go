@@ -17,8 +17,8 @@ package iamrole
 import (
 	"context"
 
-	"github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
+	"github.com/sacloud/iam-api-go/common"
 )
 
 type IAMRoleAPI interface {
@@ -33,16 +33,16 @@ type iamRoleOp struct {
 func NewIAMRoleOp(client *v1.Client) IAMRoleAPI { return &iamRoleOp{client: client} }
 
 func (i *iamRoleOp) List(ctx context.Context, page, perPage *int) (*v1.IamRolesGetOK, error) {
-	return iam.ErrorFromDecodedResponse[v1.IamRolesGetOK]("IAMRole.List", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.IamRolesGetOK]("IAMRole.List", func() (any, error) {
 		return i.client.IamRolesGet(ctx, v1.IamRolesGetParams{
-			Page:    iam.IntoOpt[v1.OptInt](page),
-			PerPage: iam.IntoOpt[v1.OptInt](perPage),
+			Page:    common.IntoOpt[v1.OptInt](page),
+			PerPage: common.IntoOpt[v1.OptInt](perPage),
 		})
 	})
 }
 
 func (i *iamRoleOp) Read(ctx context.Context, id string) (*v1.IamRole, error) {
-	return iam.ErrorFromDecodedResponse[v1.IamRole]("IAMRole.Read", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.IamRole]("IAMRole.Read", func() (any, error) {
 		return i.client.IamRolesIamRoleIDGet(ctx, v1.IamRolesIamRoleIDGetParams{IamRoleID: id})
 	})
 }

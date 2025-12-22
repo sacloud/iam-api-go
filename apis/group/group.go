@@ -18,8 +18,8 @@ package group
 import (
 	"context"
 
-	iam "github.com/sacloud/iam-api-go"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
+	"github.com/sacloud/iam-api-go/common"
 )
 
 // GroupAPI is the interface for group operations.
@@ -48,7 +48,7 @@ type ListParams struct {
 }
 
 func (g *groupOp) List(ctx context.Context, params ListParams) (*v1.GroupsGetOK, error) {
-	return iam.ErrorFromDecodedResponse[v1.GroupsGetOK]("Group.List", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.GroupsGetOK]("Group.List", func() (any, error) {
 		var userID *int = nil
 		if params.User != nil {
 			uid := params.User.GetID()
@@ -56,16 +56,16 @@ func (g *groupOp) List(ctx context.Context, params ListParams) (*v1.GroupsGetOK,
 		}
 
 		return g.client.GroupsGet(ctx, v1.GroupsGetParams{
-			Page:         iam.IntoOpt[v1.OptInt](params.Page),
-			PerPage:      iam.IntoOpt[v1.OptInt](params.PerPage),
-			Ordering:     iam.IntoOpt[v1.OptGroupsGetOrdering](params.Ordering),
-			CompatUserID: iam.IntoOpt[v1.OptInt](userID),
+			Page:         common.IntoOpt[v1.OptInt](params.Page),
+			PerPage:      common.IntoOpt[v1.OptInt](params.PerPage),
+			Ordering:     common.IntoOpt[v1.OptGroupsGetOrdering](params.Ordering),
+			CompatUserID: common.IntoOpt[v1.OptInt](userID),
 		})
 	})
 }
 
 func (g *groupOp) Create(ctx context.Context, name string, description string) (*v1.Group, error) {
-	return iam.ErrorFromDecodedResponse[v1.Group]("Group.Create", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.Group]("Group.Create", func() (any, error) {
 		return g.client.GroupsPost(ctx, &v1.GroupsPostReq{
 			Name:        name,
 			Description: description,
@@ -74,13 +74,13 @@ func (g *groupOp) Create(ctx context.Context, name string, description string) (
 }
 
 func (g *groupOp) Read(ctx context.Context, id int) (*v1.Group, error) {
-	return iam.ErrorFromDecodedResponse[v1.Group]("Group.Read", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.Group]("Group.Read", func() (any, error) {
 		return g.client.GroupsGroupIDGet(ctx, v1.GroupsGroupIDGetParams{GroupID: id})
 	})
 }
 
 func (g *groupOp) Update(ctx context.Context, id int, name string, description string) (*v1.Group, error) {
-	return iam.ErrorFromDecodedResponse[v1.Group]("Group.Update", func() (any, error) {
+	return common.ErrorFromDecodedResponse[v1.Group]("Group.Update", func() (any, error) {
 		req := v1.GroupsGroupIDPutReq{
 			Name:        name,
 			Description: description,
@@ -93,7 +93,7 @@ func (g *groupOp) Update(ctx context.Context, id int, name string, description s
 }
 
 func (g *groupOp) Delete(ctx context.Context, id int) error {
-	_, err := iam.ErrorFromDecodedResponse[v1.GroupsGroupIDDeleteNoContent]("Group.Delete", func() (any, error) {
+	_, err := common.ErrorFromDecodedResponse[v1.GroupsGroupIDDeleteNoContent]("Group.Delete", func() (any, error) {
 		return g.client.GroupsGroupIDDelete(ctx, v1.GroupsGroupIDDeleteParams{GroupID: id})
 	})
 
@@ -101,7 +101,7 @@ func (g *groupOp) Delete(ctx context.Context, id int) error {
 }
 
 func (g *groupOp) ReadMemberships(ctx context.Context, id int) ([]v1.GroupMembershipsCompatUsersItem, error) {
-	if ret, err := iam.ErrorFromDecodedResponse[v1.GroupMemberships]("Group.ReadMemberships", func() (any, error) {
+	if ret, err := common.ErrorFromDecodedResponse[v1.GroupMemberships]("Group.ReadMemberships", func() (any, error) {
 		return g.client.GroupsGroupIDMembershipsGet(ctx, v1.GroupsGroupIDMembershipsGetParams{GroupID: id})
 	}); err != nil {
 		return nil, err
@@ -111,7 +111,7 @@ func (g *groupOp) ReadMemberships(ctx context.Context, id int) ([]v1.GroupMember
 }
 
 func (g *groupOp) UpdateMemberships(ctx context.Context, groupID int, userIDs []int) ([]v1.GroupMembershipsCompatUsersItem, error) {
-	if ret, err := iam.ErrorFromDecodedResponse[v1.GroupMemberships]("Group.UpdateMemberships", func() (any, error) {
+	if ret, err := common.ErrorFromDecodedResponse[v1.GroupMemberships]("Group.UpdateMemberships", func() (any, error) {
 		compatUsers := make([]v1.GroupsGroupIDMembershipsPutReqCompatUsersItem, len(userIDs))
 		for i, j := range userIDs {
 			compatUsers[i].ID = j
