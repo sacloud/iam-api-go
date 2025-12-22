@@ -22,15 +22,11 @@ import (
 )
 
 type User2FAAPI interface {
-	ActivateOTP(ctx context.Context) (*v1.CompatUsersUserIDActivateOtpPostOK, error)
 	DeactivateOTP(ctx context.Context) error
 
-	CreateRecoveryCode(ctx context.Context) (string, error)
 	ListTrustedDevices(ctx context.Context) (*v1.CompatUsersUserIDTrustedDevicesGetOK, error)
 	DeleteTrustedDevice(ctx context.Context, trustedDeviceID int) error
 	ClearTrustedDevices(ctx context.Context) error
-	StartSecurityKeyRegistration(ctx context.Context) (string, error)
-	ValidateSecurityKeyRegistration(ctx context.Context, credential string) error
 
 	ListSecurityKeys(ctx context.Context) (*v1.CompatUsersUserIDSecurityKeysGetOK, error)
 	ReadSecurityKey(ctx context.Context, securityKeyID int) (*v1.UserSecurityKey, error)
@@ -52,27 +48,11 @@ func NewUser2FAOp(client *v1.Client, user *v1.User) User2FAAPI {
 
 func (u *user2faOp) getUserID() int { return u.user.GetID() }
 
-func (u *user2faOp) ActivateOTP(ctx context.Context) (*v1.CompatUsersUserIDActivateOtpPostOK, error) {
-	return common.ErrorFromDecodedResponse[v1.CompatUsersUserIDActivateOtpPostOK]("User2FA.ActivateOTP", func() (any, error) {
-		return u.client.CompatUsersUserIDActivateOtpPost(ctx, v1.CompatUsersUserIDActivateOtpPostParams{UserID: u.getUserID()})
-	})
-}
-
 func (u *user2faOp) DeactivateOTP(ctx context.Context) error {
 	_, err := common.ErrorFromDecodedResponse[v1.CompatUsersUserIDDeactivateOtpPostNoContent]("User2FA.DeactivateOTP", func() (any, error) {
 		return u.client.CompatUsersUserIDDeactivateOtpPost(ctx, v1.CompatUsersUserIDDeactivateOtpPostParams{UserID: u.getUserID()})
 	})
 	return err
-}
-
-func (u *user2faOp) CreateRecoveryCode(ctx context.Context) (string, error) {
-	if res, err := common.ErrorFromDecodedResponse[v1.CompatUsersUserIDRecoveryCodePostOK]("User2FA.CreateRecoveryCode", func() (any, error) {
-		return u.client.CompatUsersUserIDRecoveryCodePost(ctx, v1.CompatUsersUserIDRecoveryCodePostParams{UserID: u.getUserID()})
-	}); err != nil {
-		return "", err
-	} else {
-		return res.GetCode(), nil
-	}
 }
 
 func (u *user2faOp) ListTrustedDevices(ctx context.Context) (*v1.CompatUsersUserIDTrustedDevicesGetOK, error) {
@@ -94,25 +74,6 @@ func (u *user2faOp) DeleteTrustedDevice(ctx context.Context, trustedDeviceID int
 func (u *user2faOp) ClearTrustedDevices(ctx context.Context) error {
 	_, err := common.ErrorFromDecodedResponse[v1.CompatUsersUserIDClearTrustedDevicesPostNoContent]("User2FA.ClearTrustedDevices", func() (any, error) {
 		return u.client.CompatUsersUserIDClearTrustedDevicesPost(ctx, v1.CompatUsersUserIDClearTrustedDevicesPostParams{UserID: u.getUserID()})
-	})
-	return err
-}
-
-func (u *user2faOp) StartSecurityKeyRegistration(ctx context.Context) (string, error) {
-	if res, err := common.ErrorFromDecodedResponse[v1.CompatUsersUserIDStartSecurityKeyRegistrationPostOK]("User2FA.StartSecurityKeyRegistration", func() (any, error) {
-		return u.client.CompatUsersUserIDStartSecurityKeyRegistrationPost(ctx, v1.CompatUsersUserIDStartSecurityKeyRegistrationPostParams{UserID: u.getUserID()})
-	}); err != nil {
-		return "", err
-	} else {
-		return res.GetPublicKeyCredentialCreationOptions(), nil
-	}
-}
-
-func (u *user2faOp) ValidateSecurityKeyRegistration(ctx context.Context, credential string) error {
-	_, err := common.ErrorFromDecodedResponse[v1.CompatUsersUserIDValidateSecurityKeyRegistrationPostNoContent]("User2FA.ValidateSecurityKeyRegistration", func() (any, error) {
-		req := v1.CompatUsersUserIDValidateSecurityKeyRegistrationPostReq{Credential: credential}
-		params := v1.CompatUsersUserIDValidateSecurityKeyRegistrationPostParams{UserID: u.getUserID()}
-		return u.client.CompatUsersUserIDValidateSecurityKeyRegistrationPost(ctx, &req, params)
 	})
 	return err
 }

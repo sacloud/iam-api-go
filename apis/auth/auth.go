@@ -23,7 +23,7 @@ import (
 
 type AuthAPI interface {
 	ReadPasswordPolicy(ctx context.Context) (*v1.PasswordPolicy, error)
-	UpdatePasswordPolicy(ctx context.Context) (*v1.PasswordPolicy, error)
+	UpdatePasswordPolicy(ctx context.Context, req v1.PasswordPolicy) (*v1.PasswordPolicy, error)
 
 	ReadAuthConditions(ctx context.Context) (*v1.AuthConditions, error)
 	UpdateAuthConditions(ctx context.Context, req *v1.AuthConditions) (*v1.AuthConditions, error)
@@ -43,9 +43,9 @@ func (a *authOp) ReadPasswordPolicy(ctx context.Context) (*v1.PasswordPolicy, er
 	})
 }
 
-func (a *authOp) UpdatePasswordPolicy(ctx context.Context) (*v1.PasswordPolicy, error) {
+func (a *authOp) UpdatePasswordPolicy(ctx context.Context, req v1.PasswordPolicy) (*v1.PasswordPolicy, error) {
 	return common.ErrorFromDecodedResponse[v1.PasswordPolicy]("Auth.UpdatePasswordPolicy", func() (any, error) {
-		return a.client.OrganizationPasswordPolicyPut(ctx)
+		return a.client.OrganizationPasswordPolicyPut(ctx, &req)
 	})
 }
 

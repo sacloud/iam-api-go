@@ -45,34 +45,6 @@ func TestNewUser2FAOp(t *testing.T) {
 	assert.NotNil(api)
 }
 
-func TestActivateOTP(t *testing.T) {
-	var expected v1.CompatUsersUserIDActivateOtpPostOK
-	expected.SetFake()
-	expected.SetSecret(testutil.Random(32, testutil.CharSetAlphaNum))
-	expected.SetPeriodSec(30)
-	assert, api := setup(t, &expected)
-
-	actual, err := api.ActivateOTP(t.Context())
-	assert.NoError(err)
-	assert.NotNil(actual)
-	assert.Equal(&expected, actual)
-}
-
-func TestActivateOTP_Fail(t *testing.T) {
-	var res v1.Http403Forbidden
-	expected := testutil.Random(128, testutil.CharSetAlphaNum)
-	res.SetFake()
-	res.SetStatus(http.StatusForbidden)
-	res.SetDetail(expected)
-	assert, api := setup(t, &res, res.Status)
-
-	actual, err := api.ActivateOTP(t.Context())
-	assert.Error(err)
-	assert.Nil(actual)
-	assert.False(saclient.IsNotFoundError(err))
-	assert.Contains(err.Error(), expected)
-}
-
 func TestDeactivateOTP(t *testing.T) {
 	assert, api := setup(t, &v1.CompatUsersUserIDDeactivateOtpPostNoContent{}, http.StatusNoContent)
 
@@ -89,81 +61,6 @@ func TestDeactivateOTP_Fail(t *testing.T) {
 	assert, api := setup(t, &res, res.Status)
 
 	err := api.DeactivateOTP(t.Context())
-	assert.Error(err)
-	assert.Contains(err.Error(), expected)
-}
-
-func TestCreateRecoveryCode(t *testing.T) {
-	var expected v1.CompatUsersUserIDRecoveryCodePostOK
-	expected.SetFake()
-	expected.SetCode(testutil.Random(40, testutil.CharSetAlphaNum)) // has minLength
-	assert, api := setup(t, &expected)
-
-	actual, err := api.CreateRecoveryCode(t.Context())
-	assert.NoError(err)
-	assert.NotNil(actual)
-	assert.Equal(expected.GetCode(), actual)
-}
-
-func TestCreateRecoveryCode_Fail(t *testing.T) {
-	var res v1.Http403Forbidden
-	expected := testutil.Random(128, testutil.CharSetAlphaNum)
-	res.SetFake()
-	res.SetStatus(http.StatusForbidden)
-	res.SetDetail(expected)
-	assert, api := setup(t, &res, res.Status)
-
-	actual, err := api.CreateRecoveryCode(t.Context())
-	assert.Error(err)
-	assert.Empty(actual)
-	assert.False(saclient.IsNotFoundError(err))
-	assert.Contains(err.Error(), expected)
-}
-
-func TestStartSecurityKeyRegistration(t *testing.T) {
-	var expected v1.CompatUsersUserIDStartSecurityKeyRegistrationPostOK
-	expected.SetFake()
-	assert, api := setup(t, &expected)
-
-	actual, err := api.StartSecurityKeyRegistration(t.Context())
-	assert.NoError(err)
-	assert.NotNil(actual)
-	assert.Equal(expected.GetPublicKeyCredentialCreationOptions(), actual)
-}
-
-func TestStartSecurityKeyRegistration_Fail(t *testing.T) {
-	var res v1.Http403Forbidden
-	expected := testutil.Random(128, testutil.CharSetAlphaNum)
-	res.SetFake()
-	res.SetStatus(http.StatusForbidden)
-	res.SetDetail(expected)
-	assert, api := setup(t, &res, res.Status)
-
-	actual, err := api.StartSecurityKeyRegistration(t.Context())
-	assert.Error(err)
-	assert.Empty(actual)
-	assert.False(saclient.IsNotFoundError(err))
-	assert.Contains(err.Error(), expected)
-}
-
-func TestValidateSecurityKeyRegistration(t *testing.T) {
-	assert, api := setup(t, &v1.CompatUsersUserIDValidateSecurityKeyRegistrationPostNoContent{}, http.StatusNoContent)
-
-	credential := testutil.Random(128, testutil.CharSetAlphaNum)
-	err := api.ValidateSecurityKeyRegistration(t.Context(), credential)
-	assert.NoError(err)
-}
-
-func TestValidateSecurityKeyRegistration_Fail(t *testing.T) {
-	var res v1.Http400BadRequest
-	expected := testutil.Random(128, testutil.CharSetAlphaNum)
-	res.SetFake()
-	res.SetStatus(http.StatusBadRequest)
-	res.SetDetail(expected)
-	assert, api := setup(t, &res, res.Status)
-
-	credential := testutil.Random(128, testutil.CharSetAlphaNum)
-	err := api.ValidateSecurityKeyRegistration(t.Context(), credential)
 	assert.Error(err)
 	assert.Contains(err.Error(), expected)
 }
