@@ -104,20 +104,6 @@ func encodeCompatUsersUserIDSecurityKeysSecurityKeyIDPutRequest(
 	return nil
 }
 
-func encodeCompatUsersUserIDValidateSecurityKeyRegistrationPostRequest(
-	req *CompatUsersUserIDValidateSecurityKeyRegistrationPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
 func encodeFoldersFolderIDIamPolicyPutRequest(
 	req *FoldersFolderIDIamPolicyPutReq,
 	r *http.Request,
@@ -260,6 +246,20 @@ func encodeOrganizationIDPolicyPutRequest(
 
 func encodeOrganizationIamPolicyPutRequest(
 	req *OrganizationIamPolicyPutReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeOrganizationPasswordPolicyPutRequest(
+	req *PasswordPolicy,
 	r *http.Request,
 ) error {
 	const contentType = "application/json"

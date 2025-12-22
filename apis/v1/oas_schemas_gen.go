@@ -82,56 +82,122 @@ func (s *AuthConditionsDatetimeRestriction) SetBefore(val NilDateTime) {
 
 // 認証を許可するIPサブネットワーク (デフォルトはすべて許可).
 type AuthConditionsIPRestriction struct {
+	OneOf AuthConditionsIPRestrictionSum
+}
+
+// GetOneOf returns the value of OneOf.
+func (s *AuthConditionsIPRestriction) GetOneOf() AuthConditionsIPRestrictionSum {
+	return s.OneOf
+}
+
+// SetOneOf sets the value of OneOf.
+func (s *AuthConditionsIPRestriction) SetOneOf(val AuthConditionsIPRestrictionSum) {
+	s.OneOf = val
+}
+
+// AuthConditionsIPRestrictionSum represents sum type.
+type AuthConditionsIPRestrictionSum struct {
+	Type                            AuthConditionsIPRestrictionSumType // switch on this field
+	AuthConditionsIPRestrictionSum0 AuthConditionsIPRestrictionSum0
+	AuthConditionsIPRestrictionSum1 AuthConditionsIPRestrictionSum1
+}
+
+// AuthConditionsIPRestrictionSumType is oneOf type of AuthConditionsIPRestrictionSum.
+type AuthConditionsIPRestrictionSumType string
+
+// Possible values for AuthConditionsIPRestrictionSumType.
+const (
+	AuthConditionsIPRestrictionSum0AuthConditionsIPRestrictionSum AuthConditionsIPRestrictionSumType = "AuthConditionsIPRestrictionSum0"
+	AuthConditionsIPRestrictionSum1AuthConditionsIPRestrictionSum AuthConditionsIPRestrictionSumType = "AuthConditionsIPRestrictionSum1"
+)
+
+// IsAuthConditionsIPRestrictionSum0 reports whether AuthConditionsIPRestrictionSum is AuthConditionsIPRestrictionSum0.
+func (s AuthConditionsIPRestrictionSum) IsAuthConditionsIPRestrictionSum0() bool {
+	return s.Type == AuthConditionsIPRestrictionSum0AuthConditionsIPRestrictionSum
+}
+
+// IsAuthConditionsIPRestrictionSum1 reports whether AuthConditionsIPRestrictionSum is AuthConditionsIPRestrictionSum1.
+func (s AuthConditionsIPRestrictionSum) IsAuthConditionsIPRestrictionSum1() bool {
+	return s.Type == AuthConditionsIPRestrictionSum1AuthConditionsIPRestrictionSum
+}
+
+// SetAuthConditionsIPRestrictionSum0 sets AuthConditionsIPRestrictionSum to AuthConditionsIPRestrictionSum0.
+func (s *AuthConditionsIPRestrictionSum) SetAuthConditionsIPRestrictionSum0(v AuthConditionsIPRestrictionSum0) {
+	s.Type = AuthConditionsIPRestrictionSum0AuthConditionsIPRestrictionSum
+	s.AuthConditionsIPRestrictionSum0 = v
+}
+
+// GetAuthConditionsIPRestrictionSum0 returns AuthConditionsIPRestrictionSum0 and true boolean if AuthConditionsIPRestrictionSum is AuthConditionsIPRestrictionSum0.
+func (s AuthConditionsIPRestrictionSum) GetAuthConditionsIPRestrictionSum0() (v AuthConditionsIPRestrictionSum0, ok bool) {
+	if !s.IsAuthConditionsIPRestrictionSum0() {
+		return v, false
+	}
+	return s.AuthConditionsIPRestrictionSum0, true
+}
+
+// NewAuthConditionsIPRestrictionSum0AuthConditionsIPRestrictionSum returns new AuthConditionsIPRestrictionSum from AuthConditionsIPRestrictionSum0.
+func NewAuthConditionsIPRestrictionSum0AuthConditionsIPRestrictionSum(v AuthConditionsIPRestrictionSum0) AuthConditionsIPRestrictionSum {
+	var s AuthConditionsIPRestrictionSum
+	s.SetAuthConditionsIPRestrictionSum0(v)
+	return s
+}
+
+// SetAuthConditionsIPRestrictionSum1 sets AuthConditionsIPRestrictionSum to AuthConditionsIPRestrictionSum1.
+func (s *AuthConditionsIPRestrictionSum) SetAuthConditionsIPRestrictionSum1(v AuthConditionsIPRestrictionSum1) {
+	s.Type = AuthConditionsIPRestrictionSum1AuthConditionsIPRestrictionSum
+	s.AuthConditionsIPRestrictionSum1 = v
+}
+
+// GetAuthConditionsIPRestrictionSum1 returns AuthConditionsIPRestrictionSum1 and true boolean if AuthConditionsIPRestrictionSum is AuthConditionsIPRestrictionSum1.
+func (s AuthConditionsIPRestrictionSum) GetAuthConditionsIPRestrictionSum1() (v AuthConditionsIPRestrictionSum1, ok bool) {
+	if !s.IsAuthConditionsIPRestrictionSum1() {
+		return v, false
+	}
+	return s.AuthConditionsIPRestrictionSum1, true
+}
+
+// NewAuthConditionsIPRestrictionSum1AuthConditionsIPRestrictionSum returns new AuthConditionsIPRestrictionSum from AuthConditionsIPRestrictionSum1.
+func NewAuthConditionsIPRestrictionSum1AuthConditionsIPRestrictionSum(v AuthConditionsIPRestrictionSum1) AuthConditionsIPRestrictionSum {
+	var s AuthConditionsIPRestrictionSum
+	s.SetAuthConditionsIPRestrictionSum1(v)
+	return s
+}
+
+type AuthConditionsIPRestrictionSum0 struct {
 	// Allow_all = すべて許可
 	// allow_list = source_networkで許可リスト指定.
-	Mode AuthConditionsIPRestrictionMode `json:"mode"`
-	// Modeがlistの場合のみ必須.
-	SourceNetwork []string `json:"source_network"`
+	Mode OptAuthConditionsIPRestrictionSum0Mode `json:"mode"`
 }
 
 // GetMode returns the value of Mode.
-func (s *AuthConditionsIPRestriction) GetMode() AuthConditionsIPRestrictionMode {
+func (s *AuthConditionsIPRestrictionSum0) GetMode() OptAuthConditionsIPRestrictionSum0Mode {
 	return s.Mode
 }
 
-// GetSourceNetwork returns the value of SourceNetwork.
-func (s *AuthConditionsIPRestriction) GetSourceNetwork() []string {
-	return s.SourceNetwork
-}
-
 // SetMode sets the value of Mode.
-func (s *AuthConditionsIPRestriction) SetMode(val AuthConditionsIPRestrictionMode) {
+func (s *AuthConditionsIPRestrictionSum0) SetMode(val OptAuthConditionsIPRestrictionSum0Mode) {
 	s.Mode = val
-}
-
-// SetSourceNetwork sets the value of SourceNetwork.
-func (s *AuthConditionsIPRestriction) SetSourceNetwork(val []string) {
-	s.SourceNetwork = val
 }
 
 // Allow_all = すべて許可
 // allow_list = source_networkで許可リスト指定.
-type AuthConditionsIPRestrictionMode string
+type AuthConditionsIPRestrictionSum0Mode string
 
 const (
-	AuthConditionsIPRestrictionModeAllowAll  AuthConditionsIPRestrictionMode = "allow_all"
-	AuthConditionsIPRestrictionModeAllowList AuthConditionsIPRestrictionMode = "allow_list"
+	AuthConditionsIPRestrictionSum0ModeAllowAll AuthConditionsIPRestrictionSum0Mode = "allow_all"
 )
 
-// AllValues returns all AuthConditionsIPRestrictionMode values.
-func (AuthConditionsIPRestrictionMode) AllValues() []AuthConditionsIPRestrictionMode {
-	return []AuthConditionsIPRestrictionMode{
-		AuthConditionsIPRestrictionModeAllowAll,
-		AuthConditionsIPRestrictionModeAllowList,
+// AllValues returns all AuthConditionsIPRestrictionSum0Mode values.
+func (AuthConditionsIPRestrictionSum0Mode) AllValues() []AuthConditionsIPRestrictionSum0Mode {
+	return []AuthConditionsIPRestrictionSum0Mode{
+		AuthConditionsIPRestrictionSum0ModeAllowAll,
 	}
 }
 
 // MarshalText implements encoding.TextMarshaler.
-func (s AuthConditionsIPRestrictionMode) MarshalText() ([]byte, error) {
+func (s AuthConditionsIPRestrictionSum0Mode) MarshalText() ([]byte, error) {
 	switch s {
-	case AuthConditionsIPRestrictionModeAllowAll:
-		return []byte(s), nil
-	case AuthConditionsIPRestrictionModeAllowList:
+	case AuthConditionsIPRestrictionSum0ModeAllowAll:
 		return []byte(s), nil
 	default:
 		return nil, errors.Errorf("invalid value: %q", s)
@@ -139,13 +205,74 @@ func (s AuthConditionsIPRestrictionMode) MarshalText() ([]byte, error) {
 }
 
 // UnmarshalText implements encoding.TextUnmarshaler.
-func (s *AuthConditionsIPRestrictionMode) UnmarshalText(data []byte) error {
-	switch AuthConditionsIPRestrictionMode(data) {
-	case AuthConditionsIPRestrictionModeAllowAll:
-		*s = AuthConditionsIPRestrictionModeAllowAll
+func (s *AuthConditionsIPRestrictionSum0Mode) UnmarshalText(data []byte) error {
+	switch AuthConditionsIPRestrictionSum0Mode(data) {
+	case AuthConditionsIPRestrictionSum0ModeAllowAll:
+		*s = AuthConditionsIPRestrictionSum0ModeAllowAll
 		return nil
-	case AuthConditionsIPRestrictionModeAllowList:
-		*s = AuthConditionsIPRestrictionModeAllowList
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type AuthConditionsIPRestrictionSum1 struct {
+	// Allow_all = すべて許可
+	// allow_list = source_networkで許可リスト指定.
+	Mode OptAuthConditionsIPRestrictionSum1Mode `json:"mode"`
+	// Modeがallow_listの場合のみ必須.
+	SourceNetwork []string `json:"source_network"`
+}
+
+// GetMode returns the value of Mode.
+func (s *AuthConditionsIPRestrictionSum1) GetMode() OptAuthConditionsIPRestrictionSum1Mode {
+	return s.Mode
+}
+
+// GetSourceNetwork returns the value of SourceNetwork.
+func (s *AuthConditionsIPRestrictionSum1) GetSourceNetwork() []string {
+	return s.SourceNetwork
+}
+
+// SetMode sets the value of Mode.
+func (s *AuthConditionsIPRestrictionSum1) SetMode(val OptAuthConditionsIPRestrictionSum1Mode) {
+	s.Mode = val
+}
+
+// SetSourceNetwork sets the value of SourceNetwork.
+func (s *AuthConditionsIPRestrictionSum1) SetSourceNetwork(val []string) {
+	s.SourceNetwork = val
+}
+
+// Allow_all = すべて許可
+// allow_list = source_networkで許可リスト指定.
+type AuthConditionsIPRestrictionSum1Mode string
+
+const (
+	AuthConditionsIPRestrictionSum1ModeAllowList AuthConditionsIPRestrictionSum1Mode = "allow_list"
+)
+
+// AllValues returns all AuthConditionsIPRestrictionSum1Mode values.
+func (AuthConditionsIPRestrictionSum1Mode) AllValues() []AuthConditionsIPRestrictionSum1Mode {
+	return []AuthConditionsIPRestrictionSum1Mode{
+		AuthConditionsIPRestrictionSum1ModeAllowList,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s AuthConditionsIPRestrictionSum1Mode) MarshalText() ([]byte, error) {
+	switch s {
+	case AuthConditionsIPRestrictionSum1ModeAllowList:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *AuthConditionsIPRestrictionSum1Mode) UnmarshalText(data []byte) error {
+	switch AuthConditionsIPRestrictionSum1Mode(data) {
+	case AuthConditionsIPRestrictionSum1ModeAllowList:
+		*s = AuthConditionsIPRestrictionSum1ModeAllowList
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -599,165 +726,6 @@ func (s *CompatUsersPostReq) SetEmail(val OptString) {
 	s.Email = val
 }
 
-type CompatUsersUserIDActivateOtpPostOK struct {
-	// OTP生成方式.
-	Class CompatUsersUserIDActivateOtpPostOKClass `json:"class"`
-	// ユーザ識別子.
-	Name string `json:"name"`
-	// OTP用のシークレット.
-	Secret string `json:"secret"`
-	// 有効期限.
-	PeriodSec int `json:"period_sec"`
-	// 生成アルゴリズム.
-	Algorithm CompatUsersUserIDActivateOtpPostOKAlgorithm `json:"algorithm"`
-	// 発行元.
-	Issuer string `json:"issuer"`
-	// OTP有効化が完了したかどうか.
-	Uncommitted bool `json:"uncommitted"`
-}
-
-// GetClass returns the value of Class.
-func (s *CompatUsersUserIDActivateOtpPostOK) GetClass() CompatUsersUserIDActivateOtpPostOKClass {
-	return s.Class
-}
-
-// GetName returns the value of Name.
-func (s *CompatUsersUserIDActivateOtpPostOK) GetName() string {
-	return s.Name
-}
-
-// GetSecret returns the value of Secret.
-func (s *CompatUsersUserIDActivateOtpPostOK) GetSecret() string {
-	return s.Secret
-}
-
-// GetPeriodSec returns the value of PeriodSec.
-func (s *CompatUsersUserIDActivateOtpPostOK) GetPeriodSec() int {
-	return s.PeriodSec
-}
-
-// GetAlgorithm returns the value of Algorithm.
-func (s *CompatUsersUserIDActivateOtpPostOK) GetAlgorithm() CompatUsersUserIDActivateOtpPostOKAlgorithm {
-	return s.Algorithm
-}
-
-// GetIssuer returns the value of Issuer.
-func (s *CompatUsersUserIDActivateOtpPostOK) GetIssuer() string {
-	return s.Issuer
-}
-
-// GetUncommitted returns the value of Uncommitted.
-func (s *CompatUsersUserIDActivateOtpPostOK) GetUncommitted() bool {
-	return s.Uncommitted
-}
-
-// SetClass sets the value of Class.
-func (s *CompatUsersUserIDActivateOtpPostOK) SetClass(val CompatUsersUserIDActivateOtpPostOKClass) {
-	s.Class = val
-}
-
-// SetName sets the value of Name.
-func (s *CompatUsersUserIDActivateOtpPostOK) SetName(val string) {
-	s.Name = val
-}
-
-// SetSecret sets the value of Secret.
-func (s *CompatUsersUserIDActivateOtpPostOK) SetSecret(val string) {
-	s.Secret = val
-}
-
-// SetPeriodSec sets the value of PeriodSec.
-func (s *CompatUsersUserIDActivateOtpPostOK) SetPeriodSec(val int) {
-	s.PeriodSec = val
-}
-
-// SetAlgorithm sets the value of Algorithm.
-func (s *CompatUsersUserIDActivateOtpPostOK) SetAlgorithm(val CompatUsersUserIDActivateOtpPostOKAlgorithm) {
-	s.Algorithm = val
-}
-
-// SetIssuer sets the value of Issuer.
-func (s *CompatUsersUserIDActivateOtpPostOK) SetIssuer(val string) {
-	s.Issuer = val
-}
-
-// SetUncommitted sets the value of Uncommitted.
-func (s *CompatUsersUserIDActivateOtpPostOK) SetUncommitted(val bool) {
-	s.Uncommitted = val
-}
-
-func (*CompatUsersUserIDActivateOtpPostOK) compatUsersUserIDActivateOtpPostRes() {}
-
-// 生成アルゴリズム.
-type CompatUsersUserIDActivateOtpPostOKAlgorithm string
-
-const (
-	CompatUsersUserIDActivateOtpPostOKAlgorithmSHA1 CompatUsersUserIDActivateOtpPostOKAlgorithm = "sha1"
-)
-
-// AllValues returns all CompatUsersUserIDActivateOtpPostOKAlgorithm values.
-func (CompatUsersUserIDActivateOtpPostOKAlgorithm) AllValues() []CompatUsersUserIDActivateOtpPostOKAlgorithm {
-	return []CompatUsersUserIDActivateOtpPostOKAlgorithm{
-		CompatUsersUserIDActivateOtpPostOKAlgorithmSHA1,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s CompatUsersUserIDActivateOtpPostOKAlgorithm) MarshalText() ([]byte, error) {
-	switch s {
-	case CompatUsersUserIDActivateOtpPostOKAlgorithmSHA1:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *CompatUsersUserIDActivateOtpPostOKAlgorithm) UnmarshalText(data []byte) error {
-	switch CompatUsersUserIDActivateOtpPostOKAlgorithm(data) {
-	case CompatUsersUserIDActivateOtpPostOKAlgorithmSHA1:
-		*s = CompatUsersUserIDActivateOtpPostOKAlgorithmSHA1
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-// OTP生成方式.
-type CompatUsersUserIDActivateOtpPostOKClass string
-
-const (
-	CompatUsersUserIDActivateOtpPostOKClassTotp CompatUsersUserIDActivateOtpPostOKClass = "totp"
-)
-
-// AllValues returns all CompatUsersUserIDActivateOtpPostOKClass values.
-func (CompatUsersUserIDActivateOtpPostOKClass) AllValues() []CompatUsersUserIDActivateOtpPostOKClass {
-	return []CompatUsersUserIDActivateOtpPostOKClass{
-		CompatUsersUserIDActivateOtpPostOKClassTotp,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s CompatUsersUserIDActivateOtpPostOKClass) MarshalText() ([]byte, error) {
-	switch s {
-	case CompatUsersUserIDActivateOtpPostOKClassTotp:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *CompatUsersUserIDActivateOtpPostOKClass) UnmarshalText(data []byte) error {
-	switch CompatUsersUserIDActivateOtpPostOKClass(data) {
-	case CompatUsersUserIDActivateOtpPostOKClassTotp:
-		*s = CompatUsersUserIDActivateOtpPostOKClassTotp
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
 // CompatUsersUserIDClearTrustedDevicesPostNoContent is response for CompatUsersUserIDClearTrustedDevicesPost operation.
 type CompatUsersUserIDClearTrustedDevicesPostNoContent struct{}
 
@@ -809,23 +777,6 @@ func (s *CompatUsersUserIDPutReq) SetPassword(val OptString) {
 func (s *CompatUsersUserIDPutReq) SetDescription(val string) {
 	s.Description = val
 }
-
-type CompatUsersUserIDRecoveryCodePostOK struct {
-	// リカバリコード.
-	Code string `json:"code"`
-}
-
-// GetCode returns the value of Code.
-func (s *CompatUsersUserIDRecoveryCodePostOK) GetCode() string {
-	return s.Code
-}
-
-// SetCode sets the value of Code.
-func (s *CompatUsersUserIDRecoveryCodePostOK) SetCode(val string) {
-	s.Code = val
-}
-
-func (*CompatUsersUserIDRecoveryCodePostOK) compatUsersUserIDRecoveryCodePostRes() {}
 
 // CompatUsersUserIDRegisterEmailPostNoContent is response for CompatUsersUserIDRegisterEmailPost operation.
 type CompatUsersUserIDRegisterEmailPostNoContent struct{}
@@ -921,25 +872,6 @@ func (s *CompatUsersUserIDSecurityKeysSecurityKeyIDPutReq) SetName(val string) {
 	s.Name = val
 }
 
-// WebAuthnのPublicKeyCredentialCreationOptions.
-type CompatUsersUserIDStartSecurityKeyRegistrationPostOK struct {
-	// PublicKeyCredentialCreationOptionsの辞書データを文字列に変換したもの.
-	PublicKeyCredentialCreationOptions string `json:"public_key_credential_creation_options"`
-}
-
-// GetPublicKeyCredentialCreationOptions returns the value of PublicKeyCredentialCreationOptions.
-func (s *CompatUsersUserIDStartSecurityKeyRegistrationPostOK) GetPublicKeyCredentialCreationOptions() string {
-	return s.PublicKeyCredentialCreationOptions
-}
-
-// SetPublicKeyCredentialCreationOptions sets the value of PublicKeyCredentialCreationOptions.
-func (s *CompatUsersUserIDStartSecurityKeyRegistrationPostOK) SetPublicKeyCredentialCreationOptions(val string) {
-	s.PublicKeyCredentialCreationOptions = val
-}
-
-func (*CompatUsersUserIDStartSecurityKeyRegistrationPostOK) compatUsersUserIDStartSecurityKeyRegistrationPostRes() {
-}
-
 // Merged schema.
 type CompatUsersUserIDTrustedDevicesGetOK struct {
 	Items []UserTrustedDevice `json:"items"`
@@ -1003,27 +935,6 @@ func (*CompatUsersUserIDTrustedDevicesTrustedDeviceIDDeleteNoContent) compatUser
 type CompatUsersUserIDUnregisterEmailPostNoContent struct{}
 
 func (*CompatUsersUserIDUnregisterEmailPostNoContent) compatUsersUserIDUnregisterEmailPostRes() {}
-
-// CompatUsersUserIDValidateSecurityKeyRegistrationPostNoContent is response for CompatUsersUserIDValidateSecurityKeyRegistrationPost operation.
-type CompatUsersUserIDValidateSecurityKeyRegistrationPostNoContent struct{}
-
-func (*CompatUsersUserIDValidateSecurityKeyRegistrationPostNoContent) compatUsersUserIDValidateSecurityKeyRegistrationPostRes() {
-}
-
-type CompatUsersUserIDValidateSecurityKeyRegistrationPostReq struct {
-	// AuthenticatorAttestationResponseを持つ認証情報の辞書データを文字列にしたもの.
-	Credential string `json:"credential"`
-}
-
-// GetCredential returns the value of Credential.
-func (s *CompatUsersUserIDValidateSecurityKeyRegistrationPostReq) GetCredential() string {
-	return s.Credential
-}
-
-// SetCredential sets the value of Credential.
-func (s *CompatUsersUserIDValidateSecurityKeyRegistrationPostReq) SetCredential(val string) {
-	s.Credential = val
-}
 
 // DisableServicePolicyPostNoContent is response for DisableServicePolicyPost operation.
 type DisableServicePolicyPostNoContent struct{}
@@ -1628,34 +1539,33 @@ func (s *Http400BadRequest) SetErrors(val Http400BadRequestErrors) {
 	s.Errors = val
 }
 
-func (*Http400BadRequest) compatAPIKeysApikeyIDPutRes()                             {}
-func (*Http400BadRequest) compatAPIKeysPostRes()                                    {}
-func (*Http400BadRequest) compatUsersPostRes()                                      {}
-func (*Http400BadRequest) compatUsersUserIDPutRes()                                 {}
-func (*Http400BadRequest) compatUsersUserIDValidateSecurityKeyRegistrationPostRes() {}
-func (*Http400BadRequest) foldersFolderIDDeleteRes()                                {}
-func (*Http400BadRequest) foldersFolderIDIamPolicyPutRes()                          {}
-func (*Http400BadRequest) foldersFolderIDPutRes()                                   {}
-func (*Http400BadRequest) foldersPostRes()                                          {}
-func (*Http400BadRequest) groupsGroupIDMembershipsPutRes()                          {}
-func (*Http400BadRequest) groupsGroupIDPutRes()                                     {}
-func (*Http400BadRequest) groupsPostRes()                                           {}
-func (*Http400BadRequest) moveFoldersPostRes()                                      {}
-func (*Http400BadRequest) moveProjectsPostRes()                                     {}
-func (*Http400BadRequest) organizationIDPolicyPutRes()                              {}
-func (*Http400BadRequest) organizationIamPolicyPutRes()                             {}
-func (*Http400BadRequest) organizationPasswordPolicyPutRes()                        {}
-func (*Http400BadRequest) organizationPutRes()                                      {}
-func (*Http400BadRequest) organizationServicePolicyPutRes()                         {}
-func (*Http400BadRequest) projectsPostRes()                                         {}
-func (*Http400BadRequest) projectsProjectIDIamPolicyPutRes()                        {}
-func (*Http400BadRequest) projectsProjectIDPutRes()                                 {}
-func (*Http400BadRequest) sSOProfilesPostRes()                                      {}
-func (*Http400BadRequest) sSOProfilesSSOProfileIDPutRes()                           {}
-func (*Http400BadRequest) servicePrincipalsOAuth2TokenPostRes()                     {}
-func (*Http400BadRequest) servicePrincipalsPostRes()                                {}
-func (*Http400BadRequest) servicePrincipalsServicePrincipalIDPutRes()               {}
-func (*Http400BadRequest) servicePrincipalsServicePrincipalIDUploadKeyPostRes()     {}
+func (*Http400BadRequest) compatAPIKeysApikeyIDPutRes()                         {}
+func (*Http400BadRequest) compatAPIKeysPostRes()                                {}
+func (*Http400BadRequest) compatUsersPostRes()                                  {}
+func (*Http400BadRequest) compatUsersUserIDPutRes()                             {}
+func (*Http400BadRequest) foldersFolderIDDeleteRes()                            {}
+func (*Http400BadRequest) foldersFolderIDIamPolicyPutRes()                      {}
+func (*Http400BadRequest) foldersFolderIDPutRes()                               {}
+func (*Http400BadRequest) foldersPostRes()                                      {}
+func (*Http400BadRequest) groupsGroupIDMembershipsPutRes()                      {}
+func (*Http400BadRequest) groupsGroupIDPutRes()                                 {}
+func (*Http400BadRequest) groupsPostRes()                                       {}
+func (*Http400BadRequest) moveFoldersPostRes()                                  {}
+func (*Http400BadRequest) moveProjectsPostRes()                                 {}
+func (*Http400BadRequest) organizationIDPolicyPutRes()                          {}
+func (*Http400BadRequest) organizationIamPolicyPutRes()                         {}
+func (*Http400BadRequest) organizationPasswordPolicyPutRes()                    {}
+func (*Http400BadRequest) organizationPutRes()                                  {}
+func (*Http400BadRequest) organizationServicePolicyPutRes()                     {}
+func (*Http400BadRequest) projectsPostRes()                                     {}
+func (*Http400BadRequest) projectsProjectIDIamPolicyPutRes()                    {}
+func (*Http400BadRequest) projectsProjectIDPutRes()                             {}
+func (*Http400BadRequest) sSOProfilesPostRes()                                  {}
+func (*Http400BadRequest) sSOProfilesSSOProfileIDPutRes()                       {}
+func (*Http400BadRequest) servicePrincipalsOAuth2TokenPostRes()                 {}
+func (*Http400BadRequest) servicePrincipalsPostRes()                            {}
+func (*Http400BadRequest) servicePrincipalsServicePrincipalIDPutRes()           {}
+func (*Http400BadRequest) servicePrincipalsServicePrincipalIDUploadKeyPostRes() {}
 
 type Http400BadRequestErrors struct {
 	// リクエストボディの特定キーに関係しないエラー.
@@ -1807,23 +1717,19 @@ func (*Http401Unauthorized) compatAPIKeysGetRes()                               
 func (*Http401Unauthorized) compatAPIKeysPostRes()                                                  {}
 func (*Http401Unauthorized) compatUsersGetRes()                                                     {}
 func (*Http401Unauthorized) compatUsersPostRes()                                                    {}
-func (*Http401Unauthorized) compatUsersUserIDActivateOtpPostRes()                                   {}
 func (*Http401Unauthorized) compatUsersUserIDClearTrustedDevicesPostRes()                           {}
 func (*Http401Unauthorized) compatUsersUserIDDeactivateOtpPostRes()                                 {}
 func (*Http401Unauthorized) compatUsersUserIDDeleteRes()                                            {}
 func (*Http401Unauthorized) compatUsersUserIDGetRes()                                               {}
 func (*Http401Unauthorized) compatUsersUserIDPutRes()                                               {}
-func (*Http401Unauthorized) compatUsersUserIDRecoveryCodePostRes()                                  {}
 func (*Http401Unauthorized) compatUsersUserIDRegisterEmailPostRes()                                 {}
 func (*Http401Unauthorized) compatUsersUserIDSecurityKeysGetRes()                                   {}
 func (*Http401Unauthorized) compatUsersUserIDSecurityKeysSecurityKeyIDDeleteRes()                   {}
 func (*Http401Unauthorized) compatUsersUserIDSecurityKeysSecurityKeyIDGetRes()                      {}
 func (*Http401Unauthorized) compatUsersUserIDSecurityKeysSecurityKeyIDPutRes()                      {}
-func (*Http401Unauthorized) compatUsersUserIDStartSecurityKeyRegistrationPostRes()                  {}
 func (*Http401Unauthorized) compatUsersUserIDTrustedDevicesGetRes()                                 {}
 func (*Http401Unauthorized) compatUsersUserIDTrustedDevicesTrustedDeviceIDDeleteRes()               {}
 func (*Http401Unauthorized) compatUsersUserIDUnregisterEmailPostRes()                               {}
-func (*Http401Unauthorized) compatUsersUserIDValidateSecurityKeyRegistrationPostRes()               {}
 func (*Http401Unauthorized) disableServicePolicyPostRes()                                           {}
 func (*Http401Unauthorized) enableServicePolicyPostRes()                                            {}
 func (*Http401Unauthorized) foldersFolderIDDeleteRes()                                              {}
@@ -1947,23 +1853,19 @@ func (*Http403Forbidden) compatAPIKeysGetRes()                                  
 func (*Http403Forbidden) compatAPIKeysPostRes()                                                  {}
 func (*Http403Forbidden) compatUsersGetRes()                                                     {}
 func (*Http403Forbidden) compatUsersPostRes()                                                    {}
-func (*Http403Forbidden) compatUsersUserIDActivateOtpPostRes()                                   {}
 func (*Http403Forbidden) compatUsersUserIDClearTrustedDevicesPostRes()                           {}
 func (*Http403Forbidden) compatUsersUserIDDeactivateOtpPostRes()                                 {}
 func (*Http403Forbidden) compatUsersUserIDDeleteRes()                                            {}
 func (*Http403Forbidden) compatUsersUserIDGetRes()                                               {}
 func (*Http403Forbidden) compatUsersUserIDPutRes()                                               {}
-func (*Http403Forbidden) compatUsersUserIDRecoveryCodePostRes()                                  {}
 func (*Http403Forbidden) compatUsersUserIDRegisterEmailPostRes()                                 {}
 func (*Http403Forbidden) compatUsersUserIDSecurityKeysGetRes()                                   {}
 func (*Http403Forbidden) compatUsersUserIDSecurityKeysSecurityKeyIDDeleteRes()                   {}
 func (*Http403Forbidden) compatUsersUserIDSecurityKeysSecurityKeyIDGetRes()                      {}
 func (*Http403Forbidden) compatUsersUserIDSecurityKeysSecurityKeyIDPutRes()                      {}
-func (*Http403Forbidden) compatUsersUserIDStartSecurityKeyRegistrationPostRes()                  {}
 func (*Http403Forbidden) compatUsersUserIDTrustedDevicesGetRes()                                 {}
 func (*Http403Forbidden) compatUsersUserIDTrustedDevicesTrustedDeviceIDDeleteRes()               {}
 func (*Http403Forbidden) compatUsersUserIDUnregisterEmailPostRes()                               {}
-func (*Http403Forbidden) compatUsersUserIDValidateSecurityKeyRegistrationPostRes()               {}
 func (*Http403Forbidden) disableServicePolicyPostRes()                                           {}
 func (*Http403Forbidden) enableServicePolicyPostRes()                                            {}
 func (*Http403Forbidden) foldersFolderIDDeleteRes()                                              {}
@@ -2082,23 +1984,19 @@ func (s *Http404NotFound) SetDetail(val string) {
 func (*Http404NotFound) compatAPIKeysApikeyIDDeleteRes()                                        {}
 func (*Http404NotFound) compatAPIKeysApikeyIDGetRes()                                           {}
 func (*Http404NotFound) compatAPIKeysApikeyIDPutRes()                                           {}
-func (*Http404NotFound) compatUsersUserIDActivateOtpPostRes()                                   {}
 func (*Http404NotFound) compatUsersUserIDClearTrustedDevicesPostRes()                           {}
 func (*Http404NotFound) compatUsersUserIDDeactivateOtpPostRes()                                 {}
 func (*Http404NotFound) compatUsersUserIDDeleteRes()                                            {}
 func (*Http404NotFound) compatUsersUserIDGetRes()                                               {}
 func (*Http404NotFound) compatUsersUserIDPutRes()                                               {}
-func (*Http404NotFound) compatUsersUserIDRecoveryCodePostRes()                                  {}
 func (*Http404NotFound) compatUsersUserIDRegisterEmailPostRes()                                 {}
 func (*Http404NotFound) compatUsersUserIDSecurityKeysGetRes()                                   {}
 func (*Http404NotFound) compatUsersUserIDSecurityKeysSecurityKeyIDDeleteRes()                   {}
 func (*Http404NotFound) compatUsersUserIDSecurityKeysSecurityKeyIDGetRes()                      {}
 func (*Http404NotFound) compatUsersUserIDSecurityKeysSecurityKeyIDPutRes()                      {}
-func (*Http404NotFound) compatUsersUserIDStartSecurityKeyRegistrationPostRes()                  {}
 func (*Http404NotFound) compatUsersUserIDTrustedDevicesGetRes()                                 {}
 func (*Http404NotFound) compatUsersUserIDTrustedDevicesTrustedDeviceIDDeleteRes()               {}
 func (*Http404NotFound) compatUsersUserIDUnregisterEmailPostRes()                               {}
-func (*Http404NotFound) compatUsersUserIDValidateSecurityKeyRegistrationPostRes()               {}
 func (*Http404NotFound) foldersFolderIDDeleteRes()                                              {}
 func (*Http404NotFound) foldersFolderIDIamPolicyGetRes()                                        {}
 func (*Http404NotFound) foldersFolderIDIamPolicyPutRes()                                        {}
@@ -2183,24 +2081,20 @@ func (s *Http409Conflict) SetDetail(val string) {
 	s.Detail = val
 }
 
-func (*Http409Conflict) compatUsersPostRes()                                      {}
-func (*Http409Conflict) compatUsersUserIDActivateOtpPostRes()                     {}
-func (*Http409Conflict) compatUsersUserIDRecoveryCodePostRes()                    {}
-func (*Http409Conflict) compatUsersUserIDRegisterEmailPostRes()                   {}
-func (*Http409Conflict) compatUsersUserIDStartSecurityKeyRegistrationPostRes()    {}
-func (*Http409Conflict) compatUsersUserIDValidateSecurityKeyRegistrationPostRes() {}
-func (*Http409Conflict) disableServicePolicyPostRes()                             {}
-func (*Http409Conflict) enableServicePolicyPostRes()                              {}
-func (*Http409Conflict) groupsPostRes()                                           {}
-func (*Http409Conflict) organizationServicePolicyPutRes()                         {}
-func (*Http409Conflict) projectsPostRes()                                         {}
-func (*Http409Conflict) projectsProjectIDDeleteRes()                              {}
-func (*Http409Conflict) sSOProfilesPostRes()                                      {}
-func (*Http409Conflict) sSOProfilesSSOProfileIDAssignPostRes()                    {}
-func (*Http409Conflict) sSOProfilesSSOProfileIDDeleteRes()                        {}
-func (*Http409Conflict) servicePrincipalsPostRes()                                {}
-func (*Http409Conflict) servicePrincipalsServicePrincipalIDDeleteRes()            {}
-func (*Http409Conflict) servicePrincipalsServicePrincipalIDUploadKeyPostRes()     {}
+func (*Http409Conflict) compatUsersPostRes()                                  {}
+func (*Http409Conflict) compatUsersUserIDRegisterEmailPostRes()               {}
+func (*Http409Conflict) disableServicePolicyPostRes()                         {}
+func (*Http409Conflict) enableServicePolicyPostRes()                          {}
+func (*Http409Conflict) groupsPostRes()                                       {}
+func (*Http409Conflict) organizationServicePolicyPutRes()                     {}
+func (*Http409Conflict) projectsPostRes()                                     {}
+func (*Http409Conflict) projectsProjectIDDeleteRes()                          {}
+func (*Http409Conflict) sSOProfilesPostRes()                                  {}
+func (*Http409Conflict) sSOProfilesSSOProfileIDAssignPostRes()                {}
+func (*Http409Conflict) sSOProfilesSSOProfileIDDeleteRes()                    {}
+func (*Http409Conflict) servicePrincipalsPostRes()                            {}
+func (*Http409Conflict) servicePrincipalsServicePrincipalIDDeleteRes()        {}
+func (*Http409Conflict) servicePrincipalsServicePrincipalIDUploadKeyPostRes() {}
 
 // Ref: #/components/schemas/Http429TooManyRequests
 type Http429TooManyRequests struct {
@@ -2261,23 +2155,19 @@ func (*Http429TooManyRequests) compatAPIKeysGetRes()                            
 func (*Http429TooManyRequests) compatAPIKeysPostRes()                                    {}
 func (*Http429TooManyRequests) compatUsersGetRes()                                       {}
 func (*Http429TooManyRequests) compatUsersPostRes()                                      {}
-func (*Http429TooManyRequests) compatUsersUserIDActivateOtpPostRes()                     {}
 func (*Http429TooManyRequests) compatUsersUserIDClearTrustedDevicesPostRes()             {}
 func (*Http429TooManyRequests) compatUsersUserIDDeactivateOtpPostRes()                   {}
 func (*Http429TooManyRequests) compatUsersUserIDDeleteRes()                              {}
 func (*Http429TooManyRequests) compatUsersUserIDGetRes()                                 {}
 func (*Http429TooManyRequests) compatUsersUserIDPutRes()                                 {}
-func (*Http429TooManyRequests) compatUsersUserIDRecoveryCodePostRes()                    {}
 func (*Http429TooManyRequests) compatUsersUserIDRegisterEmailPostRes()                   {}
 func (*Http429TooManyRequests) compatUsersUserIDSecurityKeysGetRes()                     {}
 func (*Http429TooManyRequests) compatUsersUserIDSecurityKeysSecurityKeyIDDeleteRes()     {}
 func (*Http429TooManyRequests) compatUsersUserIDSecurityKeysSecurityKeyIDGetRes()        {}
 func (*Http429TooManyRequests) compatUsersUserIDSecurityKeysSecurityKeyIDPutRes()        {}
-func (*Http429TooManyRequests) compatUsersUserIDStartSecurityKeyRegistrationPostRes()    {}
 func (*Http429TooManyRequests) compatUsersUserIDTrustedDevicesGetRes()                   {}
 func (*Http429TooManyRequests) compatUsersUserIDTrustedDevicesTrustedDeviceIDDeleteRes() {}
 func (*Http429TooManyRequests) compatUsersUserIDUnregisterEmailPostRes()                 {}
-func (*Http429TooManyRequests) compatUsersUserIDValidateSecurityKeyRegistrationPostRes() {}
 func (*Http429TooManyRequests) disableServicePolicyPostRes()                             {}
 func (*Http429TooManyRequests) enableServicePolicyPostRes()                              {}
 func (*Http429TooManyRequests) foldersFolderIDDeleteRes()                                {}
@@ -2986,6 +2876,98 @@ func (o NilURI) Get() (v url.URL, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o NilURI) Or(d url.URL) url.URL {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptAuthConditionsIPRestrictionSum0Mode returns new OptAuthConditionsIPRestrictionSum0Mode with value set to v.
+func NewOptAuthConditionsIPRestrictionSum0Mode(v AuthConditionsIPRestrictionSum0Mode) OptAuthConditionsIPRestrictionSum0Mode {
+	return OptAuthConditionsIPRestrictionSum0Mode{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptAuthConditionsIPRestrictionSum0Mode is optional AuthConditionsIPRestrictionSum0Mode.
+type OptAuthConditionsIPRestrictionSum0Mode struct {
+	Value AuthConditionsIPRestrictionSum0Mode
+	Set   bool
+}
+
+// IsSet returns true if OptAuthConditionsIPRestrictionSum0Mode was set.
+func (o OptAuthConditionsIPRestrictionSum0Mode) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptAuthConditionsIPRestrictionSum0Mode) Reset() {
+	var v AuthConditionsIPRestrictionSum0Mode
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptAuthConditionsIPRestrictionSum0Mode) SetTo(v AuthConditionsIPRestrictionSum0Mode) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptAuthConditionsIPRestrictionSum0Mode) Get() (v AuthConditionsIPRestrictionSum0Mode, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptAuthConditionsIPRestrictionSum0Mode) Or(d AuthConditionsIPRestrictionSum0Mode) AuthConditionsIPRestrictionSum0Mode {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptAuthConditionsIPRestrictionSum1Mode returns new OptAuthConditionsIPRestrictionSum1Mode with value set to v.
+func NewOptAuthConditionsIPRestrictionSum1Mode(v AuthConditionsIPRestrictionSum1Mode) OptAuthConditionsIPRestrictionSum1Mode {
+	return OptAuthConditionsIPRestrictionSum1Mode{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptAuthConditionsIPRestrictionSum1Mode is optional AuthConditionsIPRestrictionSum1Mode.
+type OptAuthConditionsIPRestrictionSum1Mode struct {
+	Value AuthConditionsIPRestrictionSum1Mode
+	Set   bool
+}
+
+// IsSet returns true if OptAuthConditionsIPRestrictionSum1Mode was set.
+func (o OptAuthConditionsIPRestrictionSum1Mode) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptAuthConditionsIPRestrictionSum1Mode) Reset() {
+	var v AuthConditionsIPRestrictionSum1Mode
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptAuthConditionsIPRestrictionSum1Mode) SetTo(v AuthConditionsIPRestrictionSum1Mode) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptAuthConditionsIPRestrictionSum1Mode) Get() (v AuthConditionsIPRestrictionSum1Mode, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptAuthConditionsIPRestrictionSum1Mode) Or(d AuthConditionsIPRestrictionSum1Mode) AuthConditionsIPRestrictionSum1Mode {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -4419,11 +4401,11 @@ type ProjectApiKey struct {
 	// アクセストークン.
 	AccessToken string `json:"access_token"`
 	// APIキーがシングルサーバコントロールパネルで利用される場合は必須。.
-	ServerResourceID OptString `json:"server_resource_id"`
+	ServerResourceID OptNilString `json:"server_resource_id"`
 	// IAMのロール。.
 	IamRoles []string `json:"iam_roles"`
 	// ゾーンを指定。APIキーがシングルサーバコントロールパネルで利用される場合は必須。.
-	ZoneID OptString `json:"zone_id"`
+	ZoneID OptNilString `json:"zone_id"`
 	// 作成日時.
 	CreatedAt OptString `json:"created_at"`
 	// 更新日時.
@@ -4456,7 +4438,7 @@ func (s *ProjectApiKey) GetAccessToken() string {
 }
 
 // GetServerResourceID returns the value of ServerResourceID.
-func (s *ProjectApiKey) GetServerResourceID() OptString {
+func (s *ProjectApiKey) GetServerResourceID() OptNilString {
 	return s.ServerResourceID
 }
 
@@ -4466,7 +4448,7 @@ func (s *ProjectApiKey) GetIamRoles() []string {
 }
 
 // GetZoneID returns the value of ZoneID.
-func (s *ProjectApiKey) GetZoneID() OptString {
+func (s *ProjectApiKey) GetZoneID() OptNilString {
 	return s.ZoneID
 }
 
@@ -4506,7 +4488,7 @@ func (s *ProjectApiKey) SetAccessToken(val string) {
 }
 
 // SetServerResourceID sets the value of ServerResourceID.
-func (s *ProjectApiKey) SetServerResourceID(val OptString) {
+func (s *ProjectApiKey) SetServerResourceID(val OptNilString) {
 	s.ServerResourceID = val
 }
 
@@ -4516,7 +4498,7 @@ func (s *ProjectApiKey) SetIamRoles(val []string) {
 }
 
 // SetZoneID sets the value of ZoneID.
-func (s *ProjectApiKey) SetZoneID(val OptString) {
+func (s *ProjectApiKey) SetZoneID(val OptNilString) {
 	s.ZoneID = val
 }
 
@@ -4547,11 +4529,11 @@ type ProjectApiKeyWithSecret struct {
 	// アクセストークン.
 	AccessToken string `json:"access_token"`
 	// APIキーがシングルサーバコントロールパネルで利用される場合は必須。.
-	ServerResourceID OptString `json:"server_resource_id"`
+	ServerResourceID OptNilString `json:"server_resource_id"`
 	// IAMのロール。.
 	IamRoles []string `json:"iam_roles"`
 	// ゾーンを指定。APIキーがシングルサーバコントロールパネルで利用される場合は必須。.
-	ZoneID OptString `json:"zone_id"`
+	ZoneID OptNilString `json:"zone_id"`
 	// 作成日時.
 	CreatedAt OptString `json:"created_at"`
 	// 更新日時.
@@ -4586,7 +4568,7 @@ func (s *ProjectApiKeyWithSecret) GetAccessToken() string {
 }
 
 // GetServerResourceID returns the value of ServerResourceID.
-func (s *ProjectApiKeyWithSecret) GetServerResourceID() OptString {
+func (s *ProjectApiKeyWithSecret) GetServerResourceID() OptNilString {
 	return s.ServerResourceID
 }
 
@@ -4596,7 +4578,7 @@ func (s *ProjectApiKeyWithSecret) GetIamRoles() []string {
 }
 
 // GetZoneID returns the value of ZoneID.
-func (s *ProjectApiKeyWithSecret) GetZoneID() OptString {
+func (s *ProjectApiKeyWithSecret) GetZoneID() OptNilString {
 	return s.ZoneID
 }
 
@@ -4641,7 +4623,7 @@ func (s *ProjectApiKeyWithSecret) SetAccessToken(val string) {
 }
 
 // SetServerResourceID sets the value of ServerResourceID.
-func (s *ProjectApiKeyWithSecret) SetServerResourceID(val OptString) {
+func (s *ProjectApiKeyWithSecret) SetServerResourceID(val OptNilString) {
 	s.ServerResourceID = val
 }
 
@@ -4651,7 +4633,7 @@ func (s *ProjectApiKeyWithSecret) SetIamRoles(val []string) {
 }
 
 // SetZoneID sets the value of ZoneID.
-func (s *ProjectApiKeyWithSecret) SetZoneID(val OptString) {
+func (s *ProjectApiKeyWithSecret) SetZoneID(val OptNilString) {
 	s.ZoneID = val
 }
 

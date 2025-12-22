@@ -256,9 +256,240 @@ func (s *AuthConditionsIPRestriction) Encode(e *jx.Encoder) {
 
 // encodeFields encodes fields.
 func (s *AuthConditionsIPRestriction) encodeFields(e *jx.Encoder) {
+	s.OneOf.encodeFields(e)
+}
+
+var jsonFieldsNameOfAuthConditionsIPRestriction = [0]string{}
+
+// Decode decodes AuthConditionsIPRestriction from json.
+func (s *AuthConditionsIPRestriction) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AuthConditionsIPRestriction to nil")
+	}
+	if err := d.Capture(func(d *jx.Decoder) error {
+		return s.OneOf.Decode(d)
+	}); err != nil {
+		return errors.Wrap(err, "decode field OneOf")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		default:
+			return d.Skip()
+		}
+	}); err != nil {
+		return errors.Wrap(err, "decode AuthConditionsIPRestriction")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *AuthConditionsIPRestriction) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *AuthConditionsIPRestriction) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes AuthConditionsIPRestrictionSum as json.
+func (s AuthConditionsIPRestrictionSum) Encode(e *jx.Encoder) {
+	switch s.Type {
+	case AuthConditionsIPRestrictionSum0AuthConditionsIPRestrictionSum:
+		s.AuthConditionsIPRestrictionSum0.Encode(e)
+	case AuthConditionsIPRestrictionSum1AuthConditionsIPRestrictionSum:
+		s.AuthConditionsIPRestrictionSum1.Encode(e)
+	}
+}
+
+func (s AuthConditionsIPRestrictionSum) encodeFields(e *jx.Encoder) {
+	switch s.Type {
+	case AuthConditionsIPRestrictionSum0AuthConditionsIPRestrictionSum:
+		s.AuthConditionsIPRestrictionSum0.encodeFields(e)
+	case AuthConditionsIPRestrictionSum1AuthConditionsIPRestrictionSum:
+		s.AuthConditionsIPRestrictionSum1.encodeFields(e)
+	}
+}
+
+// Decode decodes AuthConditionsIPRestrictionSum from json.
+func (s *AuthConditionsIPRestrictionSum) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AuthConditionsIPRestrictionSum to nil")
+	}
+	// Sum type fields.
+	if typ := d.Next(); typ != jx.Object {
+		return errors.Errorf("unexpected json type %q", typ)
+	}
+
+	var found bool
+	if err := d.Capture(func(d *jx.Decoder) error {
+		return d.ObjBytes(func(d *jx.Decoder, key []byte) error {
+			switch string(key) {
+			case "source_network":
+				match := AuthConditionsIPRestrictionSum1AuthConditionsIPRestrictionSum
+				if found && s.Type != match {
+					s.Type = ""
+					return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
+				}
+				found = true
+				s.Type = match
+			}
+			return d.Skip()
+		})
+	}); err != nil {
+		return errors.Wrap(err, "capture")
+	}
+	if !found {
+		s.Type = AuthConditionsIPRestrictionSum0AuthConditionsIPRestrictionSum
+	}
+	switch s.Type {
+	case AuthConditionsIPRestrictionSum0AuthConditionsIPRestrictionSum:
+		if err := s.AuthConditionsIPRestrictionSum0.Decode(d); err != nil {
+			return err
+		}
+	case AuthConditionsIPRestrictionSum1AuthConditionsIPRestrictionSum:
+		if err := s.AuthConditionsIPRestrictionSum1.Decode(d); err != nil {
+			return err
+		}
+	default:
+		return errors.Errorf("inferred invalid type: %s", s.Type)
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s AuthConditionsIPRestrictionSum) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *AuthConditionsIPRestrictionSum) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *AuthConditionsIPRestrictionSum0) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *AuthConditionsIPRestrictionSum0) encodeFields(e *jx.Encoder) {
 	{
-		e.FieldStart("mode")
-		s.Mode.Encode(e)
+		if s.Mode.Set {
+			e.FieldStart("mode")
+			s.Mode.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfAuthConditionsIPRestrictionSum0 = [1]string{
+	0: "mode",
+}
+
+// Decode decodes AuthConditionsIPRestrictionSum0 from json.
+func (s *AuthConditionsIPRestrictionSum0) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AuthConditionsIPRestrictionSum0 to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "mode":
+			if err := func() error {
+				s.Mode.Reset()
+				if err := s.Mode.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"mode\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode AuthConditionsIPRestrictionSum0")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *AuthConditionsIPRestrictionSum0) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *AuthConditionsIPRestrictionSum0) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes AuthConditionsIPRestrictionSum0Mode as json.
+func (s AuthConditionsIPRestrictionSum0Mode) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes AuthConditionsIPRestrictionSum0Mode from json.
+func (s *AuthConditionsIPRestrictionSum0Mode) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AuthConditionsIPRestrictionSum0Mode to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch AuthConditionsIPRestrictionSum0Mode(v) {
+	case AuthConditionsIPRestrictionSum0ModeAllowAll:
+		*s = AuthConditionsIPRestrictionSum0ModeAllowAll
+	default:
+		*s = AuthConditionsIPRestrictionSum0Mode(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s AuthConditionsIPRestrictionSum0Mode) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *AuthConditionsIPRestrictionSum0Mode) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *AuthConditionsIPRestrictionSum1) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *AuthConditionsIPRestrictionSum1) encodeFields(e *jx.Encoder) {
+	{
+		if s.Mode.Set {
+			e.FieldStart("mode")
+			s.Mode.Encode(e)
+		}
 	}
 	{
 		if s.SourceNetwork != nil {
@@ -272,24 +503,22 @@ func (s *AuthConditionsIPRestriction) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfAuthConditionsIPRestriction = [2]string{
+var jsonFieldsNameOfAuthConditionsIPRestrictionSum1 = [2]string{
 	0: "mode",
 	1: "source_network",
 }
 
-// Decode decodes AuthConditionsIPRestriction from json.
-func (s *AuthConditionsIPRestriction) Decode(d *jx.Decoder) error {
+// Decode decodes AuthConditionsIPRestrictionSum1 from json.
+func (s *AuthConditionsIPRestrictionSum1) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode AuthConditionsIPRestriction to nil")
+		return errors.New("invalid: unable to decode AuthConditionsIPRestrictionSum1 to nil")
 	}
-	var requiredBitSet [1]uint8
-	s.setDefaults()
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
 		switch string(k) {
 		case "mode":
-			requiredBitSet[0] |= 1 << 0
 			if err := func() error {
+				s.Mode.Reset()
 				if err := s.Mode.Decode(d); err != nil {
 					return err
 				}
@@ -321,93 +550,59 @@ func (s *AuthConditionsIPRestriction) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode AuthConditionsIPRestriction")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfAuthConditionsIPRestriction) {
-					name = jsonFieldsNameOfAuthConditionsIPRestriction[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
+		return errors.Wrap(err, "decode AuthConditionsIPRestrictionSum1")
 	}
 
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *AuthConditionsIPRestriction) MarshalJSON() ([]byte, error) {
+func (s *AuthConditionsIPRestrictionSum1) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *AuthConditionsIPRestriction) UnmarshalJSON(data []byte) error {
+func (s *AuthConditionsIPRestrictionSum1) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
 
-// Encode encodes AuthConditionsIPRestrictionMode as json.
-func (s AuthConditionsIPRestrictionMode) Encode(e *jx.Encoder) {
+// Encode encodes AuthConditionsIPRestrictionSum1Mode as json.
+func (s AuthConditionsIPRestrictionSum1Mode) Encode(e *jx.Encoder) {
 	e.Str(string(s))
 }
 
-// Decode decodes AuthConditionsIPRestrictionMode from json.
-func (s *AuthConditionsIPRestrictionMode) Decode(d *jx.Decoder) error {
+// Decode decodes AuthConditionsIPRestrictionSum1Mode from json.
+func (s *AuthConditionsIPRestrictionSum1Mode) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode AuthConditionsIPRestrictionMode to nil")
+		return errors.New("invalid: unable to decode AuthConditionsIPRestrictionSum1Mode to nil")
 	}
 	v, err := d.StrBytes()
 	if err != nil {
 		return err
 	}
 	// Try to use constant string.
-	switch AuthConditionsIPRestrictionMode(v) {
-	case AuthConditionsIPRestrictionModeAllowAll:
-		*s = AuthConditionsIPRestrictionModeAllowAll
-	case AuthConditionsIPRestrictionModeAllowList:
-		*s = AuthConditionsIPRestrictionModeAllowList
+	switch AuthConditionsIPRestrictionSum1Mode(v) {
+	case AuthConditionsIPRestrictionSum1ModeAllowList:
+		*s = AuthConditionsIPRestrictionSum1ModeAllowList
 	default:
-		*s = AuthConditionsIPRestrictionMode(v)
+		*s = AuthConditionsIPRestrictionSum1Mode(v)
 	}
 
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s AuthConditionsIPRestrictionMode) MarshalJSON() ([]byte, error) {
+func (s AuthConditionsIPRestrictionSum1Mode) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *AuthConditionsIPRestrictionMode) UnmarshalJSON(data []byte) error {
+func (s *AuthConditionsIPRestrictionSum1Mode) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -1348,276 +1543,6 @@ func (s *CompatUsersPostReq) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
-func (s *CompatUsersUserIDActivateOtpPostOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *CompatUsersUserIDActivateOtpPostOK) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("class")
-		s.Class.Encode(e)
-	}
-	{
-		e.FieldStart("name")
-		e.Str(s.Name)
-	}
-	{
-		e.FieldStart("secret")
-		e.Str(s.Secret)
-	}
-	{
-		e.FieldStart("period_sec")
-		e.Int(s.PeriodSec)
-	}
-	{
-		e.FieldStart("algorithm")
-		s.Algorithm.Encode(e)
-	}
-	{
-		e.FieldStart("issuer")
-		e.Str(s.Issuer)
-	}
-	{
-		e.FieldStart("uncommitted")
-		e.Bool(s.Uncommitted)
-	}
-}
-
-var jsonFieldsNameOfCompatUsersUserIDActivateOtpPostOK = [7]string{
-	0: "class",
-	1: "name",
-	2: "secret",
-	3: "period_sec",
-	4: "algorithm",
-	5: "issuer",
-	6: "uncommitted",
-}
-
-// Decode decodes CompatUsersUserIDActivateOtpPostOK from json.
-func (s *CompatUsersUserIDActivateOtpPostOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode CompatUsersUserIDActivateOtpPostOK to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "class":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				if err := s.Class.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"class\"")
-			}
-		case "name":
-			requiredBitSet[0] |= 1 << 1
-			if err := func() error {
-				v, err := d.Str()
-				s.Name = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"name\"")
-			}
-		case "secret":
-			requiredBitSet[0] |= 1 << 2
-			if err := func() error {
-				v, err := d.Str()
-				s.Secret = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"secret\"")
-			}
-		case "period_sec":
-			requiredBitSet[0] |= 1 << 3
-			if err := func() error {
-				v, err := d.Int()
-				s.PeriodSec = int(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"period_sec\"")
-			}
-		case "algorithm":
-			requiredBitSet[0] |= 1 << 4
-			if err := func() error {
-				if err := s.Algorithm.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"algorithm\"")
-			}
-		case "issuer":
-			requiredBitSet[0] |= 1 << 5
-			if err := func() error {
-				v, err := d.Str()
-				s.Issuer = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"issuer\"")
-			}
-		case "uncommitted":
-			requiredBitSet[0] |= 1 << 6
-			if err := func() error {
-				v, err := d.Bool()
-				s.Uncommitted = bool(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"uncommitted\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode CompatUsersUserIDActivateOtpPostOK")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b01111111,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfCompatUsersUserIDActivateOtpPostOK) {
-					name = jsonFieldsNameOfCompatUsersUserIDActivateOtpPostOK[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *CompatUsersUserIDActivateOtpPostOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *CompatUsersUserIDActivateOtpPostOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes CompatUsersUserIDActivateOtpPostOKAlgorithm as json.
-func (s CompatUsersUserIDActivateOtpPostOKAlgorithm) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes CompatUsersUserIDActivateOtpPostOKAlgorithm from json.
-func (s *CompatUsersUserIDActivateOtpPostOKAlgorithm) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode CompatUsersUserIDActivateOtpPostOKAlgorithm to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch CompatUsersUserIDActivateOtpPostOKAlgorithm(v) {
-	case CompatUsersUserIDActivateOtpPostOKAlgorithmSHA1:
-		*s = CompatUsersUserIDActivateOtpPostOKAlgorithmSHA1
-	default:
-		*s = CompatUsersUserIDActivateOtpPostOKAlgorithm(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s CompatUsersUserIDActivateOtpPostOKAlgorithm) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *CompatUsersUserIDActivateOtpPostOKAlgorithm) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes CompatUsersUserIDActivateOtpPostOKClass as json.
-func (s CompatUsersUserIDActivateOtpPostOKClass) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes CompatUsersUserIDActivateOtpPostOKClass from json.
-func (s *CompatUsersUserIDActivateOtpPostOKClass) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode CompatUsersUserIDActivateOtpPostOKClass to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch CompatUsersUserIDActivateOtpPostOKClass(v) {
-	case CompatUsersUserIDActivateOtpPostOKClassTotp:
-		*s = CompatUsersUserIDActivateOtpPostOKClassTotp
-	default:
-		*s = CompatUsersUserIDActivateOtpPostOKClass(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s CompatUsersUserIDActivateOtpPostOKClass) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *CompatUsersUserIDActivateOtpPostOKClass) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
 func (s *CompatUsersUserIDPutReq) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -1743,102 +1668,6 @@ func (s *CompatUsersUserIDPutReq) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *CompatUsersUserIDPutReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *CompatUsersUserIDRecoveryCodePostOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *CompatUsersUserIDRecoveryCodePostOK) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("code")
-		e.Str(s.Code)
-	}
-}
-
-var jsonFieldsNameOfCompatUsersUserIDRecoveryCodePostOK = [1]string{
-	0: "code",
-}
-
-// Decode decodes CompatUsersUserIDRecoveryCodePostOK from json.
-func (s *CompatUsersUserIDRecoveryCodePostOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode CompatUsersUserIDRecoveryCodePostOK to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "code":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.Code = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"code\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode CompatUsersUserIDRecoveryCodePostOK")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfCompatUsersUserIDRecoveryCodePostOK) {
-					name = jsonFieldsNameOfCompatUsersUserIDRecoveryCodePostOK[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *CompatUsersUserIDRecoveryCodePostOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *CompatUsersUserIDRecoveryCodePostOK) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -2189,102 +2018,6 @@ func (s *CompatUsersUserIDSecurityKeysSecurityKeyIDPutReq) UnmarshalJSON(data []
 }
 
 // Encode implements json.Marshaler.
-func (s *CompatUsersUserIDStartSecurityKeyRegistrationPostOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *CompatUsersUserIDStartSecurityKeyRegistrationPostOK) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("public_key_credential_creation_options")
-		e.Str(s.PublicKeyCredentialCreationOptions)
-	}
-}
-
-var jsonFieldsNameOfCompatUsersUserIDStartSecurityKeyRegistrationPostOK = [1]string{
-	0: "public_key_credential_creation_options",
-}
-
-// Decode decodes CompatUsersUserIDStartSecurityKeyRegistrationPostOK from json.
-func (s *CompatUsersUserIDStartSecurityKeyRegistrationPostOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode CompatUsersUserIDStartSecurityKeyRegistrationPostOK to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "public_key_credential_creation_options":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.PublicKeyCredentialCreationOptions = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"public_key_credential_creation_options\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode CompatUsersUserIDStartSecurityKeyRegistrationPostOK")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfCompatUsersUserIDStartSecurityKeyRegistrationPostOK) {
-					name = jsonFieldsNameOfCompatUsersUserIDStartSecurityKeyRegistrationPostOK[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *CompatUsersUserIDStartSecurityKeyRegistrationPostOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *CompatUsersUserIDStartSecurityKeyRegistrationPostOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
 func (s *CompatUsersUserIDTrustedDevicesGetOK) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -2433,102 +2166,6 @@ func (s *CompatUsersUserIDTrustedDevicesGetOK) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *CompatUsersUserIDTrustedDevicesGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *CompatUsersUserIDValidateSecurityKeyRegistrationPostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *CompatUsersUserIDValidateSecurityKeyRegistrationPostReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("credential")
-		e.Str(s.Credential)
-	}
-}
-
-var jsonFieldsNameOfCompatUsersUserIDValidateSecurityKeyRegistrationPostReq = [1]string{
-	0: "credential",
-}
-
-// Decode decodes CompatUsersUserIDValidateSecurityKeyRegistrationPostReq from json.
-func (s *CompatUsersUserIDValidateSecurityKeyRegistrationPostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode CompatUsersUserIDValidateSecurityKeyRegistrationPostReq to nil")
-	}
-	var requiredBitSet [1]uint8
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "credential":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.Credential = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"credential\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode CompatUsersUserIDValidateSecurityKeyRegistrationPostReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfCompatUsersUserIDValidateSecurityKeyRegistrationPostReq) {
-					name = jsonFieldsNameOfCompatUsersUserIDValidateSecurityKeyRegistrationPostReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *CompatUsersUserIDValidateSecurityKeyRegistrationPostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *CompatUsersUserIDValidateSecurityKeyRegistrationPostReq) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -7193,6 +6830,72 @@ func (s NilURI) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *NilURI) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes AuthConditionsIPRestrictionSum0Mode as json.
+func (o OptAuthConditionsIPRestrictionSum0Mode) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes AuthConditionsIPRestrictionSum0Mode from json.
+func (o *OptAuthConditionsIPRestrictionSum0Mode) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptAuthConditionsIPRestrictionSum0Mode to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptAuthConditionsIPRestrictionSum0Mode) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptAuthConditionsIPRestrictionSum0Mode) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes AuthConditionsIPRestrictionSum1Mode as json.
+func (o OptAuthConditionsIPRestrictionSum1Mode) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes AuthConditionsIPRestrictionSum1Mode from json.
+func (o *OptAuthConditionsIPRestrictionSum1Mode) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptAuthConditionsIPRestrictionSum1Mode to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptAuthConditionsIPRestrictionSum1Mode) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptAuthConditionsIPRestrictionSum1Mode) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

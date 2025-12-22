@@ -46,6 +46,39 @@ func (s *AuthConditionsDatetimeRestriction) SetFake() {
 func (s *AuthConditionsIPRestriction) SetFake() {
 	{
 		{
+			s.OneOf.SetFake()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *AuthConditionsIPRestrictionSum) SetFake() {
+	var variant AuthConditionsIPRestrictionSum0
+
+	{
+		variant.SetFake()
+	}
+	s.SetAuthConditionsIPRestrictionSum0(variant)
+}
+
+// SetFake set fake values.
+func (s *AuthConditionsIPRestrictionSum0) SetFake() {
+	{
+		{
+			s.Mode.SetFake()
+		}
+	}
+}
+
+// SetFake set fake values.
+func (s *AuthConditionsIPRestrictionSum0Mode) SetFake() {
+	*s = AuthConditionsIPRestrictionSum0ModeAllowAll
+}
+
+// SetFake set fake values.
+func (s *AuthConditionsIPRestrictionSum1) SetFake() {
+	{
+		{
 			s.Mode.SetFake()
 		}
 	}
@@ -64,8 +97,8 @@ func (s *AuthConditionsIPRestriction) SetFake() {
 }
 
 // SetFake set fake values.
-func (s *AuthConditionsIPRestrictionMode) SetFake() {
-	*s = AuthConditionsIPRestrictionModeAllowAll
+func (s *AuthConditionsIPRestrictionSum1Mode) SetFake() {
+	*s = AuthConditionsIPRestrictionSum1ModeAllowList
 }
 
 // SetFake set fake values.
@@ -246,55 +279,6 @@ func (s *CompatUsersPostReq) SetFake() {
 }
 
 // SetFake set fake values.
-func (s *CompatUsersUserIDActivateOtpPostOK) SetFake() {
-	{
-		{
-			s.Class.SetFake()
-		}
-	}
-	{
-		{
-			s.Name = "string"
-		}
-	}
-	{
-		{
-			s.Secret = "string"
-		}
-	}
-	{
-		{
-			s.PeriodSec = int(0)
-		}
-	}
-	{
-		{
-			s.Algorithm.SetFake()
-		}
-	}
-	{
-		{
-			s.Issuer = "string"
-		}
-	}
-	{
-		{
-			s.Uncommitted = true
-		}
-	}
-}
-
-// SetFake set fake values.
-func (s *CompatUsersUserIDActivateOtpPostOKAlgorithm) SetFake() {
-	*s = CompatUsersUserIDActivateOtpPostOKAlgorithmSHA1
-}
-
-// SetFake set fake values.
-func (s *CompatUsersUserIDActivateOtpPostOKClass) SetFake() {
-	*s = CompatUsersUserIDActivateOtpPostOKClassTotp
-}
-
-// SetFake set fake values.
 func (s *CompatUsersUserIDPutReq) SetFake() {
 	{
 		{
@@ -309,15 +293,6 @@ func (s *CompatUsersUserIDPutReq) SetFake() {
 	{
 		{
 			s.Description = "string"
-		}
-	}
-}
-
-// SetFake set fake values.
-func (s *CompatUsersUserIDRecoveryCodePostOK) SetFake() {
-	{
-		{
-			s.Code = "string"
 		}
 	}
 }
@@ -372,15 +347,6 @@ func (s *CompatUsersUserIDSecurityKeysSecurityKeyIDPutReq) SetFake() {
 }
 
 // SetFake set fake values.
-func (s *CompatUsersUserIDStartSecurityKeyRegistrationPostOK) SetFake() {
-	{
-		{
-			s.PublicKeyCredentialCreationOptions = "string"
-		}
-	}
-}
-
-// SetFake set fake values.
 func (s *CompatUsersUserIDTrustedDevicesGetOK) SetFake() {
 	{
 		{
@@ -407,15 +373,6 @@ func (s *CompatUsersUserIDTrustedDevicesGetOK) SetFake() {
 	{
 		{
 			s.Previous.SetFake()
-		}
-	}
-}
-
-// SetFake set fake values.
-func (s *CompatUsersUserIDValidateSecurityKeyRegistrationPostReq) SetFake() {
-	{
-		{
-			s.Credential = "string"
 		}
 	}
 }
@@ -1177,6 +1134,24 @@ func (s *NilInt) SetFake() {
 // SetFake set fake values.
 func (s *NilURI) SetFake() {
 	s.Null = true
+}
+
+// SetFake set fake values.
+func (s *OptAuthConditionsIPRestrictionSum0Mode) SetFake() {
+	var elem AuthConditionsIPRestrictionSum0Mode
+	{
+		elem.SetFake()
+	}
+	s.SetTo(elem)
+}
+
+// SetFake set fake values.
+func (s *OptAuthConditionsIPRestrictionSum1Mode) SetFake() {
+	var elem AuthConditionsIPRestrictionSum1Mode
+	{
+		elem.SetFake()
+	}
+	s.SetTo(elem)
 }
 
 // SetFake set fake values.

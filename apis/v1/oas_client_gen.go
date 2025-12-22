@@ -63,12 +63,6 @@ type Invoker interface {
 	//
 	// POST /compat/users
 	CompatUsersPost(ctx context.Context, request *CompatUsersPostReq) (CompatUsersPostRes, error)
-	// CompatUsersUserIDActivateOtpPost invokes POST /compat/users/{user_id}/activate-otp operation.
-	//
-	// 指定したユーザのワンタイムパスワード認証の有効化を開始し、シークレットキーを取得します。.
-	//
-	// POST /compat/users/{user_id}/activate-otp
-	CompatUsersUserIDActivateOtpPost(ctx context.Context, params CompatUsersUserIDActivateOtpPostParams) (CompatUsersUserIDActivateOtpPostRes, error)
 	// CompatUsersUserIDClearTrustedDevicesPost invokes POST /compat/users/{user_id}/clear-trusted-devices operation.
 	//
 	// ユーザの全信頼済みデバイスを削除する.
@@ -99,12 +93,6 @@ type Invoker interface {
 	//
 	// PUT /compat/users/{user_id}
 	CompatUsersUserIDPut(ctx context.Context, request *CompatUsersUserIDPutReq, params CompatUsersUserIDPutParams) (CompatUsersUserIDPutRes, error)
-	// CompatUsersUserIDRecoveryCodePost invokes POST /compat/users/{user_id}/recovery-code operation.
-	//
-	// 指定したユーザの2要素認証リカバリコードを発行します。再実行するとリカバリコードが上書きされます。.
-	//
-	// POST /compat/users/{user_id}/recovery-code
-	CompatUsersUserIDRecoveryCodePost(ctx context.Context, params CompatUsersUserIDRecoveryCodePostParams) (CompatUsersUserIDRecoveryCodePostRes, error)
 	// CompatUsersUserIDRegisterEmailPost invokes POST /compat/users/{user_id}/register-email operation.
 	//
 	// ユーザにメールアドレスを登録する.
@@ -135,13 +123,6 @@ type Invoker interface {
 	//
 	// PUT /compat/users/{user_id}/security-keys/{security_key_id}
 	CompatUsersUserIDSecurityKeysSecurityKeyIDPut(ctx context.Context, request OptCompatUsersUserIDSecurityKeysSecurityKeyIDPutReq, params CompatUsersUserIDSecurityKeysSecurityKeyIDPutParams) (CompatUsersUserIDSecurityKeysSecurityKeyIDPutRes, error)
-	// CompatUsersUserIDStartSecurityKeyRegistrationPost invokes POST /compat/users/{user_id}/start-security-key-registration operation.
-	//
-	// 指定したユーザのセキュリティキー登録を開始します。現時点でのセキュリティキーの最大登録数は1つです。
-	// WebAuthnのPublicKeyCredentialCreationOptions生成を行います。.
-	//
-	// POST /compat/users/{user_id}/start-security-key-registration
-	CompatUsersUserIDStartSecurityKeyRegistrationPost(ctx context.Context, params CompatUsersUserIDStartSecurityKeyRegistrationPostParams) (CompatUsersUserIDStartSecurityKeyRegistrationPostRes, error)
 	// CompatUsersUserIDTrustedDevicesGet invokes GET /compat/users/{user_id}/trusted-devices operation.
 	//
 	// ユーザの信頼済みデバイス一覧を取得する.
@@ -160,14 +141,6 @@ type Invoker interface {
 	//
 	// POST /compat/users/{user_id}/unregister-email
 	CompatUsersUserIDUnregisterEmailPost(ctx context.Context, params CompatUsersUserIDUnregisterEmailPostParams) (CompatUsersUserIDUnregisterEmailPostRes, error)
-	// CompatUsersUserIDValidateSecurityKeyRegistrationPost invokes POST /compat/users/{user_id}/validate-security-key-registration operation.
-	//
-	// 指定したユーザのセキュリティキー登録を完了します。
-	// ブラウザの `navigator.credentials.create()` で生成された[認証情報](https://www.w3.
-	// org/TR/webauthn-2/#publickeycredential)を受け取って検証します。.
-	//
-	// POST /compat/users/{user_id}/validate-security-key-registration
-	CompatUsersUserIDValidateSecurityKeyRegistrationPost(ctx context.Context, request *CompatUsersUserIDValidateSecurityKeyRegistrationPostReq, params CompatUsersUserIDValidateSecurityKeyRegistrationPostParams) (CompatUsersUserIDValidateSecurityKeyRegistrationPostRes, error)
 	// DisableServicePolicyPost invokes POST /disable-service-policy operation.
 	//
 	// サービスポリシーを無効化する.
@@ -353,7 +326,7 @@ type Invoker interface {
 	// 組織のパスワードポリシーを更新する.
 	//
 	// PUT /organization-password-policy
-	OrganizationPasswordPolicyPut(ctx context.Context) (OrganizationPasswordPolicyPutRes, error)
+	OrganizationPasswordPolicyPut(ctx context.Context, request *PasswordPolicy) (OrganizationPasswordPolicyPutRes, error)
 	// OrganizationPut invokes PUT /organization operation.
 	//
 	// 組織を更新する.
@@ -517,6 +490,8 @@ type Invoker interface {
 	// GET /service-principals/{service_principal_id}
 	ServicePrincipalsServicePrincipalIDGet(ctx context.Context, params ServicePrincipalsServicePrincipalIDGetParams) (ServicePrincipalsServicePrincipalIDGetRes, error)
 	// ServicePrincipalsServicePrincipalIDKeysGet invokes GET /service-principals/{service_principal_id}/keys operation.
+	//
+	// サービスプリンシパルキー一覧を取得する.
 	//
 	// GET /service-principals/{service_principal_id}/keys
 	ServicePrincipalsServicePrincipalIDKeysGet(ctx context.Context, params ServicePrincipalsServicePrincipalIDKeysGetParams) (ServicePrincipalsServicePrincipalIDKeysGetRes, error)
@@ -1274,94 +1249,6 @@ func (c *Client) sendCompatUsersPost(ctx context.Context, request *CompatUsersPo
 	return result, nil
 }
 
-// CompatUsersUserIDActivateOtpPost invokes POST /compat/users/{user_id}/activate-otp operation.
-//
-// 指定したユーザのワンタイムパスワード認証の有効化を開始し、シークレットキーを取得します。.
-//
-// POST /compat/users/{user_id}/activate-otp
-func (c *Client) CompatUsersUserIDActivateOtpPost(ctx context.Context, params CompatUsersUserIDActivateOtpPostParams) (CompatUsersUserIDActivateOtpPostRes, error) {
-	res, err := c.sendCompatUsersUserIDActivateOtpPost(ctx, params)
-	return res, err
-}
-
-func (c *Client) sendCompatUsersUserIDActivateOtpPost(ctx context.Context, params CompatUsersUserIDActivateOtpPostParams) (res CompatUsersUserIDActivateOtpPostRes, err error) {
-
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [3]string
-	pathParts[0] = "/compat/users/"
-	{
-		// Encode "user_id" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "user_id",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.UserID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	pathParts[2] = "/activate-otp"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-
-			switch err := c.securityCompatAccessTokenAuth(ctx, CompatUsersUserIDActivateOtpPostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"CompatAccessTokenAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	result, err := decodeCompatUsersUserIDActivateOtpPostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
 // CompatUsersUserIDClearTrustedDevicesPost invokes POST /compat/users/{user_id}/clear-trusted-devices operation.
 //
 // ユーザの全信頼済みデバイスを削除する.
@@ -1795,94 +1682,6 @@ func (c *Client) sendCompatUsersUserIDPut(ctx context.Context, request *CompatUs
 	defer resp.Body.Close()
 
 	result, err := decodeCompatUsersUserIDPutResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// CompatUsersUserIDRecoveryCodePost invokes POST /compat/users/{user_id}/recovery-code operation.
-//
-// 指定したユーザの2要素認証リカバリコードを発行します。再実行するとリカバリコードが上書きされます。.
-//
-// POST /compat/users/{user_id}/recovery-code
-func (c *Client) CompatUsersUserIDRecoveryCodePost(ctx context.Context, params CompatUsersUserIDRecoveryCodePostParams) (CompatUsersUserIDRecoveryCodePostRes, error) {
-	res, err := c.sendCompatUsersUserIDRecoveryCodePost(ctx, params)
-	return res, err
-}
-
-func (c *Client) sendCompatUsersUserIDRecoveryCodePost(ctx context.Context, params CompatUsersUserIDRecoveryCodePostParams) (res CompatUsersUserIDRecoveryCodePostRes, err error) {
-
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [3]string
-	pathParts[0] = "/compat/users/"
-	{
-		// Encode "user_id" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "user_id",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.UserID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	pathParts[2] = "/recovery-code"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-
-			switch err := c.securityCompatAccessTokenAuth(ctx, CompatUsersUserIDRecoveryCodePostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"CompatAccessTokenAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	result, err := decodeCompatUsersUserIDRecoveryCodePostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -2390,95 +2189,6 @@ func (c *Client) sendCompatUsersUserIDSecurityKeysSecurityKeyIDPut(ctx context.C
 	return result, nil
 }
 
-// CompatUsersUserIDStartSecurityKeyRegistrationPost invokes POST /compat/users/{user_id}/start-security-key-registration operation.
-//
-// 指定したユーザのセキュリティキー登録を開始します。現時点でのセキュリティキーの最大登録数は1つです。
-// WebAuthnのPublicKeyCredentialCreationOptions生成を行います。.
-//
-// POST /compat/users/{user_id}/start-security-key-registration
-func (c *Client) CompatUsersUserIDStartSecurityKeyRegistrationPost(ctx context.Context, params CompatUsersUserIDStartSecurityKeyRegistrationPostParams) (CompatUsersUserIDStartSecurityKeyRegistrationPostRes, error) {
-	res, err := c.sendCompatUsersUserIDStartSecurityKeyRegistrationPost(ctx, params)
-	return res, err
-}
-
-func (c *Client) sendCompatUsersUserIDStartSecurityKeyRegistrationPost(ctx context.Context, params CompatUsersUserIDStartSecurityKeyRegistrationPostParams) (res CompatUsersUserIDStartSecurityKeyRegistrationPostRes, err error) {
-
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [3]string
-	pathParts[0] = "/compat/users/"
-	{
-		// Encode "user_id" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "user_id",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.UserID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	pathParts[2] = "/start-security-key-registration"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-
-			switch err := c.securityCompatAccessTokenAuth(ctx, CompatUsersUserIDStartSecurityKeyRegistrationPostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"CompatAccessTokenAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	result, err := decodeCompatUsersUserIDStartSecurityKeyRegistrationPostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
 // CompatUsersUserIDTrustedDevicesGet invokes GET /compat/users/{user_id}/trusted-devices operation.
 //
 // ユーザの信頼済みデバイス一覧を取得する.
@@ -2754,99 +2464,6 @@ func (c *Client) sendCompatUsersUserIDUnregisterEmailPost(ctx context.Context, p
 	defer resp.Body.Close()
 
 	result, err := decodeCompatUsersUserIDUnregisterEmailPostResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// CompatUsersUserIDValidateSecurityKeyRegistrationPost invokes POST /compat/users/{user_id}/validate-security-key-registration operation.
-//
-// 指定したユーザのセキュリティキー登録を完了します。
-// ブラウザの `navigator.credentials.create()` で生成された[認証情報](https://www.w3.
-// org/TR/webauthn-2/#publickeycredential)を受け取って検証します。.
-//
-// POST /compat/users/{user_id}/validate-security-key-registration
-func (c *Client) CompatUsersUserIDValidateSecurityKeyRegistrationPost(ctx context.Context, request *CompatUsersUserIDValidateSecurityKeyRegistrationPostReq, params CompatUsersUserIDValidateSecurityKeyRegistrationPostParams) (CompatUsersUserIDValidateSecurityKeyRegistrationPostRes, error) {
-	res, err := c.sendCompatUsersUserIDValidateSecurityKeyRegistrationPost(ctx, request, params)
-	return res, err
-}
-
-func (c *Client) sendCompatUsersUserIDValidateSecurityKeyRegistrationPost(ctx context.Context, request *CompatUsersUserIDValidateSecurityKeyRegistrationPostReq, params CompatUsersUserIDValidateSecurityKeyRegistrationPostParams) (res CompatUsersUserIDValidateSecurityKeyRegistrationPostRes, err error) {
-
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [3]string
-	pathParts[0] = "/compat/users/"
-	{
-		// Encode "user_id" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "user_id",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.IntToString(params.UserID))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	pathParts[2] = "/validate-security-key-registration"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeCompatUsersUserIDValidateSecurityKeyRegistrationPostRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	{
-		type bitset = [1]uint8
-		var satisfied bitset
-		{
-
-			switch err := c.securityCompatAccessTokenAuth(ctx, CompatUsersUserIDValidateSecurityKeyRegistrationPostOperation, r); {
-			case err == nil: // if NO error
-				satisfied[0] |= 1 << 0
-			case errors.Is(err, ogenerrors.ErrSkipClientSecurity):
-				// Skip this security.
-			default:
-				return res, errors.Wrap(err, "security \"CompatAccessTokenAuth\"")
-			}
-		}
-
-		if ok := func() bool {
-		nextRequirement:
-			for _, requirement := range []bitset{
-				{0b00000001},
-			} {
-				for i, mask := range requirement {
-					if satisfied[i]&mask != mask {
-						continue nextRequirement
-					}
-				}
-				return true
-			}
-			return false
-		}(); !ok {
-			return res, ogenerrors.ErrSecurityRequirementIsNotSatisfied
-		}
-	}
-
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	result, err := decodeCompatUsersUserIDValidateSecurityKeyRegistrationPostResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}
@@ -5461,12 +5078,12 @@ func (c *Client) sendOrganizationPasswordPolicyGet(ctx context.Context) (res Org
 // 組織のパスワードポリシーを更新する.
 //
 // PUT /organization-password-policy
-func (c *Client) OrganizationPasswordPolicyPut(ctx context.Context) (OrganizationPasswordPolicyPutRes, error) {
-	res, err := c.sendOrganizationPasswordPolicyPut(ctx)
+func (c *Client) OrganizationPasswordPolicyPut(ctx context.Context, request *PasswordPolicy) (OrganizationPasswordPolicyPutRes, error) {
+	res, err := c.sendOrganizationPasswordPolicyPut(ctx, request)
 	return res, err
 }
 
-func (c *Client) sendOrganizationPasswordPolicyPut(ctx context.Context) (res OrganizationPasswordPolicyPutRes, err error) {
+func (c *Client) sendOrganizationPasswordPolicyPut(ctx context.Context, request *PasswordPolicy) (res OrganizationPasswordPolicyPutRes, err error) {
 
 	u := uri.Clone(c.requestURL(ctx))
 	var pathParts [1]string
@@ -5476,6 +5093,9 @@ func (c *Client) sendOrganizationPasswordPolicyPut(ctx context.Context) (res Org
 	r, err := ht.NewRequest(ctx, "PUT", u)
 	if err != nil {
 		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeOrganizationPasswordPolicyPutRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
 	}
 
 	{
@@ -7846,6 +7466,8 @@ func (c *Client) sendServicePrincipalsServicePrincipalIDGet(ctx context.Context,
 }
 
 // ServicePrincipalsServicePrincipalIDKeysGet invokes GET /service-principals/{service_principal_id}/keys operation.
+//
+// サービスプリンシパルキー一覧を取得する.
 //
 // GET /service-principals/{service_principal_id}/keys
 func (c *Client) ServicePrincipalsServicePrincipalIDKeysGet(ctx context.Context, params ServicePrincipalsServicePrincipalIDKeysGetParams) (ServicePrincipalsServicePrincipalIDKeysGetRes, error) {

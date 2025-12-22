@@ -44,12 +44,6 @@ type CompatUsersGetParams struct {
 	Ordering OptCompatUsersGetOrdering `json:",omitempty,omitzero"`
 }
 
-// CompatUsersUserIDActivateOtpPostParams is parameters of POST /compat/users/{user_id}/activate-otp operation.
-type CompatUsersUserIDActivateOtpPostParams struct {
-	// ユーザID.
-	UserID int
-}
-
 // CompatUsersUserIDClearTrustedDevicesPostParams is parameters of POST /compat/users/{user_id}/clear-trusted-devices operation.
 type CompatUsersUserIDClearTrustedDevicesPostParams struct {
 	// ユーザID.
@@ -76,12 +70,6 @@ type CompatUsersUserIDGetParams struct {
 
 // CompatUsersUserIDPutParams is parameters of PUT /compat/users/{user_id} operation.
 type CompatUsersUserIDPutParams struct {
-	// ユーザID.
-	UserID int
-}
-
-// CompatUsersUserIDRecoveryCodePostParams is parameters of POST /compat/users/{user_id}/recovery-code operation.
-type CompatUsersUserIDRecoveryCodePostParams struct {
 	// ユーザID.
 	UserID int
 }
@@ -122,12 +110,6 @@ type CompatUsersUserIDSecurityKeysSecurityKeyIDPutParams struct {
 	SecurityKeyID int
 }
 
-// CompatUsersUserIDStartSecurityKeyRegistrationPostParams is parameters of POST /compat/users/{user_id}/start-security-key-registration operation.
-type CompatUsersUserIDStartSecurityKeyRegistrationPostParams struct {
-	// ユーザID.
-	UserID int
-}
-
 // CompatUsersUserIDTrustedDevicesGetParams is parameters of GET /compat/users/{user_id}/trusted-devices operation.
 type CompatUsersUserIDTrustedDevicesGetParams struct {
 	// ユーザID.
@@ -144,12 +126,6 @@ type CompatUsersUserIDTrustedDevicesTrustedDeviceIDDeleteParams struct {
 
 // CompatUsersUserIDUnregisterEmailPostParams is parameters of POST /compat/users/{user_id}/unregister-email operation.
 type CompatUsersUserIDUnregisterEmailPostParams struct {
-	// ユーザID.
-	UserID int
-}
-
-// CompatUsersUserIDValidateSecurityKeyRegistrationPostParams is parameters of POST /compat/users/{user_id}/validate-security-key-registration operation.
-type CompatUsersUserIDValidateSecurityKeyRegistrationPostParams struct {
 	// ユーザID.
 	UserID int
 }
