@@ -370,7 +370,7 @@ func TestIntegrated(t *testing.T) {
 	assert.NotNil(updated)
 	assert.Equal(expected, updated.GetDescription())
 
-	k, err := rsa.GenerateKey(rand.Reader, bits)
+	k, err := rsa.GenerateKey(rand.Reader, 2048)
 	assert.NoError(err)
 
 	// Upload Key
@@ -412,8 +412,6 @@ func TestIntegrated(t *testing.T) {
 	assert.NoError(err)
 	assert.NotNil(token)
 }
-
-const bits = 2048
 
 func pubkey(assert *require.Assertions, k *rsa.PrivateKey) v1.ServiceprincipalKeyPublicKey {
 	der, err := x509.MarshalPKIXPublicKey(&k.PublicKey)
