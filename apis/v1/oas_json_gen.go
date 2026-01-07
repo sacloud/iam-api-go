@@ -331,6 +331,11 @@ func (s *AuthConditionsIPRestrictionSum) Decode(d *jx.Decoder) error {
 		return d.ObjBytes(func(d *jx.Decoder, key []byte) error {
 			switch string(key) {
 			case "source_network":
+				// Type-based discrimination: check if field has expected JSON type
+				if typ := d.Next(); typ != jx.Array {
+					// Field exists but has wrong type, not a match for this variant
+					return d.Skip()
+				}
 				match := AuthConditionsIPRestrictionSum1AuthConditionsIPRestrictionSum
 				if found && s.Type != match {
 					s.Type = ""
@@ -338,6 +343,36 @@ func (s *AuthConditionsIPRestrictionSum) Decode(d *jx.Decoder) error {
 				}
 				found = true
 				s.Type = match
+			case "mode":
+				// Value-based discrimination: check enum value
+				if typ := d.Next(); typ != jx.String {
+					return d.Skip()
+				}
+				value, err := d.StrBytes()
+				if err != nil {
+					return err
+				}
+				switch string(value) {
+				case "allow_all":
+					match := AuthConditionsIPRestrictionSum0AuthConditionsIPRestrictionSum
+					if found && s.Type != match {
+						s.Type = ""
+						return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
+					}
+					found = true
+					s.Type = match
+				case "allow_list":
+					match := AuthConditionsIPRestrictionSum1AuthConditionsIPRestrictionSum
+					if found && s.Type != match {
+						s.Type = ""
+						return errors.Errorf("multiple oneOf matches: (%v, %v)", s.Type, match)
+					}
+					found = true
+					s.Type = match
+				default:
+					// Unknown enum value, ignore and continue
+				}
+				return nil
 			}
 			return d.Skip()
 		})
@@ -345,7 +380,7 @@ func (s *AuthConditionsIPRestrictionSum) Decode(d *jx.Decoder) error {
 		return errors.Wrap(err, "capture")
 	}
 	if !found {
-		s.Type = AuthConditionsIPRestrictionSum0AuthConditionsIPRestrictionSum
+		return errors.New("unable to detect sum type variant")
 	}
 	switch s.Type {
 	case AuthConditionsIPRestrictionSum0AuthConditionsIPRestrictionSum:

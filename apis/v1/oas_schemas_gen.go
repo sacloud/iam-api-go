@@ -4401,11 +4401,11 @@ type ProjectApiKey struct {
 	// アクセストークン.
 	AccessToken string `json:"access_token"`
 	// APIキーがシングルサーバコントロールパネルで利用される場合は必須。.
-	ServerResourceID OptNilString `json:"server_resource_id"`
+	ServerResourceID OptString `json:"server_resource_id"`
 	// IAMのロール。.
 	IamRoles []string `json:"iam_roles"`
 	// ゾーンを指定。APIキーがシングルサーバコントロールパネルで利用される場合は必須。.
-	ZoneID OptNilString `json:"zone_id"`
+	ZoneID OptString `json:"zone_id"`
 	// 作成日時.
 	CreatedAt OptString `json:"created_at"`
 	// 更新日時.
@@ -4438,7 +4438,7 @@ func (s *ProjectApiKey) GetAccessToken() string {
 }
 
 // GetServerResourceID returns the value of ServerResourceID.
-func (s *ProjectApiKey) GetServerResourceID() OptNilString {
+func (s *ProjectApiKey) GetServerResourceID() OptString {
 	return s.ServerResourceID
 }
 
@@ -4448,7 +4448,7 @@ func (s *ProjectApiKey) GetIamRoles() []string {
 }
 
 // GetZoneID returns the value of ZoneID.
-func (s *ProjectApiKey) GetZoneID() OptNilString {
+func (s *ProjectApiKey) GetZoneID() OptString {
 	return s.ZoneID
 }
 
@@ -4488,7 +4488,7 @@ func (s *ProjectApiKey) SetAccessToken(val string) {
 }
 
 // SetServerResourceID sets the value of ServerResourceID.
-func (s *ProjectApiKey) SetServerResourceID(val OptNilString) {
+func (s *ProjectApiKey) SetServerResourceID(val OptString) {
 	s.ServerResourceID = val
 }
 
@@ -4498,7 +4498,7 @@ func (s *ProjectApiKey) SetIamRoles(val []string) {
 }
 
 // SetZoneID sets the value of ZoneID.
-func (s *ProjectApiKey) SetZoneID(val OptNilString) {
+func (s *ProjectApiKey) SetZoneID(val OptString) {
 	s.ZoneID = val
 }
 
@@ -4529,11 +4529,11 @@ type ProjectApiKeyWithSecret struct {
 	// アクセストークン.
 	AccessToken string `json:"access_token"`
 	// APIキーがシングルサーバコントロールパネルで利用される場合は必須。.
-	ServerResourceID OptNilString `json:"server_resource_id"`
+	ServerResourceID OptString `json:"server_resource_id"`
 	// IAMのロール。.
 	IamRoles []string `json:"iam_roles"`
 	// ゾーンを指定。APIキーがシングルサーバコントロールパネルで利用される場合は必須。.
-	ZoneID OptNilString `json:"zone_id"`
+	ZoneID OptString `json:"zone_id"`
 	// 作成日時.
 	CreatedAt OptString `json:"created_at"`
 	// 更新日時.
@@ -4568,7 +4568,7 @@ func (s *ProjectApiKeyWithSecret) GetAccessToken() string {
 }
 
 // GetServerResourceID returns the value of ServerResourceID.
-func (s *ProjectApiKeyWithSecret) GetServerResourceID() OptNilString {
+func (s *ProjectApiKeyWithSecret) GetServerResourceID() OptString {
 	return s.ServerResourceID
 }
 
@@ -4578,7 +4578,7 @@ func (s *ProjectApiKeyWithSecret) GetIamRoles() []string {
 }
 
 // GetZoneID returns the value of ZoneID.
-func (s *ProjectApiKeyWithSecret) GetZoneID() OptNilString {
+func (s *ProjectApiKeyWithSecret) GetZoneID() OptString {
 	return s.ZoneID
 }
 
@@ -4623,7 +4623,7 @@ func (s *ProjectApiKeyWithSecret) SetAccessToken(val string) {
 }
 
 // SetServerResourceID sets the value of ServerResourceID.
-func (s *ProjectApiKeyWithSecret) SetServerResourceID(val OptNilString) {
+func (s *ProjectApiKeyWithSecret) SetServerResourceID(val OptString) {
 	s.ServerResourceID = val
 }
 
@@ -4633,7 +4633,7 @@ func (s *ProjectApiKeyWithSecret) SetIamRoles(val []string) {
 }
 
 // SetZoneID sets the value of ZoneID.
-func (s *ProjectApiKeyWithSecret) SetZoneID(val OptNilString) {
+func (s *ProjectApiKeyWithSecret) SetZoneID(val OptString) {
 	s.ZoneID = val
 }
 
