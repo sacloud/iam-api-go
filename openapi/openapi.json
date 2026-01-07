@@ -8041,12 +8041,12 @@
           "created_at": {
             "type": "string",
             "description": "作成日時",
-            "example": "2024-05-01 14:30:00 UTC"
+            "example": "2024-05-01T14:30:00Z"
           },
           "updated_at": {
             "type": "string",
             "description": "更新日時",
-            "example": "2024-05-02 16:32:23 UTC"
+            "example": "2024-05-02T16:32:23Z"
           }
         }
       },
@@ -8189,13 +8189,13 @@
             "type": "string",
             "description": "作成日時",
             "readOnly": true,
-            "example": "2024-05-02 16:32:23 UTC"
+            "example": "2024-05-02T16:32:23Z"
           },
           "updated_at": {
             "type": "string",
             "description": "更新日時",
             "readOnly": true,
-            "example": "2024-05-02 16:32:23 UTC"
+            "example": "2024-05-02T16:32:23Z"
           }
         }
       },
@@ -8300,13 +8300,13 @@
             "type": "string",
             "description": "作成日時",
             "readOnly": true,
-            "example": "2024-05-02 16:32:23 UTC"
+            "example": "2024-05-02T16:32:23Z"
           },
           "updated_at": {
             "type": "string",
             "description": "更新日時",
             "readOnly": true,
-            "example": "2024-05-02 16:32:23 UTC"
+            "example": "2024-05-02T16:32:23Z"
           }
         }
       },
@@ -8367,12 +8367,12 @@
           "created_at": {
             "type": "string",
             "description": "作成日時",
-            "example": "2024-05-01 14:30:00 UTC"
+            "example": "2024-05-01T14:30:00Z"
           },
           "updated_at": {
             "type": "string",
             "description": "更新日時",
-            "example": "2024-05-02 14:30:00 UTC"
+            "example": "2024-05-02T14:30:00Z"
           }
         }
       },
@@ -8424,12 +8424,12 @@
           "created_at": {
             "type": "string",
             "description": "作成日時",
-            "example": "2024-05-01 14:30:00 UTC"
+            "example": "2024-05-01T14:30:00Z"
           },
           "expired_at": {
             "type": "string",
             "description": "有効期限",
-            "example": "2024-05-01 14:30:00 UTC",
+            "example": "2024-05-01T14:30:00Z",
             "nullable": true
           }
         }
@@ -8530,7 +8530,6 @@
           },
           "server_resource_id": {
             "type": "string",
-            "nullable": true,
             "description": "APIキーがシングルサーバコントロールパネルで利用される場合は必須。",
             "example": "123456789123"
           },
@@ -8548,19 +8547,18 @@
           },
           "zone_id": {
             "type": "string",
-            "nullable": true,
             "description": "ゾーンを指定。APIキーがシングルサーバコントロールパネルで利用される場合は必須。",
             "example": "is1a"
           },
           "created_at": {
             "type": "string",
             "description": "作成日時",
-            "example": "2024-05-01 14:30:00 UTC"
+            "example": "2024-05-01T14:30:00Z"
           },
           "updated_at": {
             "type": "string",
             "description": "更新日時",
-            "example": "2024-05-02 14:30:00 UTC"
+            "example": "2024-05-02T14:30:00Z"
           }
         }
       },
@@ -8727,13 +8725,13 @@
             "type": "string",
             "description": "作成日時",
             "readOnly": true,
-            "example": "2024-05-01 14:30:00 UTC"
+            "example": "2024-05-01T14:30:00Z"
           },
           "updated_at": {
             "type": "string",
             "description": "更新日時",
             "readOnly": true,
-            "example": "2024-05-02 14:30:00 UTC"
+            "example": "2024-05-02T14:30:00Z"
           }
         }
       },
@@ -8795,13 +8793,13 @@
             "type": "string",
             "description": "作成日時",
             "readOnly": true,
-            "example": "2024-05-01 14:30:00 UTC"
+            "example": "2024-05-01T14:30:00Z"
           },
           "updated_at": {
             "type": "string",
             "description": "更新日時",
             "readOnly": true,
-            "example": "2024-05-02 14:30:00 UTC"
+            "example": "2024-05-02T14:30:00Z"
           }
         }
       },
