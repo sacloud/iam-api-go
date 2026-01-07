@@ -92,6 +92,11 @@ export SAKURA_PRIVATE_KEY=-----BEGIN PRIVATE KEY-----...
 
 のように指定できます。
 
+なおIAMの各機能を利用するには各機能を利用できる権限を付与したサービスプリンシパルが必要です。
+さくらのクラウド マニュアルの [サービスプリンシパル](https://manual.sakura.ad.jp/cloud/controlpanel/service-principal.html) 内「ロールの付与」、および [IAMポリシー](https://manual.sakura.ad.jp/cloud/controlpanel/iam-policy.html) 内「設定方法」をご参照ください。
+
+単体テストを流すのに必要な権限に関しては [./doc/testing.md](./doc/testing.md) もご参照ください。
+
 ## 開発
 
 ビルドやテストはMakefile経由で実行できます。
