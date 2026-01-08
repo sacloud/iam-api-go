@@ -87,3 +87,17 @@ func TestGet_Fail(t *testing.T) {
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
 }
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	op := NewIdRoleOp(client)
+
+	roles, err := op.List(t.Context(), nil, nil)
+	assert.NoError(err)
+	assert.NotEmpty(roles.Items)
+
+	roleID := roles.Items[0].ID
+	role, err := op.Read(t.Context(), roleID)
+	assert.NoError(err)
+	assert.Equal(roles.Items[0], *role)
+}

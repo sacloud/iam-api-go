@@ -19,6 +19,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sacloud/iam-api-go"
+	"github.com/sacloud/iam-api-go/apis/projectapikey"
 	. "github.com/sacloud/iam-api-go/apis/projectapikey"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
 	iam_test "github.com/sacloud/iam-api-go/testutil"
@@ -201,4 +203,60 @@ func TestDelete_Fail(t *testing.T) {
 	err := api.Delete(t.Context(), 123)
 	assert.Error(err)
 	assert.Contains(err.Error(), expected)
+}
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	api := NewProjectAPIKeyOp(client)
+	svc := iam.NewServicePrincipalOp(client)
+
+	// an api key must be created by a service principal of the project
+	myself := iam_test.Myself()
+	p, err := svc.Read(t.Context(), myself.PrincipalID)
+	assert.NoError(err)
+
+	// Create
+	created, err := api.Create(t.Context(), projectapikey.CreateParams{
+		ProjectID:   p.GetProjectID(),
+		Name:        testutil.RandomName("key-", 32, testutil.CharSetAlphaNum),
+		Description: testutil.Random(64, testutil.CharSetAlphaNum),
+		IamRoles:    []string{"resource-viewer"},
+	})
+	assert.NoError(err)
+	assert.NotNil(created)
+
+	// Delete
+	defer func() {
+		err = api.Delete(t.Context(), created.GetID())
+		assert.NoError(err)
+	}()
+
+	// Read
+	read, err := api.Read(t.Context(), created.GetID())
+	assert.NoError(err)
+	assert.NotNil(read)
+
+	assert.Equal(created.GetID(), read.GetID())
+	assert.Equal(created.GetProjectID(), read.GetProjectID())
+	assert.Equal(created.GetName(), read.GetName())
+	assert.Equal(created.GetDescription(), read.GetDescription())
+	assert.Equal(created.GetAccessToken(), read.GetAccessToken())
+	assert.Equal(created.GetServerResourceID(), read.GetServerResourceID())
+	assert.Equal(created.GetIamRoles(), read.GetIamRoles())
+	assert.Equal(created.GetZoneID(), read.GetZoneID())
+
+	// List
+	listed, err := api.List(t.Context(), ListParams{})
+	assert.NoError(err)
+	assert.NotNil(listed)
+	assert.NotEmpty(listed)
+
+	// Update
+	updated, err := api.Update(t.Context(), created.GetID(), projectapikey.UpdateParams{
+		Name:        read.GetName(),
+		Description: read.GetDescription(),
+		IamRoles:    []string{"resource-viewer"},
+	})
+	assert.NoError(err)
+	assert.NotNil(updated)
 }

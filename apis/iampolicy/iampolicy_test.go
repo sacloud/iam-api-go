@@ -207,3 +207,61 @@ func TestUpdateFolderPolicy_Fail(t *testing.T) {
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
 }
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	api := NewIAMPolicyOp(client)
+
+	// Organization Policy
+	orgPolicy, err := api.ReadOrganizationPolicy(t.Context())
+	assert.NoError(err)
+	assert.NotNil(orgPolicy)
+	assert.NotEmpty(orgPolicy) // being able to call this API means at least there is some policy whatsoever
+
+	updatedOrgPolicy, err := api.UpdateOrganizationPolicy(t.Context(), orgPolicy)
+	assert.NoError(err)
+	assert.NotNil(updatedOrgPolicy)
+
+	// Project Policy
+	project, dproject := iam_test.NewProject(t, client)
+	defer dproject()
+
+	projectID := project.GetID()
+	principal, dprincipal := iam_test.NewPrincipal(t, client, projectID)
+	defer dprincipal()
+
+	projectPolicy, err := api.ReadProjectPolicy(t.Context(), projectID)
+	assert.NoError(err)
+	assert.NotNil(projectPolicy)
+	assert.NotEmpty(projectPolicy) // the newborn project is "owned" by the caller
+
+	var newRole v1.IamPolicyRole
+	var newPolicy v1.IamPolicy
+	newRole.SetFake()
+	newRole.SetType(v1.NewOptIamPolicyRoleType(v1.IamPolicyRoleTypePreset))
+	newRole.SetID(v1.NewOptString("resource-viewer"))
+	newPolicy.SetFake()
+	newPolicy.SetRole(v1.NewOptIamPolicyRole(newRole))
+	newPolicy.SetPrincipals(make([]v1.Principal, 1))
+	newPolicy.Principals[0].SetFake()
+	newPolicy.Principals[0].SetID(v1.NewOptInt(principal.GetID()))
+	newPolicy.Principals[0].SetType(v1.NewOptString("service-principal"))
+
+	updatedProjectPolicy, err := api.UpdateProjectPolicy(t.Context(), projectID, []v1.IamPolicy{newPolicy})
+	assert.NoError(err)
+	assert.NotNil(updatedProjectPolicy)
+
+	// Folder Policy
+	folder, dfolder := iam_test.NewFolder(t, client)
+	defer dfolder()
+
+	folderID := folder.GetID()
+	folderPolicy, err := api.ReadFolderPolicy(t.Context(), folderID)
+	assert.NoError(err)
+	assert.NotNil(folderPolicy)
+	assert.Empty(folderPolicy)
+
+	updatedFolderPolicy, err := api.UpdateFolderPolicy(t.Context(), folderID, []v1.IamPolicy{newPolicy})
+	assert.NoError(err)
+	assert.NotNil(updatedFolderPolicy)
+}

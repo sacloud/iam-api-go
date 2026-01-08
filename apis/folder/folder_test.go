@@ -1,3 +1,17 @@
+// Copyright 2025- The sacloud/iam-api-go Authors
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//      http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 package folder_test
 
 import (
@@ -165,4 +179,51 @@ func TestMove_Fail(t *testing.T) {
 	err := api.Move(t.Context(), []int{123}, nil)
 	assert.Error(err)
 	assert.Contains(err.Error(), expected)
+}
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	op := NewFolderOp(client)
+
+	name1 := testutil.RandomName("folder", 64, testutil.CharSetAlphaNum)
+	folder1, err := op.Create(t.Context(), CreateParams{Name: name1})
+	assert.NoError(err)
+	assert.NotNil(folder1)
+	assert.Equal(name1, folder1.GetName())
+	defer func() {
+		err := op.Delete(t.Context(), folder1.GetID())
+		assert.NoError(err)
+	}()
+
+	name2 := testutil.RandomName("folder", 64, testutil.CharSetAlphaNum)
+	folder2, err := op.Create(t.Context(), CreateParams{Name: name2})
+	assert.NoError(err)
+	assert.NotNil(folder2)
+	assert.Equal(name2, folder2.GetName())
+	defer func() {
+		err := op.Delete(t.Context(), folder2.GetID())
+		assert.NoError(err)
+	}()
+
+	list, err := op.List(t.Context(), ListParams{})
+	assert.NoError(err)
+	assert.NotEmpty(list.Items)
+
+	readFolder, err := op.Read(t.Context(), folder1.GetID())
+	assert.NoError(err)
+	assert.NotNil(readFolder)
+	assert.Equal(folder1, readFolder)
+
+	updatedName := testutil.RandomName("folder-updated", 64, testutil.CharSetAlphaNum)
+	updatedFolder, err := op.Update(t.Context(), folder1.GetID(), updatedName, nil)
+	assert.NoError(err)
+	assert.NotNil(updatedFolder)
+	assert.Equal(updatedName, updatedFolder.GetName())
+
+	defer func() {
+		err = op.Move(t.Context(), []int{folder1.GetID()}, nil)
+		assert.NoError(err)
+	}()
+	err = op.Move(t.Context(), []int{folder1.GetID()}, saclient.Ptr(folder2.GetID()))
+	assert.NoError(err)
 }
