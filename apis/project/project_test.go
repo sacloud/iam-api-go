@@ -18,6 +18,8 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/sacloud/iam-api-go"
+	"github.com/sacloud/iam-api-go/apis/folder"
 	. "github.com/sacloud/iam-api-go/apis/project"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
 	iam_test "github.com/sacloud/iam-api-go/testutil"
@@ -209,4 +211,68 @@ func TestMove_Fail(t *testing.T) {
 	err := api.Move(t.Context(), ids, &parentFolderID)
 	assert.Error(err)
 	assert.Contains(err.Error(), expected)
+}
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	op := NewProjectOp(client)
+
+	// Create
+	createParams := CreateParams{
+		Code:        testutil.RandomName("proj", 12, testutil.CharSetAlphaNum),
+		Name:        testutil.RandomName("project", 32, testutil.CharSetAlphaNum),
+		Description: testutil.Random(64, testutil.CharSetAlphaNum),
+	}
+	created, err := op.Create(t.Context(), createParams)
+	assert.NoError(err)
+	assert.NotNil(created)
+
+	defer func() {
+		// Delete
+		err = op.Delete(t.Context(), created.GetID())
+		assert.NoError(err)
+	}()
+
+	// Read
+	read, err := op.Read(t.Context(), created.GetID())
+	assert.NoError(err)
+	assert.NotNil(read)
+	assert.Equal(created, read)
+
+	// Update
+	newName := testutil.RandomName("project-updated", 32, testutil.CharSetAlphaNum)
+	newDescription := testutil.Random(64, testutil.CharSetAlphaNum)
+	updated, err := op.Update(t.Context(), created.GetID(), newName, newDescription)
+	assert.NoError(err)
+	assert.NotNil(updated)
+	assert.Equal(newName, updated.GetName())
+	assert.Equal(newDescription, updated.GetDescription())
+
+	fop := iam.NewFolderOp(client)
+	folderName := testutil.RandomName("folder", 16, testutil.CharSetAlphaNum)
+	folder, err := fop.Create(t.Context(), folder.CreateParams{Name: folderName})
+	assert.NoError(err)
+	assert.NotNil(folder)
+
+	defer func() {
+		// Delete Folder
+		err = fop.Delete(t.Context(), folder.ID)
+		assert.NoError(err)
+	}()
+
+	// Move
+	err = op.Move(t.Context(), []int{created.GetID()}, &folder.ID)
+	assert.NoError(err)
+
+	defer func() {
+		// Move back to root folder
+		err = op.Move(t.Context(), []int{created.GetID()}, nil)
+		assert.NoError(err)
+	}()
+
+	// List
+	listParams := ListParams{}
+	listed, err := op.List(t.Context(), listParams)
+	assert.NoError(err)
+	assert.NotNil(listed)
 }

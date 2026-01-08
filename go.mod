@@ -7,6 +7,7 @@ tool github.com/ogen-go/ogen/cmd/ogen
 require (
 	github.com/go-faster/errors v0.7.1
 	github.com/go-faster/jx v1.2.0
+	github.com/golang-jwt/jwt/v5 v5.3.0
 	github.com/google/uuid v1.6.0
 	github.com/ogen-go/ogen v1.18.0
 	github.com/sacloud/packages-go v0.0.12
@@ -22,7 +23,6 @@ require (
 	github.com/ghodss/yaml v1.0.0 // indirect
 	github.com/go-faster/yaml v0.4.6 // indirect
 	github.com/gofrs/flock v0.13.0 // indirect
-	github.com/golang-jwt/jwt/v5 v5.3.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-retryablehttp v0.7.8 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect

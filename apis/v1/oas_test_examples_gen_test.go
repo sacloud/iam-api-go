@@ -81,8 +81,8 @@ func TestAuthConditionsIPRestriction_EncodeDecode(t *testing.T) {
 	var typ2 AuthConditionsIPRestriction
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
-func TestAuthConditionsIPRestrictionMode_EncodeDecode(t *testing.T) {
-	var typ AuthConditionsIPRestrictionMode
+func TestAuthConditionsIPRestrictionSum_EncodeDecode(t *testing.T) {
+	var typ AuthConditionsIPRestrictionSum
 	typ.SetFake()
 
 	e := jx.Encoder{}
@@ -90,7 +90,55 @@ func TestAuthConditionsIPRestrictionMode_EncodeDecode(t *testing.T) {
 	data := e.Bytes()
 	require.True(t, std.Valid(data), "Encoded: %s", data)
 
-	var typ2 AuthConditionsIPRestrictionMode
+	var typ2 AuthConditionsIPRestrictionSum
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestAuthConditionsIPRestrictionSum0_EncodeDecode(t *testing.T) {
+	var typ AuthConditionsIPRestrictionSum0
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 AuthConditionsIPRestrictionSum0
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestAuthConditionsIPRestrictionSum0Mode_EncodeDecode(t *testing.T) {
+	var typ AuthConditionsIPRestrictionSum0Mode
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 AuthConditionsIPRestrictionSum0Mode
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestAuthConditionsIPRestrictionSum1_EncodeDecode(t *testing.T) {
+	var typ AuthConditionsIPRestrictionSum1
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 AuthConditionsIPRestrictionSum1
+	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+func TestAuthConditionsIPRestrictionSum1Mode_EncodeDecode(t *testing.T) {
+	var typ AuthConditionsIPRestrictionSum1Mode
+	typ.SetFake()
+
+	e := jx.Encoder{}
+	typ.Encode(&e)
+	data := e.Bytes()
+	require.True(t, std.Valid(data), "Encoded: %s", data)
+
+	var typ2 AuthConditionsIPRestrictionSum1Mode
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
 func TestAuthConditionsRequireTwoFactorAuth_EncodeDecode(t *testing.T) {
@@ -194,100 +242,6 @@ func TestCompatUsersPostReq_EncodeDecode(t *testing.T) {
 	var typ2 CompatUsersPostReq
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
-func TestCompatUsersUserIDActivateOtpPostOK_EncodeDecode(t *testing.T) {
-	var typ CompatUsersUserIDActivateOtpPostOK
-	typ.SetFake()
-
-	e := jx.Encoder{}
-	typ.Encode(&e)
-	data := e.Bytes()
-	require.True(t, std.Valid(data), "Encoded: %s", data)
-
-	var typ2 CompatUsersUserIDActivateOtpPostOK
-	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
-}
-func TestCompatUsersUserIDActivateOtpPostOKAlgorithm_EncodeDecode(t *testing.T) {
-	var typ CompatUsersUserIDActivateOtpPostOKAlgorithm
-	typ.SetFake()
-
-	e := jx.Encoder{}
-	typ.Encode(&e)
-	data := e.Bytes()
-	require.True(t, std.Valid(data), "Encoded: %s", data)
-
-	var typ2 CompatUsersUserIDActivateOtpPostOKAlgorithm
-	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
-}
-
-func TestCompatUsersUserIDActivateOtpPostOKAlgorithm_Examples(t *testing.T) {
-
-	for i, tc := range []struct {
-		Input string
-	}{
-		{Input: "\"sha1\""},
-	} {
-		tc := tc
-		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
-			var typ CompatUsersUserIDActivateOtpPostOKAlgorithm
-
-			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
-				if validateErr, ok := errors.Into[*validate.Error](err); ok {
-					t.Skipf("Validation error: %v", validateErr)
-					return
-				}
-				require.NoErrorf(t, err, "Input: %s", tc.Input)
-			}
-
-			e := jx.Encoder{}
-			typ.Encode(&e)
-			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
-
-			var typ2 CompatUsersUserIDActivateOtpPostOKAlgorithm
-			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
-		})
-	}
-}
-func TestCompatUsersUserIDActivateOtpPostOKClass_EncodeDecode(t *testing.T) {
-	var typ CompatUsersUserIDActivateOtpPostOKClass
-	typ.SetFake()
-
-	e := jx.Encoder{}
-	typ.Encode(&e)
-	data := e.Bytes()
-	require.True(t, std.Valid(data), "Encoded: %s", data)
-
-	var typ2 CompatUsersUserIDActivateOtpPostOKClass
-	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
-}
-
-func TestCompatUsersUserIDActivateOtpPostOKClass_Examples(t *testing.T) {
-
-	for i, tc := range []struct {
-		Input string
-	}{
-		{Input: "\"totp\""},
-	} {
-		tc := tc
-		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
-			var typ CompatUsersUserIDActivateOtpPostOKClass
-
-			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
-				if validateErr, ok := errors.Into[*validate.Error](err); ok {
-					t.Skipf("Validation error: %v", validateErr)
-					return
-				}
-				require.NoErrorf(t, err, "Input: %s", tc.Input)
-			}
-
-			e := jx.Encoder{}
-			typ.Encode(&e)
-			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
-
-			var typ2 CompatUsersUserIDActivateOtpPostOKClass
-			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
-		})
-	}
-}
 func TestCompatUsersUserIDPutReq_EncodeDecode(t *testing.T) {
 	var typ CompatUsersUserIDPutReq
 	typ.SetFake()
@@ -298,18 +252,6 @@ func TestCompatUsersUserIDPutReq_EncodeDecode(t *testing.T) {
 	require.True(t, std.Valid(data), "Encoded: %s", data)
 
 	var typ2 CompatUsersUserIDPutReq
-	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
-}
-func TestCompatUsersUserIDRecoveryCodePostOK_EncodeDecode(t *testing.T) {
-	var typ CompatUsersUserIDRecoveryCodePostOK
-	typ.SetFake()
-
-	e := jx.Encoder{}
-	typ.Encode(&e)
-	data := e.Bytes()
-	require.True(t, std.Valid(data), "Encoded: %s", data)
-
-	var typ2 CompatUsersUserIDRecoveryCodePostOK
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
 func TestCompatUsersUserIDRegisterEmailPostReq_EncodeDecode(t *testing.T) {
@@ -348,18 +290,6 @@ func TestCompatUsersUserIDSecurityKeysSecurityKeyIDPutReq_EncodeDecode(t *testin
 	var typ2 CompatUsersUserIDSecurityKeysSecurityKeyIDPutReq
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
-func TestCompatUsersUserIDStartSecurityKeyRegistrationPostOK_EncodeDecode(t *testing.T) {
-	var typ CompatUsersUserIDStartSecurityKeyRegistrationPostOK
-	typ.SetFake()
-
-	e := jx.Encoder{}
-	typ.Encode(&e)
-	data := e.Bytes()
-	require.True(t, std.Valid(data), "Encoded: %s", data)
-
-	var typ2 CompatUsersUserIDStartSecurityKeyRegistrationPostOK
-	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
-}
 func TestCompatUsersUserIDTrustedDevicesGetOK_EncodeDecode(t *testing.T) {
 	var typ CompatUsersUserIDTrustedDevicesGetOK
 	typ.SetFake()
@@ -370,18 +300,6 @@ func TestCompatUsersUserIDTrustedDevicesGetOK_EncodeDecode(t *testing.T) {
 	require.True(t, std.Valid(data), "Encoded: %s", data)
 
 	var typ2 CompatUsersUserIDTrustedDevicesGetOK
-	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
-}
-func TestCompatUsersUserIDValidateSecurityKeyRegistrationPostReq_EncodeDecode(t *testing.T) {
-	var typ CompatUsersUserIDValidateSecurityKeyRegistrationPostReq
-	typ.SetFake()
-
-	e := jx.Encoder{}
-	typ.Encode(&e)
-	data := e.Bytes()
-	require.True(t, std.Valid(data), "Encoded: %s", data)
-
-	var typ2 CompatUsersUserIDValidateSecurityKeyRegistrationPostReq
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
 }
 func TestFolder_EncodeDecode(t *testing.T) {
@@ -640,14 +558,14 @@ func TestHttp400BadRequest_Examples(t *testing.T) {
 	for i, tc := range []struct {
 		Input string
 	}{
-		{Input: "{\"detail\":\"フォルダの登録数上限◯◯を超えています。\",\"status\":400,\"title\":\"folder_registration_limit_over\"}"},
-		{Input: "{\"detail\":\"下の階層にフォルダまたはプロジェクトがあります。\",\"status\":400,\"title\":\"exist_dependency_folders_or_projects\",\"type\":\"about:blank\"}"},
-		{Input: "{\"detail\":\"同じ階層に同じ名前のフォルダを登録できません。\",\"status\":400,\"title\":\"duplicate_folder_names\",\"type\":\"about:blank\"}"},
-		{Input: "{\"detail\":\"同じ階層に同じ名前のフォルダを登録できません。\\nフォルダ名を変更してください。\\n\",\"status\":400,\"title\":\"duplicate_folder_names\",\"type\":\"about:blank\"}"},
-		{Input: "{\"detail\":\"同じ階層に同じ名前のプロジェクトを登録できません。\",\"status\":400,\"title\":\"duplicate_project_names\",\"type\":\"about:blank\"}"},
-		{Input: "{\"detail\":\"指定されたフォルダが見つかりません\",\"status\":400,\"title\":\"folder_not_found\",\"type\":\"about:blank\"}"},
-		{Input: "{\"detail\":\"指定されたプロジェクトが見つかりません。\",\"status\":400,\"title\":\"project_not_found\",\"type\":\"about:blank\"}"},
-		{Input: "{\"detail\":\"親フォルダが見つかりません。\",\"status\":400,\"title\":\"parant_not_found\",\"type\":\"about:blank\"}"},
+		{Input: "{\"detail\":\"フォルダの登録数上限◯◯を超えています。\",\"errors\":{},\"status\":400,\"title\":\"folder_registration_limit_over\",\"type\":\"about:blank\"}"},
+		{Input: "{\"detail\":\"下の階層にフォルダまたはプロジェクトがあります。\",\"errors\":{},\"status\":400,\"title\":\"exist_dependency_folders_or_projects\",\"type\":\"about:blank\"}"},
+		{Input: "{\"detail\":\"同じ階層に同じ名前のフォルダを登録できません。\",\"errors\":{},\"status\":400,\"title\":\"duplicate_folder_names\",\"type\":\"about:blank\"}"},
+		{Input: "{\"detail\":\"同じ階層に同じ名前のフォルダを登録できません。\\nフォルダ名を変更してください。\\n\",\"errors\":{},\"status\":400,\"title\":\"duplicate_folder_names\",\"type\":\"about:blank\"}"},
+		{Input: "{\"detail\":\"同じ階層に同じ名前のプロジェクトを登録できません。\",\"errors\":{},\"status\":400,\"title\":\"duplicate_project_names\",\"type\":\"about:blank\"}"},
+		{Input: "{\"detail\":\"指定されたフォルダが見つかりません\",\"errors\":{},\"status\":400,\"title\":\"folder_not_found\",\"type\":\"about:blank\"}"},
+		{Input: "{\"detail\":\"指定されたプロジェクトが見つかりません。\",\"errors\":{},\"status\":400,\"title\":\"project_not_found\",\"type\":\"about:blank\"}"},
+		{Input: "{\"detail\":\"親フォルダが見つかりません。\",\"errors\":{},\"status\":400,\"title\":\"parant_not_found\",\"type\":\"about:blank\"}"},
 	} {
 		tc := tc
 		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
@@ -772,6 +690,36 @@ func TestHttp403Forbidden_EncodeDecode(t *testing.T) {
 
 	var typ2 Http403Forbidden
 	require.NoError(t, typ2.Decode(jx.DecodeBytes(data)))
+}
+
+func TestHttp403Forbidden_Examples(t *testing.T) {
+
+	for i, tc := range []struct {
+		Input string
+	}{
+		{Input: "{\"detail\":\"このアクションを実行する権限がありません。\",\"status\":403,\"title\":\"permission_denied\",\"type\":\"about:blank\"}"},
+		{Input: "{\"detail\":\"要求された操作は許可されていません。サービスポリシーを違反しました。\\niam-disable-api-key-creationの内容を確認してください。\",\"status\":403,\"title\":\"permission_denied\",\"type\":\"about:blank\"}"},
+	} {
+		tc := tc
+		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {
+			var typ Http403Forbidden
+
+			if err := typ.Decode(jx.DecodeStr(tc.Input)); err != nil {
+				if validateErr, ok := errors.Into[*validate.Error](err); ok {
+					t.Skipf("Validation error: %v", validateErr)
+					return
+				}
+				require.NoErrorf(t, err, "Input: %s", tc.Input)
+			}
+
+			e := jx.Encoder{}
+			typ.Encode(&e)
+			require.True(t, std.Valid(e.Bytes()), "Encoded: %s", e.Bytes())
+
+			var typ2 Http403Forbidden
+			require.NoError(t, typ2.Decode(jx.DecodeBytes(e.Bytes())))
+		})
+	}
 }
 func TestHttp404NotFound_EncodeDecode(t *testing.T) {
 	var typ Http404NotFound
@@ -1687,8 +1635,8 @@ func TestServicePrincipalKey_Examples(t *testing.T) {
 	for i, tc := range []struct {
 		Input string
 	}{
-		{Input: "{\"created_at\":\"2023-10-01T00:00:00Z\",\"expired_at\":\"2024-10-01T00:00:00Z\",\"id\":\"00000000-0000-0000-0000-000000000000\",\"key_origin\":\"user\",\"status\":\"disabled\"}"},
-		{Input: "{\"created_at\":\"2023-10-01T00:00:00Z\",\"expired_at\":\"2024-10-01T00:00:00Z\",\"id\":\"00000000-0000-0000-0000-000000000000\",\"key_origin\":\"user\",\"status\":\"enabled\"}"},
+		{Input: "{\"created_at\":\"2023-10-01T00:00:00Z\",\"expired_at\":\"2024-10-01T00:00:00Z\",\"id\":\"00000000-0000-0000-0000-000000000000\",\"key_origin\":\"user\",\"kid\":\"key-id-123456\",\"public_key\":\"BEGIN PUBLIC KEY\\\\n...\\\\nEND PUBLIC KEY\",\"status\":\"disabled\"}"},
+		{Input: "{\"created_at\":\"2023-10-01T00:00:00Z\",\"expired_at\":\"2024-10-01T00:00:00Z\",\"id\":\"00000000-0000-0000-0000-000000000000\",\"key_origin\":\"user\",\"kid\":\"key-id-123456\",\"public_key\":\"BEGIN PUBLIC KEY\\\\n...\\\\nEND PUBLIC KEY\",\"status\":\"enabled\"}"},
 	} {
 		tc := tc
 		t.Run(fmt.Sprintf("Test%d", i+1), func(t *testing.T) {

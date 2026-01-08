@@ -244,3 +244,56 @@ func TestUnregisterEmail_Fail(t *testing.T) {
 	assert.Error(err)
 	assert.Contains(err.Error(), expected)
 }
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	api := NewUserOp(client)
+
+	// Create
+	name := testutil.RandomName("user", 32, testutil.CharSetAlphaNum)
+	password := testutil.Random(64, testutil.CharSetAlphaNum)
+	code := testutil.RandomName("c", 31, testutil.CharSetAlphaNum)
+	createParams := CreateParams{
+		Name:     name,
+		Password: password,
+		Code:     code,
+		Email:    nil,
+	}
+	created, err := api.Create(t.Context(), createParams)
+	assert.NoError(err)
+	assert.NotNil(created)
+	assert.Equal(name, created.GetName())
+
+	defer func() {
+		// Delete
+		err = api.Delete(t.Context(), created.GetID())
+		assert.NoError(err)
+	}()
+
+	// Read
+	read, err := api.Read(t.Context(), created.GetID())
+	assert.NoError(err)
+	assert.NotNil(read)
+	assert.Equal(created, read)
+
+	// Update
+	newDescription := testutil.Random(64, testutil.CharSetAlphaNum)
+	updateParams := UpdateParams{
+		Name:        name,
+		Password:    &password,
+		Description: newDescription,
+	}
+	updated, err := api.Update(t.Context(), created.GetID(), updateParams)
+	assert.NoError(err)
+	assert.NotNil(updated)
+	assert.Equal(newDescription, updated.GetDescription())
+
+	// RegisterEmail
+	email := testutil.RandomName("name-", 12, testutil.CharSetAlphaNum) + "@example.com"
+	err = api.RegisterEmail(t.Context(), created.GetID(), email)
+	assert.NoError(err)
+
+	// UnregisterEmail
+	err = api.UnregisterEmail(t.Context(), created.GetID())
+	assert.NoError(err)
+}

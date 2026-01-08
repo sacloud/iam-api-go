@@ -15,7 +15,9 @@
 package group_test
 
 import (
+	"iter"
 	"net/http"
+	"slices"
 	"testing"
 
 	. "github.com/sacloud/iam-api-go/apis/group"
@@ -226,4 +228,67 @@ func TestUpdateMemberships_Fail(t *testing.T) {
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
+}
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	op := NewGroupOp(client)
+
+	// Create
+	groupName := testutil.RandomName("group", 32, testutil.CharSetAlphaNum)
+	groupDescription := testutil.Random(64, testutil.CharSetAlphaNum)
+	created, err := op.Create(t.Context(), groupName, groupDescription)
+	assert.NoError(err)
+	assert.NotNil(created)
+
+	id := created.GetID()
+
+	defer func() {
+		err = op.Delete(t.Context(), id)
+		assert.NoError(err)
+	}()
+
+	// List
+	groups, err := op.List(t.Context(), ListParams{})
+	assert.NoError(err)
+	assert.NotNil(groups)
+	assert.NotEmpty(groups.GetItems())
+
+	// Read
+	read, err := op.Read(t.Context(), id)
+	assert.NoError(err)
+	assert.Equal(created, read)
+
+	// Update
+	newGroupName := testutil.RandomName("group-updated", 32, testutil.CharSetAlphaNum)
+	newGroupDescription := testutil.Random(64, testutil.CharSetAlphaNum)
+	updated, err := op.Update(t.Context(), id, newGroupName, newGroupDescription)
+	assert.NoError(err)
+	assert.NotNil(updated)
+	assert.Equal(newGroupName, updated.GetName())
+	assert.Equal(newGroupDescription, updated.GetDescription())
+
+	user, deleter := iam_test.NewUser(t, client)
+	defer deleter()
+
+	// ReadMemberships
+	memberships, err := op.ReadMemberships(t.Context(), id)
+	assert.NoError(err)
+	assert.NotNil(memberships)
+
+	// UpdateMemberships
+	ids := mapSeq(slices.Values(memberships), func(m v1.GroupMembershipsCompatUsersItem) int { return m.GetID() })
+	updatedMemberships, err := op.UpdateMemberships(t.Context(), id, append(slices.Collect(ids), user.GetID()))
+	assert.NoError(err)
+	assert.NotNil(updatedMemberships)
+}
+
+func mapSeq[T any, U any](s iter.Seq[T], f func(T) U) iter.Seq[U] {
+	return func(y func(U) bool) {
+		for t := range s {
+			if !y(f(t)) {
+				return
+			}
+		}
+	}
 }

@@ -66,8 +66,10 @@ func TestPutPasswordPolicy(t *testing.T) {
 	var expected v1.PasswordPolicy
 	expected.SetFake()
 	assert, api := setup(t, &expected)
+	var req v1.PasswordPolicy
+	req.SetFake()
 
-	actual, err := api.UpdatePasswordPolicy(t.Context())
+	actual, err := api.UpdatePasswordPolicy(t.Context(), req)
 	assert.NoError(err)
 	assert.NotNil(actual)
 	assert.Equal(&expected, actual)
@@ -80,8 +82,10 @@ func TestPutPasswordPolicy_Fail(t *testing.T) {
 	res.SetStatus(http.StatusForbidden)
 	res.SetDetail(expected)
 	assert, api := setup(t, &res, res.Status)
+	var req v1.PasswordPolicy
+	req.SetFake()
 
-	actual, err := api.UpdatePasswordPolicy(t.Context())
+	actual, err := api.UpdatePasswordPolicy(t.Context(), req)
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
@@ -137,4 +141,23 @@ func TestPutAuthConditions_Fail(t *testing.T) {
 	assert.Error(err)
 	assert.Nil(actual)
 	assert.Contains(err.Error(), expected)
+}
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	op := NewAuthOp(client)
+
+	pp, err := op.ReadPasswordPolicy(t.Context())
+	assert.NoError(err)
+	assert.NotNil(pp)
+
+	_, err = op.UpdatePasswordPolicy(t.Context(), *pp)
+	assert.NoError(err)
+
+	ac, err := op.ReadAuthConditions(t.Context())
+	assert.NoError(err)
+	assert.NotNil(ac)
+
+	_, err = op.UpdateAuthConditions(t.Context(), ac)
+	assert.NoError(err)
 }

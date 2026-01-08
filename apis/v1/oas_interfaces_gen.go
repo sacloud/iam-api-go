@@ -29,10 +29,6 @@ type CompatUsersPostRes interface {
 	compatUsersPostRes()
 }
 
-type CompatUsersUserIDActivateOtpPostRes interface {
-	compatUsersUserIDActivateOtpPostRes()
-}
-
 type CompatUsersUserIDClearTrustedDevicesPostRes interface {
 	compatUsersUserIDClearTrustedDevicesPostRes()
 }
@@ -51,10 +47,6 @@ type CompatUsersUserIDGetRes interface {
 
 type CompatUsersUserIDPutRes interface {
 	compatUsersUserIDPutRes()
-}
-
-type CompatUsersUserIDRecoveryCodePostRes interface {
-	compatUsersUserIDRecoveryCodePostRes()
 }
 
 type CompatUsersUserIDRegisterEmailPostRes interface {
@@ -77,10 +69,6 @@ type CompatUsersUserIDSecurityKeysSecurityKeyIDPutRes interface {
 	compatUsersUserIDSecurityKeysSecurityKeyIDPutRes()
 }
 
-type CompatUsersUserIDStartSecurityKeyRegistrationPostRes interface {
-	compatUsersUserIDStartSecurityKeyRegistrationPostRes()
-}
-
 type CompatUsersUserIDTrustedDevicesGetRes interface {
 	compatUsersUserIDTrustedDevicesGetRes()
 }
@@ -91,10 +79,6 @@ type CompatUsersUserIDTrustedDevicesTrustedDeviceIDDeleteRes interface {
 
 type CompatUsersUserIDUnregisterEmailPostRes interface {
 	compatUsersUserIDUnregisterEmailPostRes()
-}
-
-type CompatUsersUserIDValidateSecurityKeyRegistrationPostRes interface {
-	compatUsersUserIDValidateSecurityKeyRegistrationPostRes()
 }
 
 type DisableServicePolicyPostRes interface {

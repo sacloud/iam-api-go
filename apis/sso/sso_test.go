@@ -15,12 +15,15 @@
 package sso_test
 
 import (
+	"encoding/pem"
 	"net/http"
 	"testing"
 
+	"github.com/sacloud/iam-api-go/apis/sso"
 	. "github.com/sacloud/iam-api-go/apis/sso"
 	v1 "github.com/sacloud/iam-api-go/apis/v1"
 	iam_test "github.com/sacloud/iam-api-go/testutil"
+	"github.com/sacloud/packages-go/testutil"
 	"github.com/stretchr/testify/require"
 )
 
@@ -198,4 +201,57 @@ func TestUnlinkProfile_Fail(t *testing.T) {
 	_, err := api.Unlink(t.Context(), 123)
 	assert.Error(err)
 	assert.Contains(err.Error(), "forbidden")
+}
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	api := NewSSOOp(client)
+
+	// Create
+	var createParam v1.SSOProfilesPostReq
+	createParam.IdpLoginURL = "https://example.com/sso/login"
+	createParam.IdpLogoutURL = "https://example.com/sso/logout"
+	createParam.IdpEntityID = "https://example.com/sso/issuer"
+	createParam.IdpCertificate = string(cert(assert))
+	createParam.Name = testutil.RandomName("sso-", 32, testutil.CharSetAlphaNum)
+	created, err := api.Create(t.Context(), createParam)
+	assert.NoError(err)
+	assert.NotNil(created)
+
+	// Delete
+	defer func() {
+		err = api.Delete(t.Context(), created.GetID())
+		assert.NoError(err)
+	}()
+
+	// Read
+	read, err := api.Read(t.Context(), created.GetID())
+	assert.NoError(err)
+	assert.NotNil(read)
+
+	// Update
+	var updateParam sso.UpdateParams
+	updateParam.IdpLoginURL = read.GetIdpLoginURL()
+	updateParam.IdpLogoutURL = read.GetIdpLogoutURL()
+	updateParam.IdpEntityID = read.GetIdpEntityID()
+	updateParam.IdpCertificate = read.GetIdpCertificate()
+	updateParam.Name = read.GetName()
+	updateParam.Description = testutil.Random(64, testutil.CharSetAlphaNum)
+	updated, err := api.Update(t.Context(), created.GetID(), updateParam)
+	assert.NoError(err)
+	assert.NotNil(updated)
+
+	// Link
+	linked, err := api.Link(t.Context(), created.GetID())
+	assert.NoError(err)
+	assert.NotNil(linked)
+
+	// Unlink
+	unlinked, err := api.Unlink(t.Context(), created.GetID())
+	assert.NoError(err)
+	assert.NotNil(unlinked)
+}
+
+func cert(assert *require.Assertions) []byte {
+	return pem.EncodeToMemory(&pem.Block{Type: "CERTIFICATE", Bytes: []byte(nil)})
 }

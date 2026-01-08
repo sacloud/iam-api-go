@@ -98,3 +98,20 @@ func TestUpdateOrganizationIdPolicy_Fail(t *testing.T) {
 	assert.Nil(actual)
 	assert.Contains(err.Error(), detail)
 }
+
+func TestIntegrated(t *testing.T) {
+	assert, client := iam_test.IntegratedClient(t)
+	api := NewIDPolicyOp(client)
+
+	// Organization ID Policy
+	orgPolicy, err := api.ReadOrganizationIdPolicy(t.Context())
+	assert.NoError(err)
+	assert.NotNil(orgPolicy)
+	if len(orgPolicy) == 0 {
+		return
+	}
+
+	updatedOrgPolicy, err := api.UpdateOrganizationIdPolicy(t.Context(), orgPolicy)
+	assert.NoError(err)
+	assert.NotNil(updatedOrgPolicy)
+}
