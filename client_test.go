@@ -17,7 +17,6 @@ package iam_test
 import (
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"sync"
 	"testing"
 
@@ -42,10 +41,8 @@ func TestNewClient_WithCustomEndpoint(t *testing.T) {
 	tracker := newMockRequestTracker()
 	defer tracker.Close()
 
-	t.Setenv("SAKURA_ENDPOINTS_IAM", tracker.URL())
-
 	var theClient saclient.Client
-	err := theClient.SetEnviron(os.Environ())
+	err := theClient.SetEnviron([]string{"SAKURA_ENDPOINTS_IAM=" + tracker.URL()})
 	assert.NoError(err)
 
 	client, err := NewClient(&theClient)
