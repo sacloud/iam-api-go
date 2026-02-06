@@ -23,8 +23,13 @@ import (
 	"github.com/sacloud/saclient-go"
 )
 
-// DefaultAPIRootURL デフォルトのAPIルートURL
-const DefaultAPIRootURL = "https://secure.sakura.ad.jp/cloud/api/iam/1.0/"
+const (
+	// DefaultAPIRootURL デフォルトのAPIルートURL
+	DefaultAPIRootURL = "https://secure.sakura.ad.jp/cloud/api/iam/1.0/"
+
+	// ServiceKey SDKの種別を示すキー、プロファイルでのエンドポイント取得に利用する
+	ServiceKey = "iam"
+)
 
 // UserAgent APIリクエスト時のユーザーエージェント
 var UserAgent = fmt.Sprintf(
@@ -43,7 +48,16 @@ func (voidSecuritySource) CompatAccessTokenAuth(context.Context, v1.OperationNam
 }
 
 func NewClient(client saclient.ClientAPI) (*v1.Client, error) {
-	return NewClientWithAPIRootURL(client, DefaultAPIRootURL)
+	endpointConfig, err := client.EndpointConfig()
+	if err != nil {
+		return nil, NewError("unable to load endpoint configuration", err)
+	}
+	endpoint := DefaultAPIRootURL
+	if ep, ok := endpointConfig.Endpoints[ServiceKey]; ok && ep != "" {
+		endpoint = ep
+	}
+
+	return NewClientWithAPIRootURL(client, endpoint)
 }
 
 func NewClientWithAPIRootURL(client saclient.ClientAPI, apiRootURL string) (*v1.Client, error) {
