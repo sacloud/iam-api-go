@@ -8531,6 +8531,7 @@
           "server_resource_id": {
             "type": "string",
             "description": "APIキーがシングルサーバコントロールパネルで利用される場合は必須。",
+            "nullable": true,
             "example": "123456789123"
           },
           "iam_roles": {
@@ -8548,6 +8549,7 @@
           "zone_id": {
             "type": "string",
             "description": "ゾーンを指定。APIキーがシングルサーバコントロールパネルで利用される場合は必須。",
+            "nullable": true,
             "example": "is1a"
           },
           "created_at": {
