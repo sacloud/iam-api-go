@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.2.0](https://github.com/sacloud/iam-api-go/compare/v0.1.0...v0.2.0) - 2026-02-13
+- Make API root URL configurable via saclient-go endpoints by @yamamoto-febc in https://github.com/sacloud/iam-api-go/pull/50
+- Feature/shyouhei/nullability/@2026/02/06 by @shyouhei in https://github.com/sacloud/iam-api-go/pull/55
+- go: bump github.com/sacloud/saclient-go from 0.3.0 to 0.3.1 by @dependabot[bot] in https://github.com/sacloud/iam-api-go/pull/57
+
 ## [v0.1.0](https://github.com/sacloud/iam-api-go/commits/v0.1.0) - 2026-01-08
 - Fundamental parts by @shyouhei in https://github.com/sacloud/iam-api-go/pull/6
 - ci: bump Songmu/tagpr from 1.8.4 to 1.9.0 by @dependabot[bot] in https://github.com/sacloud/iam-api-go/pull/3
