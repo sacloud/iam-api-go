@@ -28,7 +28,7 @@ type AuthAPI interface {
 	ReadAuthConditions(ctx context.Context) (*v1.AuthConditions, error)
 	UpdateAuthConditions(ctx context.Context, req *v1.AuthConditions) (*v1.AuthConditions, error)
 
-	GetAuthContext(ctx context.Context) (*v1.GetAuthContextOK, error)
+	ReadAuthContext(ctx context.Context) (*v1.GetAuthContextOK, error)
 }
 
 type authOp struct {
@@ -63,8 +63,8 @@ func (a *authOp) UpdateAuthConditions(ctx context.Context, req *v1.AuthCondition
 	})
 }
 
-func (a *authOp) GetAuthContext(ctx context.Context) (*v1.GetAuthContextOK, error) {
-	return common.ErrorFromDecodedResponse[v1.GetAuthContextOK]("Auth.GetAuthContext", func() (any, error) {
+func (a *authOp) ReadAuthContext(ctx context.Context) (*v1.GetAuthContextOK, error) {
+	return common.ErrorFromDecodedResponse[v1.GetAuthContextOK]("Auth.ReadAuthContext", func() (any, error) {
 		return a.client.GetAuthContext(ctx)
 	})
 }
