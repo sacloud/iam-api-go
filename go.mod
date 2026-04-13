@@ -2,7 +2,7 @@ module github.com/sacloud/iam-api-go
 
 go 1.25.0
 
-toolchain go1.25.7
+toolchain go1.26.2
 
 tool github.com/ogen-go/ogen/cmd/ogen
 
